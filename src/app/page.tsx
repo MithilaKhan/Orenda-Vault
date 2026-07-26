@@ -1,0 +1,246 @@
+'use client';
+
+import React, { useState } from 'react';
+import { useWorkspaceStore } from '@/store/useWorkspaceStore';
+import { WorkspaceShell } from '@/components/layout/WorkspaceShell';
+import { Dashboard } from '@/features/home/Dashboard';
+import { WorkspaceChat } from '@/features/chat/WorkspaceChat';
+import { NotesManager } from '@/features/notes/NotesManager';
+import { CollectionsManager } from '@/features/collections/CollectionsManager';
+import { QuickNoteModal } from '@/features/notes/QuickNoteModal';
+import { aiService } from '@/services/aiService';
+import { ActionType } from '@/types/workspace';
+
+export default function VaultPage() {
+  const store = useWorkspaceStore();
+  const [isQuickNoteOpen, setIsQuickNoteOpen] = useState<boolean>(false);
+  const [modalInitialTitle, setModalInitialTitle] = useState<string>('');
+  const [modalInitialContent, setModalInitialContent] = useState<string>('');
+  const [modalInitialTags, setModalInitialTags] = useState<string[]>(['Vault', 'Idea']);
+
+  const handleOpenCapture = (actionType: ActionType) => {
+    switch (actionType) {
+      case 'note':
+        setModalInitialTitle('New Quick Note');
+        setModalInitialContent('');
+        setModalInitialTags(['Vault', 'Note']);
+        break;
+      case 'website':
+        setModalInitialTitle('Saved Website Bookmark');
+        setModalInitialContent('### URL:\nhttps://example.com\n\n### AI Summary:\n- Key takeaway 1\n- Key takeaway 2');
+        setModalInitialTags(['Bookmark', 'Web']);
+        break;
+      case 'pdf':
+        setModalInitialTitle('PDF Document Summary');
+        setModalInitialContent('### Document Name:\nProject_Specification.pdf\n\n### Extracted Takeaways:\n1. Architecture goals\n2. Design system tokens');
+        setModalInitialTags(['PDF', 'Summary']);
+        break;
+      case 'code':
+        setModalInitialTitle('TypeScript Snippet');
+        setModalInitialContent('```ts\n// Paste code here\nconst vault = new OrendaVault();\n```\n\n### Notes:\nWhy this pattern was used.');
+        setModalInitialTags(['Code', 'TypeScript']);
+        break;
+      case 'idea':
+        setModalInitialTitle('Brainstorming Concept');
+        setModalInitialContent('### Problem Statement:\n...\n\n### Proposed Solution:\n...');
+        setModalInitialTags(['Idea', 'Brainstorm']);
+        break;
+      case 'meeting':
+        setModalInitialTitle('Meeting Notes: Standup');
+        setModalInitialContent('### Attendees:\n- Mithila\n- Team\n\n### Action Items:\n- [ ] Finalize Orenda Vault layout\n- [ ] Deploy to Vercel');
+        setModalInitialTags(['Meeting', 'TODO']);
+        break;
+    }
+    setIsQuickNoteOpen(true);
+  };
+
+  const handleTriggerAITool = async (toolId: string, prompt: string) => {
+    store.setActiveView('chat');
+    store.addChatMessage({ role: 'user', content: `Tool Action: **${toolId.toUpperCase()}**\n\n${prompt}` });
+    store.setIsAiLoading(true);
+
+    try {
+      const res = await aiService.generateResponse(prompt, store.chatMessages);
+      store.addChatMessage({ role: 'assistant', content: res.content });
+    } catch {
+      store.addChatMessage({ role: 'assistant', content: 'I encountered an error executing this tool, but local fallback memory is active.' });
+    } finally {
+      store.setIsAiLoading(false);
+    }
+  };
+
+  const handleSendAI = async (prompt: string) => {
+    store.setActiveView('chat');
+    store.addChatMessage({ role: 'user', content: prompt });
+    store.setIsAiLoading(true);
+
+    try {
+      const res = await aiService.generateResponse(prompt, store.chatMessages);
+      store.addChatMessage({ role: 'assistant', content: res.content });
+    } catch {
+      store.addChatMessage({ role: 'assistant', content: aiService.getOfflineFallback(prompt) });
+    } finally {
+      store.setIsAiLoading(false);
+    }
+  };
+
+  const handleSearchSubmit = (query: string) => {
+    store.setSearchQuery(query);
+    if (!query.trim()) {
+      store.setActiveView('notes');
+      return;
+    }
+    // Filter notes in Notes view
+    store.setActiveView('notes');
+  };
+
+  // Filter notes based on search query or view
+  const getDisplayedNotes = () => {
+    let filtered = store.notes;
+
+    if (store.activeView === 'favorites') {
+      filtered = filtered.filter(n => n.isFavorite && !n.isTrashed);
+    } else if (store.activeView === 'trash') {
+      filtered = filtered.filter(n => n.isTrashed);
+    } else if (store.activeView === 'recent') {
+      filtered = [...filtered.filter(n => !n.isTrashed)].sort((a, b) => b.updatedAt - a.updatedAt);
+    } else {
+      filtered = filtered.filter(n => !n.isTrashed);
+    }
+
+    if (store.searchQuery.trim()) {
+      const q = store.searchQuery.toLowerCase();
+      filtered = filtered.filter(
+        n => n.title.toLowerCase().includes(q) ||
+             n.content.toLowerCase().includes(q) ||
+             n.tags.some(t => t.toLowerCase().includes(q)) ||
+             (n.category && n.category.toLowerCase().includes(q))
+      );
+    }
+
+    return filtered;
+  };
+
+  if (!store.isHydrated) {
+    return (
+      <div className="min-h-screen bg-[#F7F3EA] flex items-center justify-center p-6 text-[#0f3d3e]">
+        <div className="flex flex-col items-center gap-3">
+          <span className="text-4xl animate-bounce">🌿</span>
+          <p className="text-sm font-semibold tracking-wider uppercase text-[#4B5563]">Loading Orenda Vault...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <WorkspaceShell
+      activeView={store.activeView}
+      onSelectView={(view) => {
+        store.setActiveView(view);
+        store.setSearchQuery('');
+        store.setSelectedCollectionId(null);
+      }}
+      onNewWorkspace={() => handleOpenCapture('note')}
+      onTriggerAITool={handleTriggerAITool}
+      onSendFloatingAI={handleSendAI}
+    >
+      {/* Active Workspace Feature Rendering */}
+      {store.activeView === 'dashboard' && (
+        <Dashboard
+          notes={store.notes}
+          collections={store.collections}
+          activities={store.activities}
+          onSelectNote={(note) => {
+            store.setSelectedNote(note);
+            store.setActiveView('notes');
+          }}
+          onSelectCollection={(colId) => {
+            store.setSelectedCollectionId(colId);
+            store.setActiveView('collections');
+          }}
+          onActionCardClick={handleOpenCapture}
+          onSearchSubmit={handleSearchSubmit}
+          onQuickNoteCreate={() => handleOpenCapture('note')}
+        />
+      )}
+
+      {store.activeView === 'chat' && (
+        <WorkspaceChat
+          messages={store.chatMessages}
+          onSendMessage={handleSendAI}
+          onSaveToNotes={(content, title) => {
+            store.addNote({
+              title: title || 'AI Chat Snippet',
+              content,
+              summary: content.slice(0, 100) + '...',
+              tags: ['AI Snippet', 'Vault'],
+            });
+          }}
+          onClearHistory={store.clearChatHistory}
+          isLoading={store.isAiLoading}
+        />
+      )}
+
+      {(store.activeView === 'notes' ||
+        store.activeView === 'favorites' ||
+        store.activeView === 'recent' ||
+        store.activeView === 'trash') && (
+        <NotesManager
+          notes={getDisplayedNotes()}
+          collections={store.collections}
+          onAddNote={store.addNote}
+          onUpdateNote={store.updateNote}
+          onDeleteNote={store.deleteNote}
+          onRestoreNote={store.restoreNote}
+          onPermanentlyDeleteNote={store.permanentlyDeleteNote}
+          onToggleFavorite={store.toggleFavorite}
+          viewTitle={
+            store.activeView === 'favorites'
+              ? '⭐ Favorite Notes'
+              : store.activeView === 'recent'
+              ? '🕒 Recent Notes'
+              : store.activeView === 'trash'
+              ? '🗑 Trashed Notes'
+              : store.searchQuery
+              ? `🔍 Search Results for "${store.searchQuery}"`
+              : '📝 Vault Notes'
+          }
+          viewDescription={
+            store.activeView === 'trash'
+              ? 'Items in trash can be restored or permanently removed.'
+              : 'Click any note to edit its content or use AI to summarize and tag.'
+          }
+          isTrashView={store.activeView === 'trash'}
+        />
+      )}
+
+      {store.activeView === 'collections' && (
+        <CollectionsManager
+          collections={store.collections}
+          notes={store.notes}
+          onAddCollection={store.addCollection}
+          onDeleteCollection={store.deleteCollection}
+          onAddNote={store.addNote}
+          onUpdateNote={store.updateNote}
+          onDeleteNote={store.deleteNote}
+          onToggleFavorite={store.toggleFavorite}
+          selectedCollectionId={store.selectedCollectionId}
+          onSelectCollection={store.setSelectedCollectionId}
+        />
+      )}
+
+      {/* Instant Capture Modal */}
+      <QuickNoteModal
+        isOpen={isQuickNoteOpen}
+        onClose={() => setIsQuickNoteOpen(false)}
+        onSave={(noteData) => {
+          store.addNote(noteData);
+        }}
+        collections={store.collections}
+        initialTitle={modalInitialTitle}
+        initialContent={modalInitialContent}
+        initialTags={modalInitialTags}
+      />
+    </WorkspaceShell>
+  );
+}

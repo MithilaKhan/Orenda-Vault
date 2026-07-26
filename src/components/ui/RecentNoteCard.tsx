@@ -1,0 +1,48 @@
+'use client';
+
+import React from 'react';
+import { Note } from '@/types/workspace';
+import { Card } from '@/components/ui/Card';
+import { Tag } from '@/components/ui/Tag';
+import { Clock, ArrowRight } from 'lucide-react';
+
+export interface RecentNoteCardProps {
+  note: Note;
+  onSelect: (note: Note) => void;
+}
+
+export const RecentNoteCard: React.FC<RecentNoteCardProps> = ({ note, onSelect }) => {
+  return (
+    <Card
+      hoverEffect
+      onClick={() => onSelect(note)}
+      className="flex items-start justify-between gap-4 p-4 bg-white/75 hover:bg-white border-[#0f3d3e]/15 group"
+    >
+      <div className="space-y-1.5 flex-1 min-w-0">
+        <div className="flex items-center gap-2">
+          <h4 className="font-semibold text-base text-[#0f3d3e] truncate">
+            {note.title}
+          </h4>
+          {note.isFavorite && <span className="text-amber-500 text-xs">⭐</span>}
+        </div>
+        <p className="text-xs text-[#4B5563] line-clamp-2 leading-relaxed font-normal">
+          {note.summary || note.content}
+        </p>
+        <div className="flex flex-wrap items-center gap-2 pt-1.5">
+          {note.tags.slice(0, 3).map((tag, i) => (
+            <Tag key={i} label={tag} variant="moss" />
+          ))}
+          <span className="text-[11px] text-[#4B5563]/80 flex items-center gap-1 ml-auto font-medium">
+            <Clock className="w-3 h-3" />
+            {new Date(note.updatedAt).toLocaleDateString()}
+          </span>
+        </div>
+      </div>
+      <div className="self-center pl-2">
+        <div className="w-8 h-8 rounded-full bg-[#0f3d3e]/5 group-hover:bg-[#0F4C3A] group-hover:text-[#F7F3EA] flex items-center justify-center text-[#0f3d3e] transition-colors">
+          <ArrowRight className="w-4 h-4" />
+        </div>
+      </div>
+    </Card>
+  );
+};
