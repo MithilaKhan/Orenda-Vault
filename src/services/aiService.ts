@@ -71,8 +71,8 @@ export const aiService = {
       );
       const tags = res.content
         .split(',')
-        .map(t => t.trim().replace(/[^a-zA-Z0-9 ]/g, ''))
-        .filter(Boolean)
+        .map(t => t.trim().replace(/[^a-zA-Z0-9 -]/g, ''))
+        .filter(t => t && t.length > 0 && t.length <= 20 && !t.includes('\n') && !t.includes('#'))
         .slice(0, 3);
       return tags.length > 0 ? tags : ['General', 'AI', 'Vault'];
     } catch {
@@ -82,6 +82,12 @@ export const aiService = {
 
   getOfflineFallback(prompt: string): string {
     const p = prompt.toLowerCase();
+    if (p.includes('category tags') || p.includes('suggest 2 to 3 short category tags') || p.includes('comma-separated list of tags')) {
+      if (p.includes('jwt') || p.includes('auth') || p.includes('token')) return 'Security, Auth, Web Dev';
+      if (p.includes('portfolio') || p.includes('hero') || p.includes('copy')) return 'Portfolio, Copy, Design';
+      if (p.includes('react') || p.includes('hook') || p.includes('action')) return 'React, NextJS, Frontend';
+      return 'General, Vault, AI Note';
+    }
     if (p.includes('jwt') || p.includes('auth')) {
       return `### JSON Web Token (JWT) Quick Reference\n\nJWTs are URL-safe tokens used for stateless authentication between client and server.\n\n1. **Header**: Defines token type and signing hash algorithm (\`HS256\`, \`RS256\`).\n2. **Payload**: Houses user claims (id, email, roles, \`exp\` timestamp).\n3. **Signature**: Verifies token authenticity.\n\n> [!TIP]\n> Always store JWTs securely and set short expiration times to mitigate token hijacking.`;
     }

@@ -35,7 +35,18 @@ export function useWorkspaceStore() {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (parsed.notes) setNotes(parsed.notes);
+        if (parsed.notes) {
+          const sanitizedNotes = parsed.notes.map((n: Note) => {
+            const cleanTags = Array.isArray(n.tags)
+              ? n.tags.filter((t: any) => typeof t === 'string' && t.length <= 22 && !t.includes('\n') && !t.includes('#'))
+              : ['Note'];
+            return {
+              ...n,
+              tags: cleanTags.length > 0 ? cleanTags : ['Vault Note'],
+            };
+          });
+          setNotes(sanitizedNotes);
+        }
         if (parsed.collections) setCollections(parsed.collections);
         if (parsed.activities) setActivities(parsed.activities);
         if (parsed.chatMessages) setChatMessages(parsed.chatMessages);

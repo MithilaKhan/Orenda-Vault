@@ -5,7 +5,8 @@ import { Modal } from '@/components/ui/Modal';
 import { Button } from '@/components/ui/Button';
 import { Collection } from '@/types/workspace';
 import { Sparkles, Tag, Folder } from 'lucide-react';
-import { Input, Select, Form, ConfigProvider } from 'antd';
+import { Select, Form, ConfigProvider } from 'antd';
+import { Input, TextArea } from '@/components/ui/Input';
 
 export interface QuickNoteModalProps {
   isOpen: boolean;
@@ -64,63 +65,60 @@ export const QuickNoteModal: React.FC<QuickNoteModalProps> = ({
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="✨ Quick Capture" maxWidth="max-w-xl">
-      <ConfigProvider
-        theme={{
-          token: {
-            colorPrimary: '#0F4C3A',
-            colorText: '#0f3d3e',
-            colorTextPlaceholder: '#4B5563',
-            borderRadius: 12,
-            controlHeight: 40,
-          },
-        }}
-      >
-        <Form layout="vertical" className="space-y-3" onSubmitCapture={(e) => { e.preventDefault(); handleSave(); }}>
-          <Form.Item className="mb-3">
+      <Form layout="vertical" className="space-y-3" onSubmitCapture={(e) => { e.preventDefault(); handleSave(); }}>
+        <Form.Item className="mb-3">
+          <Input
+            size="large"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Note Title (e.g. React 19 Action Notes)"
+            className="font-semibold text-lg"
+            autoFocus
+          />
+        </Form.Item>
+
+        <Form.Item className="mb-3">
+          <TextArea
+            rows={5}
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            placeholder="Jot down thoughts, code snippets, or meeting takeaways... Markdown is supported!"
+            className="font-mono text-sm leading-relaxed"
+          />
+        </Form.Item>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <Form.Item
+            label={
+              <span className="text-xs font-semibold text-[#0f3d3e] flex items-center gap-1">
+                <Tag className="w-3.5 h-3.5" /> Tags (comma separated)
+              </span>
+            }
+            className="mb-2"
+          >
             <Input
-              size="large"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="Note Title (e.g. React 19 Action Notes)"
-              className="font-semibold text-lg border-[#0f3d3e]/20"
-              autoFocus
+              value={tagInput}
+              onChange={(e) => setTagInput(e.target.value)}
+              placeholder="React, AI, Work"
             />
           </Form.Item>
 
-          <Form.Item className="mb-3">
-            <Input.TextArea
-              rows={5}
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              placeholder="Jot down thoughts, code snippets, or meeting takeaways... Markdown is supported!"
-              className="font-mono text-sm border-[#0f3d3e]/20 leading-relaxed"
-            />
-          </Form.Item>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Form.Item
-              label={
-                <span className="text-xs font-semibold text-[#0f3d3e] flex items-center gap-1">
-                  <Tag className="w-3.5 h-3.5" /> Tags (comma separated)
-                </span>
-              }
-              className="mb-2"
-            >
-              <Input
-                value={tagInput}
-                onChange={(e) => setTagInput(e.target.value)}
-                placeholder="React, AI, Work"
-                className="border-[#0f3d3e]/15"
-              />
-            </Form.Item>
-
-            <Form.Item
-              label={
-                <span className="text-xs font-semibold text-[#0f3d3e] flex items-center gap-1">
-                  <Folder className="w-3.5 h-3.5" /> Save to Collection
-                </span>
-              }
-              className="mb-2"
+          <Form.Item
+            label={
+              <span className="text-xs font-semibold text-[#0f3d3e] flex items-center gap-1">
+                <Folder className="w-3.5 h-3.5" /> Save to Collection
+              </span>
+            }
+            className="mb-2"
+          >
+            <ConfigProvider
+              theme={{
+                token: {
+                  colorPrimary: '#0F4C3A',
+                  colorText: '#0f3d3e',
+                  borderRadius: 12,
+                },
+              }}
             >
               <Select
                 value={selectedCollectionId}
@@ -132,24 +130,24 @@ export const QuickNoteModal: React.FC<QuickNoteModalProps> = ({
                   ...collections.map(col => ({ value: col.id, label: col.name }))
                 ]}
               />
-            </Form.Item>
-          </div>
+            </ConfigProvider>
+          </Form.Item>
+        </div>
 
-          <div className="flex items-center justify-between pt-4 border-t border-[#0f3d3e]/10">
-            <span className="text-[11px] text-[#4B5563] flex items-center gap-1">
-              <Sparkles className="w-3 h-3 text-[#A8E063]" /> Saved locally in browser memory
-            </span>
-            <div className="flex items-center gap-2">
-              <Button variant="secondary" size="sm" onClick={onClose} type="button">
-                Cancel
-              </Button>
-              <Button variant="accent" size="sm" onClick={handleSave} type="button">
-                Save to Vault
-              </Button>
-            </div>
+        <div className="flex items-center justify-between pt-4 border-t border-[#0f3d3e]/10">
+          <span className="text-[11px] text-[#4B5563] flex items-center gap-1">
+            <Sparkles className="w-3 h-3 text-[#A8E063]" /> Saved locally in browser memory
+          </span>
+          <div className="flex items-center gap-2">
+            <Button variant="secondary" size="sm" onClick={onClose} type="button">
+              Cancel
+            </Button>
+            <Button variant="accent" size="sm" onClick={handleSave} type="button">
+              Save to Vault
+            </Button>
           </div>
-        </Form>
-      </ConfigProvider>
+        </div>
+      </Form>
     </Modal>
   );
 };

@@ -33,16 +33,21 @@ export const NoteCard: React.FC<NoteCardProps> = ({
   onAiTag,
   isAiSummarizing = false,
 }) => {
+  // Sanitize tags so that long sentences or paragraphs never render as badges
+  const displayTags = (note.tags || [])
+    .filter(t => t && typeof t === 'string' && t.length <= 25 && !t.includes('\n'))
+    .slice(0, 3);
+
   return (
     <Card
       hoverEffect={!isTrashView}
       onClick={isTrashView ? undefined : () => onEdit(note)}
-      className="flex flex-col justify-between h-64 bg-white/70 hover:bg-white border-[#0f3d3e]/15 relative group"
+      className="flex flex-col justify-between min-h-[260px] h-auto bg-white/70 hover:bg-white border-[#0f3d3e]/15 relative group p-5 gap-4"
     >
       {/* Note Top Bar */}
-      <div className="space-y-2">
+      <div className="space-y-2.5">
         <div className="flex items-start justify-between gap-2">
-          <h3 className="font-semibold text-base text-[#0f3d3e] line-clamp-1 flex-1">
+          <h3 className="font-bold text-base text-[#0f3d3e] line-clamp-2 flex-1 leading-snug">
             {note.title}
           </h3>
           {!isTrashView && (
@@ -51,7 +56,7 @@ export const NoteCard: React.FC<NoteCardProps> = ({
                 e.stopPropagation();
                 onFavorite(note.id);
               }}
-              className="p-1 rounded hover:bg-[#0f3d3e]/5 transition-colors"
+              className="p-1 rounded hover:bg-[#0f3d3e]/5 transition-colors shrink-0"
               title="Favorite"
             >
               <Star className={`w-4 h-4 ${note.isFavorite ? 'fill-amber-500 text-amber-500' : 'text-[#4B5563]'}`} />
@@ -61,31 +66,35 @@ export const NoteCard: React.FC<NoteCardProps> = ({
 
         {/* Collection Badge */}
         {collection && (
-          <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-md bg-[#0f3d3e]/5 text-[#0f3d3e]">
+          <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-md bg-[#0f3d3e]/5 text-[#0f3d3e] w-fit">
             <Folder className="w-3 h-3" /> {collection.name}
           </span>
         )}
 
-        <p className="text-xs text-[#4B5563] line-clamp-3 leading-relaxed">
-          {note.summary || note.content.slice(0, 100) + '...'}
+        <p className="text-xs text-[#4B5563] line-clamp-3 leading-relaxed font-normal">
+          {note.summary || note.content.slice(0, 120) + '...'}
         </p>
       </div>
 
       {/* Note Bottom Bar */}
-      <div className="space-y-3 pt-3 border-t border-[#0f3d3e]/10">
-        <div className="flex items-center gap-1.5 flex-wrap">
-          {note.tags?.slice(0, 3).map((tag) => (
-            <Tag key={tag} label={tag} variant="moss" />
-          ))}
+      <div className="space-y-3 pt-3 border-t border-[#0f3d3e]/10 mt-auto">
+        <div className="flex items-center gap-1.5 flex-wrap min-h-[24px]">
+          {displayTags.length > 0 ? (
+            displayTags.map((tag) => (
+              <Tag key={tag} label={tag} variant="moss" />
+            ))
+          ) : (
+            <Tag label="Note" variant="moss" />
+          )}
         </div>
 
-        <div className="flex items-center justify-between text-[11px] text-[#4B5563]">
-          <span className="flex items-center gap-1">
+        <div className="flex items-center justify-between text-[11px] text-[#4B5563] pt-1">
+          <span className="flex items-center gap-1 font-medium">
             <Clock className="w-3 h-3" />
             {new Date(note.updatedAt).toLocaleDateString()}
           </span>
 
-          <div className="flex items-center gap-1 opacity-80 group-hover:opacity-100 transition-opacity">
+          <div className="flex items-center gap-1 opacity-85 group-hover:opacity-100 transition-opacity">
             {!isTrashView ? (
               <>
                 <button

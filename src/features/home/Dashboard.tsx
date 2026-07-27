@@ -8,6 +8,7 @@ import { Note, Collection, ActivityItem, ActionType } from '@/types/workspace';
 import { Search, Sparkles, ArrowRight, Folder, Briefcase, Code, FileText } from 'lucide-react';
 import { QuickActionCard } from '@/components/ui/QuickActionCard';
 import { RecentNoteCard } from '@/components/ui/RecentNoteCard';
+import { Input } from '@/components/ui/Input';
 
 export interface DashboardProps {
   notes: Note[];
@@ -64,17 +65,17 @@ export const Dashboard: React.FC<DashboardProps> = ({
         </div>
 
         <form onSubmit={handleSearch} className="relative max-w-2xl">
-          <input
-            type="text"
+          <Input
+            size="large"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
             placeholder="Ask your second brain, search notes, or generate concepts..."
-            className="w-full bg-white border border-[#0f3d3e]/20 rounded-2xl pl-12 pr-28 py-3.5 text-sm font-medium text-[#0f3d3e] placeholder-[#4B5563]/60 focus:outline-none focus:ring-2 focus:ring-[#0f3d3e]/20 shadow-sm"
+            icon={<Search className="w-5 h-5 text-[#4B5563]" />}
+            className="pr-28 py-2 text-sm font-medium shadow-sm rounded-2xl"
           />
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#4B5563]" />
           <button
             type="submit"
-            className="absolute right-2 top-1/2 -translate-y-1/2 px-4 py-2 rounded-xl bg-[#0F4C3A] hover:bg-[#0F4C3A]/90 text-white text-xs font-semibold transition-all shadow-sm active:scale-95 flex items-center gap-1.5"
+            className="absolute right-2 top-1.5 px-4 py-2 rounded-xl bg-[#0F4C3A] hover:bg-[#0F4C3A]/90 text-white text-xs font-semibold transition-all shadow-sm active:scale-95 flex items-center gap-1.5 z-10"
           >
             Ask AI <ArrowRight className="w-3.5 h-3.5" />
           </button>

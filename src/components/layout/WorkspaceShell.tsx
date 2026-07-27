@@ -5,6 +5,7 @@ import { Sidebar } from './Sidebar';
 import { WorkspaceView } from '@/types/workspace';
 import { Sparkles, Send, Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Input } from '@/components/ui/Input';
 
 export interface WorkspaceShellProps {
   activeView: WorkspaceView;
@@ -125,12 +126,12 @@ export const WorkspaceShell: React.FC<WorkspaceShellProps> = ({
           <div className="p-2 rounded-xl bg-[#A8E063]/30 text-[#0f3d3e] flex-shrink-0">
             <Sparkles className="w-5 h-5 text-[#0f3d3e]" />
           </div>
-          <input
-            type="text"
+          <Input
             value={floatingPrompt}
             onChange={(e) => setFloatingPrompt(e.target.value)}
             placeholder="✨ Ask Orenda... (e.g., Explain JWT, brainstorm blog topics, or search notes)"
-            className="w-full bg-transparent border-none text-sm text-[#0f3d3e] placeholder-[#4B5563]/70 focus:outline-none px-2"
+            className="w-full border-none shadow-none bg-transparent"
+            style={{ boxShadow: 'none', background: 'transparent' }}
           />
           <button
             type="submit"

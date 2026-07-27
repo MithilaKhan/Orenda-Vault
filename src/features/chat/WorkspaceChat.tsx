@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { WorkspaceChatMessage } from '@/types/workspace';
 import { Button } from '@/components/ui/Button';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { Input } from '@/components/ui/Input';
 import { 
   Sparkles, 
   Send, 
@@ -242,13 +243,13 @@ export const WorkspaceChat: React.FC<WorkspaceChatProps> = ({
           onSubmit={handleSubmit}
           className="bg-white border border-[#0f3d3e]/20 rounded-2xl shadow-soft p-2 flex items-center gap-2 focus-within:ring-2 focus-within:ring-[#0f3d3e]/30 transition-all"
         >
-          <input
-            type="text"
+          <Input
             value={input}
             onChange={(e) => setInput(e.target.value)}
             disabled={isLoading}
             placeholder="Type a message or instruction for Orenda AI..."
-            className="w-full bg-transparent border-none text-sm text-[#0f3d3e] placeholder-[#4B5563]/70 focus:outline-none px-3 py-2"
+            className="w-full border-none shadow-none bg-transparent"
+            style={{ boxShadow: 'none', background: 'transparent' }}
           />
           <button
             type="submit"

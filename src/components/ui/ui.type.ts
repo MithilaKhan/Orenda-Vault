@@ -22,14 +22,7 @@ export interface ModalProps {
   maxWidth?: string;
 }
 
-export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  icon?: React.ReactNode;
-  label?: string;
-  error?: string;
-  value?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  placeholder?: string;
-}
+export * from './Input';
 
 export interface TagProps {
   label: string;
