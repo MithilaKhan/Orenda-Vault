@@ -37,12 +37,8 @@ export function useWorkspaceStore() {
         const parsed = JSON.parse(saved);
         if (parsed.notes) {
           const sanitizedNotes = parsed.notes.map((n: Note) => {
-            const cleanTags = Array.isArray(n.tags)
-              ? n.tags.filter((t: any) => typeof t === 'string' && t.length <= 22 && !t.includes('\n') && !t.includes('#'))
-              : ['Note'];
             return {
               ...n,
-              tags: cleanTags.length > 0 ? cleanTags : ['Vault Note'],
             };
           });
           setNotes(sanitizedNotes);
@@ -73,12 +69,11 @@ export function useWorkspaceStore() {
     }
   }, [notes, collections, activities, chatMessages, isHydrated]);
 
-  const addActivity = useCallback((title: string, type: string, tag: string, targetId?: string) => {
+  const addActivity = useCallback((title: string, type: string, targetId?: string) => {
     const newAct: ActivityItem = {
       id: `act-${Date.now()}`,
       title,
       type,
-      tag,
       timestamp: Date.now(),
       targetId,
     };
@@ -89,7 +84,6 @@ export function useWorkspaceStore() {
     title: string;
     content: string;
     summary?: string;
-    tags?: string[];
     category?: string;
     collectionId?: string;
   }) => {
@@ -98,7 +92,6 @@ export function useWorkspaceStore() {
       title: noteData.title || 'Untitled Note',
       content: noteData.content || '',
       summary: noteData.summary || noteData.content.slice(0, 100) + '...',
-      tags: noteData.tags || ['General'],
       category: noteData.category || 'General Notes',
       collectionId: noteData.collectionId,
       isFavorite: false,
@@ -114,7 +107,7 @@ export function useWorkspaceStore() {
       setCollections(prev => prev.map(c => c.id === noteData.collectionId ? { ...c, noteCount: c.noteCount + 1 } : c));
     }
 
-    addActivity(newNote.title, 'Created Note', newNote.tags[0] || 'Note', newNote.id);
+    addActivity(newNote.title, 'Created Note', newNote.id);
     return newNote;
   }, [addActivity]);
 
@@ -123,7 +116,7 @@ export function useWorkspaceStore() {
       if (note.id === id) {
         const updated = { ...note, ...partial, updatedAt: Date.now() };
         if (partial.title || partial.content) {
-          addActivity(updated.title, 'Edited Note', updated.tags[0] || 'Note', updated.id);
+          addActivity(updated.title, 'Edited Note', updated.id);
         }
         return updated;
       }
@@ -135,7 +128,7 @@ export function useWorkspaceStore() {
     setNotes(prev => prev.map(note => {
       if (note.id === id) {
         const nextState = !note.isFavorite;
-        addActivity(note.title, nextState ? 'Favorited' : 'Unfavorited', note.tags[0] || 'Note', note.id);
+        addActivity(note.title, nextState ? 'Favorited' : 'Unfavorited', note.id);
         return { ...note, isFavorite: nextState };
       }
       return note;
@@ -146,7 +139,7 @@ export function useWorkspaceStore() {
     setNotes(prev => prev.map(note => {
       if (note.id === id) {
         if (!note.isTrashed) {
-          addActivity(note.title, 'Moved to Trash', note.tags[0] || 'Trash', note.id);
+          addActivity(note.title, 'Moved to Trash', note.id);
           return { ...note, isTrashed: true };
         }
       }
@@ -161,7 +154,7 @@ export function useWorkspaceStore() {
   const restoreNote = useCallback((id: string) => {
     setNotes(prev => prev.map(note => {
       if (note.id === id) {
-        addActivity(note.title, 'Restored Note', note.tags[0] || 'Note', note.id);
+        addActivity(note.title, 'Restored Note', note.id);
         return { ...note, isTrashed: false };
       }
       return note;
@@ -178,7 +171,7 @@ export function useWorkspaceStore() {
       createdAt: Date.now(),
     };
     setCollections(prev => [newCol, ...prev]);
-    addActivity(name, 'Created Collection', 'Collection', newCol.id);
+    addActivity(name, 'Created Collection', newCol.id);
     return newCol;
   }, [addActivity]);
 

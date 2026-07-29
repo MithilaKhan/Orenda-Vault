@@ -21,6 +21,7 @@ export interface NotesManagerProps {
   onPermanentlyDeleteNote?: (id: string) => void;
   onToggleFavorite: (id: string) => void;
   viewTitle?: string;
+  viewIcon?: React.ReactNode;
   viewDescription?: string;
   isTrashView?: boolean;
 }
@@ -35,6 +36,7 @@ export const NotesManager: React.FC<NotesManagerProps> = ({
   onPermanentlyDeleteNote,
   onToggleFavorite,
   viewTitle = 'Vault Notes',
+  viewIcon,
   viewDescription = 'Your personal second brain and searchable knowledge repository',
   isTrashView = false,
 }) => {
@@ -60,15 +62,6 @@ export const NotesManager: React.FC<NotesManagerProps> = ({
     }
   };
 
-  const handleAiTag = async (note: Note) => {
-    try {
-      const tags = await aiService.tagNoteContent(note.content);
-      onUpdateNote(note.id, { tags });
-    } catch {
-      // ignore
-    }
-  };
-
   return (
     <ConfigProvider
       theme={{
@@ -85,7 +78,7 @@ export const NotesManager: React.FC<NotesManagerProps> = ({
           <PageHeader
             title={viewTitle}
             description={viewDescription}
-            icon={<FileText className="w-6 h-6 text-[#0f3d3e]" />}
+            icon={viewIcon || <FileText className="w-6 h-6 text-[#0F4C3A]" />}
           />
           {notes.length > 0 && (
             <div className="flex items-center gap-2 self-start sm:self-auto">
@@ -123,7 +116,6 @@ export const NotesManager: React.FC<NotesManagerProps> = ({
                   onRestore={onRestoreNote}
                   onPermanentlyDelete={onPermanentlyDeleteNote}
                   onAiSummarize={handleAiSummarize}
-                  onAiTag={handleAiTag}
                   isAiSummarizing={isAiSummarizing}
                 />
               );

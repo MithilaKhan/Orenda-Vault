@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { Star, Clock, Trash2, Search, FileText } from 'lucide-react';
 import { useWorkspaceStore } from '@/store/useWorkspaceStore';
 import { WorkspaceShell } from '@/components/layout/WorkspaceShell';
 import { Dashboard } from '@/features/home/Dashboard';
@@ -16,39 +17,32 @@ export default function VaultPage() {
   const [isQuickNoteOpen, setIsQuickNoteOpen] = useState<boolean>(false);
   const [modalInitialTitle, setModalInitialTitle] = useState<string>('');
   const [modalInitialContent, setModalInitialContent] = useState<string>('');
-  const [modalInitialTags, setModalInitialTags] = useState<string[]>(['Vault', 'Idea']);
 
   const handleOpenCapture = (actionType: ActionType) => {
     switch (actionType) {
       case 'note':
         setModalInitialTitle('New Quick Note');
         setModalInitialContent('');
-        setModalInitialTags(['Vault', 'Note']);
         break;
       case 'website':
         setModalInitialTitle('Saved Website Bookmark');
         setModalInitialContent('### URL:\nhttps://example.com\n\n### AI Summary:\n- Key takeaway 1\n- Key takeaway 2');
-        setModalInitialTags(['Bookmark', 'Web']);
         break;
       case 'pdf':
         setModalInitialTitle('PDF Document Summary');
         setModalInitialContent('### Document Name:\nProject_Specification.pdf\n\n### Extracted Takeaways:\n1. Architecture goals\n2. Design system tokens');
-        setModalInitialTags(['PDF', 'Summary']);
         break;
       case 'code':
         setModalInitialTitle('TypeScript Snippet');
         setModalInitialContent('```ts\n// Paste code here\nconst vault = new OrendaVault();\n```\n\n### Notes:\nWhy this pattern was used.');
-        setModalInitialTags(['Code', 'TypeScript']);
         break;
       case 'idea':
         setModalInitialTitle('Brainstorming Concept');
         setModalInitialContent('### Problem Statement:\n...\n\n### Proposed Solution:\n...');
-        setModalInitialTags(['Idea', 'Brainstorm']);
         break;
       case 'meeting':
         setModalInitialTitle('Meeting Notes: Standup');
         setModalInitialContent('### Attendees:\n- Mithila\n- Team\n\n### Action Items:\n- [ ] Finalize Orenda Vault layout\n- [ ] Deploy to Vercel');
-        setModalInitialTags(['Meeting', 'TODO']);
         break;
     }
     setIsQuickNoteOpen(true);
@@ -113,7 +107,6 @@ export default function VaultPage() {
       filtered = filtered.filter(
         n => n.title.toLowerCase().includes(q) ||
              n.content.toLowerCase().includes(q) ||
-             n.tags.some(t => t.toLowerCase().includes(q)) ||
              (n.category && n.category.toLowerCase().includes(q))
       );
     }
@@ -173,7 +166,6 @@ export default function VaultPage() {
               title: title || 'AI Chat Snippet',
               content,
               summary: content.slice(0, 100) + '...',
-              tags: ['AI Snippet', 'Vault'],
             });
           }}
           onClearHistory={store.clearChatHistory}
@@ -196,14 +188,21 @@ export default function VaultPage() {
           onToggleFavorite={store.toggleFavorite}
           viewTitle={
             store.activeView === 'favorites'
-              ? '⭐ Favorite Notes'
+              ? 'Favorite Notes'
               : store.activeView === 'recent'
-              ? '🕒 Recent Notes'
+              ? 'Recent Notes'
               : store.activeView === 'trash'
-              ? '🗑 Trashed Notes'
+              ? 'Trashed Notes'
               : store.searchQuery
-              ? `🔍 Search Results for "${store.searchQuery}"`
-              : '📝 Vault Notes'
+              ? `Search Results for "${store.searchQuery}"`
+              : 'Vault Notes'
+          }
+          viewIcon={
+            store.activeView === 'favorites' ? <Star className="w-6 h-6 text-[#0F4C3A]" /> :
+            store.activeView === 'recent' ? <Clock className="w-6 h-6 text-[#0F4C3A]" /> :
+            store.activeView === 'trash' ? <Trash2 className="w-6 h-6 text-[#0F4C3A]" /> :
+            store.searchQuery ? <Search className="w-6 h-6 text-[#0F4C3A]" /> :
+            <FileText className="w-6 h-6 text-[#0F4C3A]" />
           }
           viewDescription={
             store.activeView === 'trash'
@@ -239,7 +238,6 @@ export default function VaultPage() {
         collections={store.collections}
         initialTitle={modalInitialTitle}
         initialContent={modalInitialContent}
-        initialTags={modalInitialTags}
       />
     </WorkspaceShell>
   );

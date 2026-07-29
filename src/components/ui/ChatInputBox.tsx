@@ -42,11 +42,6 @@ export function ChatInputBox({ prompt, setPrompt, onGenerate, loading }: ChatInp
           />
         </div>
       </div>
-      <div className="text-center mt-3">
-        <p className="text-xs text-[#0f3d3e]/60">
-          Orenda AI may produce inaccurate information about natural systems.
-        </p>
-      </div>
     </div>
   );
 }

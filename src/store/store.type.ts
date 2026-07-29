@@ -24,7 +24,6 @@ export interface WorkspaceStoreActions {
     title: string;
     content: string;
     summary?: string;
-    tags?: string[];
     category?: string;
     collectionId?: string;
   }) => Note;
@@ -37,7 +36,7 @@ export interface WorkspaceStoreActions {
   deleteCollection: (id: string) => void;
   addChatMessage: (role: 'user' | 'assistant' | 'system', content: string) => WorkspaceChatMessage;
   clearChatHistory: () => void;
-  addActivity: (title: string, type: string, tag: string, targetId?: string) => void;
+  addActivity: (title: string, type: string, targetId?: string) => void;
   triggerAITool: (toolId: string, prompt: string) => Promise<void>;
   resetToDefault: () => void;
 }

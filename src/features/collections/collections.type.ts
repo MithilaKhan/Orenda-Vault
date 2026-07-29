@@ -14,7 +14,7 @@ export interface CollectionsManagerProps {
   notes: Note[];
   onAddCollection: (name: string, description?: string, icon?: string) => void;
   onDeleteCollection: (id: string) => void;
-  onAddNote: (note: { title: string; content: string; tags?: string[]; collectionId?: string }) => void;
+  onAddNote: (note: { title: string; content: string; collectionId?: string }) => void;
   onUpdateNote: (id: string, partial: Partial<Note>) => void;
   onDeleteNote: (id: string) => void;
   onToggleFavorite: (id: string) => void;

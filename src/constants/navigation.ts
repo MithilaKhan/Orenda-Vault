@@ -25,17 +25,12 @@ export const MAIN_NAV_ITEMS: NavItem[] = [
 
 export const AI_TOOLS: AIToolItem[] = [
   { 
-    id: 'summarize', 
-    label: 'Summarize', 
+    id: 'chat', 
+    label: 'AI Chat', 
     iconName: 'Sparkles', 
-    prompt: 'Summarize my recent notes into key takeaways and action items.' 
+    prompt: '' 
   },
-  { 
-    id: 'tag', 
-    label: 'Tag Notes', 
-    iconName: 'Tag', 
-    prompt: 'Analyze my untagged notes and suggest relevant category tags.' 
-  },
+
   { 
     id: 'search', 
     label: 'Smart Search', 

@@ -5,7 +5,6 @@ export interface Note {
   title: string;
   content: string;
   summary?: string;
-  tags: string[];
   category?: string;
   collectionId?: string;
   isFavorite: boolean;
@@ -17,7 +16,7 @@ export interface Note {
 export interface NotesManagerProps {
   notes: Note[];
   collections: Collection[];
-  onAddNote: (note: { title: string; content: string; tags?: string[]; collectionId?: string }) => void;
+  onAddNote: (note: { title: string; content: string; collectionId?: string }) => void;
   onUpdateNote: (id: string, partial: Partial<Note>) => void;
   onDeleteNote: (id: string) => void;
   onRestoreNote?: (id: string) => void;
@@ -34,12 +33,10 @@ export interface QuickNoteModalProps {
   onSave: (noteData: {
     title: string;
     content: string;
-    tags?: string[];
     category?: string;
     collectionId?: string;
   }) => void;
   collections: Collection[];
   initialTitle?: string;
   initialContent?: string;
-  initialTags?: string[];
 }

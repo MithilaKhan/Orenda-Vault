@@ -21,7 +21,6 @@ export interface ActivityItem {
   id: string;
   title: string;
   type: string;
-  tag: string;
   timestamp: number;
   targetId?: string;
 }

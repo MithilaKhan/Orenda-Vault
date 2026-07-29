@@ -11,6 +11,5 @@ export interface AIServiceInterface {
     systemContext?: string
   ): Promise<AIResponseResult>;
   summarizeText(text: string): Promise<string>;
-  tagNoteContent(text: string): Promise<string[]>;
   getOfflineFallback(prompt: string): string;
 }

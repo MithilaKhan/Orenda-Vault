@@ -181,7 +181,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
                   <div className="flex-1 min-w-0">
                     <p className="text-[#0f3d3e] font-semibold truncate">{act.title}</p>
                     <p className="text-[#4B5563] text-[11px]">
-                      {act.type} • <span className="text-[#0f3d3e]/80 font-semibold">#{act.tag}</span>
+                      {act.type}
                     </p>
                   </div>
                 </div>

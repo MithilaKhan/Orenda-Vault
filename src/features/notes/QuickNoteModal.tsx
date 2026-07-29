@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Modal } from '@/components/ui/Modal';
 import { Button } from '@/components/ui/Button';
 import { Collection } from '@/types/workspace';
-import { Sparkles, Tag, Folder } from 'lucide-react';
+import { Sparkles, Folder } from 'lucide-react';
 import { Select, Form, ConfigProvider } from 'antd';
 import { Input, TextArea } from '@/components/ui/Input';
 
@@ -14,14 +14,12 @@ export interface QuickNoteModalProps {
   onSave: (noteData: {
     title: string;
     content: string;
-    tags?: string[];
     category?: string;
     collectionId?: string;
   }) => void;
   collections: Collection[];
   initialTitle?: string;
   initialContent?: string;
-  initialTags?: string[];
 }
 
 export const QuickNoteModal: React.FC<QuickNoteModalProps> = ({
@@ -31,26 +29,20 @@ export const QuickNoteModal: React.FC<QuickNoteModalProps> = ({
   collections,
   initialTitle = '',
   initialContent = '',
-  initialTags = ['Vault', 'Idea'],
 }) => {
   const [title, setTitle] = useState<string>(initialTitle);
   const [content, setContent] = useState<string>(initialContent);
-  const [tagInput, setTagInput] = useState<string>(initialTags.join(', '));
+
   const [selectedCollectionId, setSelectedCollectionId] = useState<string>('');
 
   const handleSave = () => {
     if (!title.trim() && !content.trim()) return;
-    const tags = tagInput
-      .split(',')
-      .map(t => t.trim())
-      .filter(Boolean);
 
     const col = collections.find(c => c.id === selectedCollectionId);
 
     onSave({
       title: title.trim() || 'Quick Note',
       content: content.trim(),
-      tags: tags.length > 0 ? tags : ['Quick Note'],
       category: col ? col.name : 'General Notes',
       collectionId: selectedCollectionId || undefined,
     });
@@ -58,7 +50,6 @@ export const QuickNoteModal: React.FC<QuickNoteModalProps> = ({
     // Reset and close
     setTitle('');
     setContent('');
-    setTagInput('Vault, Idea');
     setSelectedCollectionId('');
     onClose();
   };
@@ -88,20 +79,6 @@ export const QuickNoteModal: React.FC<QuickNoteModalProps> = ({
         </Form.Item>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <Form.Item
-            label={
-              <span className="text-xs font-semibold text-[#0f3d3e] flex items-center gap-1">
-                <Tag className="w-3.5 h-3.5" /> Tags (comma separated)
-              </span>
-            }
-            className="mb-2"
-          >
-            <Input
-              value={tagInput}
-              onChange={(e) => setTagInput(e.target.value)}
-              placeholder="React, AI, Work"
-            />
-          </Form.Item>
 
           <Form.Item
             label={

@@ -60,23 +60,7 @@ export const NoteTableView: React.FC<NoteTableViewProps> = ({
               );
             },
           },
-          {
-            title: 'Tags',
-            dataIndex: 'tags',
-            key: 'tags',
-            render: (tags: string[]) => (
-              <div className="flex flex-wrap gap-1">
-                {tags
-                  ?.filter(t => t && typeof t === 'string' && t.length <= 22 && !t.includes('\n'))
-                  .slice(0, 3)
-                  .map(t => (
-                    <span key={t} title={`#${t}`} className="text-[11px] px-2 py-0.5 rounded-full bg-[#0F4C3A]/10 text-[#0f3d3e] font-medium max-w-[120px] truncate inline-block">
-                      #{t}
-                    </span>
-                  ))}
-              </div>
-            ),
-          },
+
           {
             title: 'Summary',
             dataIndex: 'summary',

@@ -132,6 +132,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
               onClick={() => {
                 if (tool.id === 'search') {
                   onSelectView('dashboard');
+                } else if (tool.id === 'chat') {
+                  onSelectView('chat');
                 } else {
                   onTriggerAITool(tool.id, tool.prompt);
                 }

@@ -16,7 +16,6 @@ export interface NoteCardProps {
   onRestore?: (id: string) => void;
   onPermanentlyDelete?: (id: string) => void;
   onAiSummarize: (note: Note) => void;
-  onAiTag: (note: Note) => void;
   isAiSummarizing?: boolean;
 }
 
@@ -30,14 +29,8 @@ export const NoteCard: React.FC<NoteCardProps> = ({
   onRestore,
   onPermanentlyDelete,
   onAiSummarize,
-  onAiTag,
   isAiSummarizing = false,
 }) => {
-  // Sanitize tags so that long sentences or paragraphs never render as badges
-  const displayTags = (note.tags || [])
-    .filter(t => t && typeof t === 'string' && t.length <= 25 && !t.includes('\n'))
-    .slice(0, 3);
-
   return (
     <Card
       hoverEffect={!isTrashView}
@@ -78,16 +71,6 @@ export const NoteCard: React.FC<NoteCardProps> = ({
 
       {/* Note Bottom Bar */}
       <div className="space-y-3 pt-3 border-t border-[#0f3d3e]/10 mt-auto">
-        <div className="flex items-center gap-1.5 flex-wrap min-h-[24px]">
-          {displayTags.length > 0 ? (
-            displayTags.map((tag) => (
-              <Tag key={tag} label={tag} variant="moss" />
-            ))
-          ) : (
-            <Tag label="Note" variant="moss" />
-          )}
-        </div>
-
         <div className="flex items-center justify-between text-[11px] text-[#4B5563] pt-1">
           <span className="flex items-center gap-1 font-medium">
             <Clock className="w-3 h-3" />
@@ -107,16 +90,6 @@ export const NoteCard: React.FC<NoteCardProps> = ({
                   disabled={isAiSummarizing}
                 >
                   <Sparkles className={`w-3.5 h-3.5 ${isAiSummarizing ? 'animate-spin' : ''}`} />
-                </button>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onAiTag(note);
-                  }}
-                  className="p-1.5 rounded-lg text-[#0f3d3e] hover:bg-[#0F4C3A]/10 transition-colors"
-                  title="AI Auto-Tag"
-                >
-                  <TagIcon className="w-3.5 h-3.5" />
                 </button>
                 <button
                   onClick={(e) => {

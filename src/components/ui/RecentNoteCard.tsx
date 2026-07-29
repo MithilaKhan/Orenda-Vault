@@ -12,9 +12,6 @@ export interface RecentNoteCardProps {
 }
 
 export const RecentNoteCard: React.FC<RecentNoteCardProps> = ({ note, onSelect }) => {
-  const displayTags = (note.tags || [])
-    .filter(t => t && typeof t === 'string' && t.length <= 25 && !t.includes('\n'))
-    .slice(0, 3);
 
   return (
     <Card
@@ -33,13 +30,7 @@ export const RecentNoteCard: React.FC<RecentNoteCardProps> = ({ note, onSelect }
           {note.summary || note.content}
         </p>
         <div className="flex flex-wrap items-center gap-1.5 pt-1.5">
-          {displayTags.length > 0 ? (
-            displayTags.map((tag, i) => (
-              <Tag key={i} label={tag} variant="moss" />
-            ))
-          ) : (
-            <Tag label="Note" variant="moss" />
-          )}
+
           <span className="text-[11px] text-[#4B5563]/80 flex items-center gap-1 ml-auto font-medium shrink-0">
             <Clock className="w-3 h-3" />
             {new Date(note.updatedAt).toLocaleDateString()}
