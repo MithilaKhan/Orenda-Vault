@@ -86,7 +86,7 @@ export const NoteCard: React.FC<NoteCardProps> = ({
                     onAiSummarize(note);
                   }}
                   className="p-1.5 rounded-lg text-[#0f3d3e] hover:bg-[#0F4C3A]/10 transition-colors"
-                  title="AI Summarize"
+                  title="Summarize"
                   disabled={isAiSummarizing}
                 >
                   <Sparkles className={`w-3.5 h-3.5 ${isAiSummarizing ? 'animate-spin' : ''}`} />

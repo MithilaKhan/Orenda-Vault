@@ -69,7 +69,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
             size="large"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
-            placeholder="Ask your second brain, search notes, or generate concepts..."
+            placeholder="Search your second brain, notes, code, and collections..."
             icon={<Search className="w-5 h-5 text-[#4B5563]" />}
             className="pr-28 py-2 text-sm font-medium shadow-sm rounded-2xl"
           />
@@ -84,7 +84,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
         {/* Search Suggestions */}
         <div className="flex flex-wrap items-center gap-2 pt-1">
           <span className="text-xs text-[#0f3d3e] font-semibold mr-1 flex items-center gap-1">
-            <Sparkles className="w-3 h-3 text-[#0f3d3e]" /> Reliable Suggestions:
+            <Sparkles className="w-3 h-3 text-[#0f3d3e]" /> Try searching:
           </span>
           {SEARCH_SUGGESTIONS.map((sug, idx) => (
             <button
@@ -104,8 +104,8 @@ export const Dashboard: React.FC<DashboardProps> = ({
       {/* Quick Action Cards Grid */}
       <div>
         <SectionTitle 
-          title="Quick Action Center" 
-          subtitle="Simple, one-click tools to capture knowledge, save code, or summarize web pages instantly"
+          title="Quick Actions" 
+          subtitle="Capture and save knowledge."
         />
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {QUICK_ACTION_CARDS.map((card, index) => (
@@ -118,8 +118,8 @@ export const Dashboard: React.FC<DashboardProps> = ({
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 pt-2">
         <div className="lg:col-span-2 space-y-4">
           <SectionTitle 
-            title="Recent Vault Memories" 
-            subtitle="Your latest saved notes, snippets, and project drafts"
+            title="Recent Activity" 
+            subtitle="Recently updated content."
             action={
               <button 
                 onClick={() => onSearchSubmit('')} 
@@ -147,7 +147,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
         {/* Collections Sidebar & Recent Activity */}
         <div className="space-y-6">
           <div>
-            <SectionTitle title="Project Folders" subtitle="Categorized knowledge vaults" />
+            <SectionTitle title="Collections" subtitle="Organize your knowledge." />
             <div className="space-y-2.5">
               {collections.slice(0, 4).map((col) => (
                 <div
@@ -173,7 +173,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
           </div>
 
           <div>
-            <SectionTitle title="Activity Timeline" subtitle="Recent actions in your vault" />
+            <SectionTitle title="Timeline" subtitle="Recent workspace actions." />
             <div className="p-4 rounded-2xl bg-white/60 border border-[#0f3d3e]/15 space-y-3.5">
               {activities.slice(0, 4).map((act) => (
                 <div key={act.id} className="flex items-start gap-2.5 text-xs">

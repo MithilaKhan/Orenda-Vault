@@ -93,8 +93,8 @@ export const WorkspaceChat: React.FC<WorkspaceChatProps> = ({
             <Sparkles className="w-5 h-5 text-[#A8E063]" />
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-[#0f3d3e]">Orenda AI Intelligence</h2>
-            <p className="text-xs text-[#4B5563]">Centered Notion-style reading workspace</p>
+            <h2 className="text-lg font-semibold text-[#0f3d3e]">AI Search</h2>
+            <p className="text-xs text-[#4B5563]">Search your knowledge.</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -200,7 +200,7 @@ export const WorkspaceChat: React.FC<WorkspaceChatProps> = ({
             <span className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-white/80 border border-[#0f3d3e]/10 shadow-soft text-xs font-medium">
               <span className="w-2 h-2 rounded-full bg-[#0f3d3e] animate-ping" />
               <span className="w-2 h-2 rounded-full bg-[#4B5563] animate-pulse" />
-              <span>Orenda AI is thinking...</span>
+              <span>Searching...</span>
             </span>
           </div>
         )}

@@ -27,7 +27,7 @@ export function ChatInputBox({ prompt, setPrompt, onGenerate, loading }: ChatInp
             className="w-full bg-transparent border-none shadow-none resize-none outline-none py-2 px-3 text-[#0f3d3e] focus:ring-0 overflow-y-auto"
             style={{ boxShadow: 'none', background: 'transparent' }}
             autoSize={{ minRows: 1, maxRows: 6 }}
-            placeholder="Ask Orenda AI something..."
+            placeholder="Search your knowledge..."
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             onKeyDown={handleKeyDown as any}

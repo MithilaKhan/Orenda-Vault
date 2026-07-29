@@ -69,8 +69,8 @@ export const CollectionsManager: React.FC<CollectionsManagerProps> = ({
   return (
     <div className="space-y-6 pb-6 animate-fade-in">
       <PageHeader
-        title="Collections & Folders"
-        description="Organize your second brain into dedicated project vaults and topics"
+        title="Collections"
+        description="Organize your knowledge into dedicated project vaults and topics"
         icon={<Folder className="w-6 h-6 text-[#0F4C3A]" />}
         action={
           <Button variant="accent" size="sm" onClick={() => setIsModalOpen(true)} icon={<Plus className="w-4 h-4 font-semibold" />}>
@@ -81,8 +81,8 @@ export const CollectionsManager: React.FC<CollectionsManagerProps> = ({
 
       {collections.length === 0 ? (
         <EmptyState
-          title="No collections yet"
-          description="Create folders like 'React Notes' or 'Portfolio Hero Copy' to organize your notes."
+          title="No collections yet."
+          description="Create a collection to organize your notes."
           onCreateNote={() => setIsModalOpen(true)}
         />
       ) : (

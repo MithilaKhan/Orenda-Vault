@@ -15,18 +15,18 @@ export interface AIToolItem {
 }
 
 export const MAIN_NAV_ITEMS: NavItem[] = [
-  { id: 'dashboard', label: 'Home', iconName: 'Home' },
+  { id: 'dashboard', label: 'Dashboard', iconName: 'Home' },
   { id: 'notes', label: 'Notes', iconName: 'FileText' },
   { id: 'collections', label: 'Collections', iconName: 'Folder' },
   { id: 'favorites', label: 'Favorites', iconName: 'Star' },
-  { id: 'recent', label: 'Recent', iconName: 'Clock' },
+  { id: 'recent', label: 'Recent Activity', iconName: 'Clock' },
   { id: 'trash', label: 'Trash', iconName: 'Trash2' },
 ];
 
 export const AI_TOOLS: AIToolItem[] = [
   { 
     id: 'chat', 
-    label: 'AI Chat', 
+    label: 'AI Search', 
     iconName: 'Sparkles', 
     prompt: '' 
   },

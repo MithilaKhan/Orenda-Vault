@@ -4,53 +4,53 @@ export const QUICK_ACTION_CARDS: ActionCard[] = [
   {
     id: 'quick-note',
     title: 'Quick Note',
-    description: 'Write down a thought, reminder, or snippet before you forget it.',
+    description: 'Create a note, reminder, or snippet.',
     icon: 'FileEdit',
     actionType: 'note',
   },
   {
     id: 'save-website',
     title: 'Save Website',
-    description: 'Bookmark any web link and get an instant AI summary of the page.',
+    description: 'Save a link and generate an AI summary.',
     icon: 'Bookmark',
     actionType: 'website',
   },
   {
     id: 'summarize-pdf',
     title: 'Summarize Document',
-    description: 'Upload or paste document text to extract bullet-point takeaways.',
+    description: 'Extract bullet-point takeaways from text.',
     icon: 'FileText',
     actionType: 'pdf',
   },
   {
     id: 'save-code',
     title: 'Save Code Snippet',
-    description: 'Store reusable code with syntax highlighting and AI explanations.',
+    description: 'Store reusable code with AI explanations.',
     icon: 'Code2',
     actionType: 'code',
   },
   {
     id: 'capture-idea',
     title: 'Brainstorm Idea',
-    description: 'Expand your creative concepts and project outlines with Orenda AI.',
+    description: 'Expand your concepts and project outlines.',
     icon: 'Lightbulb',
     actionType: 'idea',
   },
   {
     id: 'meeting-notes',
     title: 'Meeting Notes',
-    description: 'Organize discussion notes and turn them into clear TODO checklists.',
+    description: 'Turn discussion notes into clear checklists.',
     icon: 'ClipboardCheck',
     actionType: 'meeting',
   },
 ];
 
 export const SEARCH_SUGGESTIONS: string[] = [
-  'Summarize my React 19 notes',
-  'Show interview questions & answers',
-  'Find Portfolio Hero copy ideas',
-  'What did I save this week?',
-  'Explain JWT authentication',
+  'React 19 notes summary',
+  'Interview Q&A',
+  'Portfolio hero copy',
+  'Saved this week',
+  'jwt token',
 ];
 
 export const INITIAL_COLLECTIONS: Collection[] = [

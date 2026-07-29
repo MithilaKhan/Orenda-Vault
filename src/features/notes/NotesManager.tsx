@@ -96,8 +96,8 @@ export const NotesManager: React.FC<NotesManagerProps> = ({
 
         {notes.length === 0 ? (
           <EmptyState 
-            title={isTrashView ? 'Trash is empty' : 'No notes found'}
-            description={isTrashView ? 'Deleted notes will appear here.' : 'Create your first note to start organizing your thoughts.'}
+            title={isTrashView ? 'Trash is empty' : 'No notes yet.'}
+            description={isTrashView ? 'Deleted notes will appear here.' : 'Create your first note to start building your knowledge library.'}
             onCreateNote={isTrashView ? undefined : () => onAddNote({ title: 'New Vault Note', content: '# Welcome\n\nStart writing...' })}
           />
         ) : viewMode === 'grid' ? (

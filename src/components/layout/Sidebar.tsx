@@ -87,10 +87,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
           className={`w-full flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-[#A8E063] hover:bg-[#95cc56] text-[#0f3d3e] font-semibold transition-all shadow-soft active:scale-[0.98] ${
             isCollapsed ? 'px-0' : ''
           }`}
-          title="New Workspace Note"
+          title="Create Note"
         >
           <Plus className="w-4 h-4 flex-shrink-0 font-semibold" />
-          {!isCollapsed && <span className="text-sm">New Workspace</span>}
+          {!isCollapsed && <span className="text-sm">Create Note</span>}
         </button>
 
         <div className="h-px bg-[#0f3d3e]/10 my-2" />

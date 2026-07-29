@@ -55,7 +55,7 @@ export const QuickNoteModal: React.FC<QuickNoteModalProps> = ({
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="✨ Quick Capture" maxWidth="max-w-xl">
+    <Modal isOpen={isOpen} onClose={onClose} title="Create Note" maxWidth="max-w-xl">
       <Form layout="vertical" className="space-y-3" onSubmitCapture={(e) => { e.preventDefault(); handleSave(); }}>
         <Form.Item className="mb-3">
           <Input
@@ -113,14 +113,13 @@ export const QuickNoteModal: React.FC<QuickNoteModalProps> = ({
 
         <div className="flex items-center justify-between pt-4 border-t border-[#0f3d3e]/10">
           <span className="text-[11px] text-[#4B5563] flex items-center gap-1">
-            <Sparkles className="w-3 h-3 text-[#A8E063]" /> Saved locally in browser memory
           </span>
           <div className="flex items-center gap-2">
             <Button variant="secondary" size="sm" onClick={onClose} type="button">
               Cancel
             </Button>
             <Button variant="accent" size="sm" onClick={handleSave} type="button">
-              Save to Vault
+              Save
             </Button>
           </div>
         </div>
