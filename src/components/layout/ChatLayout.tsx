@@ -35,7 +35,7 @@ export function ChatLayout({
       <ChatSidebar {...sidebarProps} />
 
       <div className="md:hidden fixed top-0 left-0 right-0 h-14 bg-sidebar-bg/80 backdrop-blur-md border-b border-border-color z-50 flex items-center justify-between px-4">
-        <span className="font-semibold text-primary">Orenda AI</span>
+        <span className="font-semibold text-primary">Orenda Vault</span>
         <button onClick={() => setMobileMenuOpen(true)} className="p-2 text-primary hover:bg-primary/5 rounded-lg transition-colors">
           <Menu className="w-5 h-5" />
         </button>

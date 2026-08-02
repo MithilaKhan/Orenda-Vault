@@ -1,21 +1,14 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
+import Image from 'next/image';
 import { WorkspaceChatMessage } from '@/types/workspace';
 import { Button } from '@/components/ui/Button';
-import { PageHeader } from '@/components/ui/PageHeader';
-import { Input } from '@/components/ui/Input';
-import { 
-  Sparkles, 
-  Send, 
-  Copy, 
-  BookmarkPlus, 
-  Star, 
-  Share2, 
-  RefreshCw, 
-  Check, 
-  User as UserIcon, 
-  Bot,
+import {
+  Copy,
+  RefreshCw,
+  Check,
+  User as UserIcon,
   Trash2
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -35,10 +28,7 @@ export const WorkspaceChat: React.FC<WorkspaceChatProps> = ({
   onClearHistory,
   isLoading,
 }) => {
-  const [input, setInput] = useState<string>('');
   const [copiedId, setCopiedId] = useState<string | null>(null);
-  const [savedId, setSavedId] = useState<string | null>(null);
-  const [favoritedIds, setFavoritedIds] = useState<Set<string>>(new Set());
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -49,12 +39,6 @@ export const WorkspaceChat: React.FC<WorkspaceChatProps> = ({
     scrollToBottom();
   }, [messages, isLoading]);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!input.trim() || isLoading) return;
-    onSendMessage(input);
-    setInput('');
-  };
 
   const handleCopy = async (id: string, content: string) => {
     try {
@@ -66,35 +50,28 @@ export const WorkspaceChat: React.FC<WorkspaceChatProps> = ({
     }
   };
 
-  const handleSave = (id: string, content: string) => {
-    // Extract first line or clean snippet as title
-    const lines = content.split('\n').filter(Boolean);
-    const firstLine = lines[0]?.replace(/^#+\s*/, '') || 'AI Conversation Snippet';
-    onSaveToNotes(content, firstLine.slice(0, 50));
-    setSavedId(id);
-    setTimeout(() => setSavedId(null), 2500);
-  };
-
-  const toggleFavorite = (id: string) => {
-    setFavoritedIds(prev => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
-  };
-
   return (
-    <div className="flex flex-col h-[calc(100vh-210px)] sm:h-[calc(100vh-185px)] lg:h-[calc(100vh-140px)] max-w-3xl mx-auto px-2 sm:px-4">
-      {/* Header */}
+    <div className="flex flex-col h-[calc(100vh-210px)] sm:h-[calc(100vh-185px)] lg:h-[calc(100vh-150px)] max-w-3xl mx-auto px-2 sm:px-4">
+      {/* ── Header ─────────────────────────────────────────── */}
       <div className="flex items-center justify-between pb-4 border-b border-[#0f3d3e]/10 mb-4">
-        <div className="flex items-center gap-2.5">
-          <div className="p-2 rounded-xl bg-[#0F4C3A] text-[#F7F3EA] shadow-soft">
-            <Sparkles className="w-5 h-5 text-[#A8E063]" />
-          </div>
+        <div className="flex items-center gap-3">
+          {/* Fix 1 – real PNG logo, cropped */}
+          <span
+            className="inline-flex items-center justify-center overflow-hidden rounded-xl shadow-soft flex-shrink-0"
+            style={{ width: 44, height: 44 }}
+          >
+            <Image
+              src="/logo-mockup.png"
+              alt="Orenda Vault"
+              width={70}
+              height={70}
+              style={{ objectFit: 'cover', width: 70, height: 70 }}
+              priority
+            />
+          </span>
           <div>
-            <h2 className="text-lg font-semibold text-[#0f3d3e]">AI Search</h2>
-            <p className="text-xs text-[#4B5563]">Search your knowledge.</p>
+            <h2 className="text-lg font-bold text-[#0f3d3e] leading-tight">Orenda Vault</h2>
+            <p className="text-xs text-[#4B5563]">Your personal AI knowledge assistant</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -112,103 +89,101 @@ export const WorkspaceChat: React.FC<WorkspaceChatProps> = ({
         </div>
       </div>
 
-      {/* Centered Reading Width Messages Area */}
-      <div className="flex-1 overflow-y-auto space-y-6 py-4 pr-2">
+      {/* ── Messages Area – scrollbar hidden (Fix 3) ────────── */}
+      <div className="flex-1 overflow-y-auto space-y-4 py-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <AnimatePresence initial={false}>
           {messages.map((msg) => {
             const isAI = msg.role === 'assistant';
-            const isFav = favoritedIds.has(msg.id) || msg.isFavorite;
-
             return (
               <motion.div
                 key={msg.id}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.2 }}
-                className={`flex flex-col w-full mb-6 ${isAI ? 'items-start' : 'items-end'}`}
+                className={`flex flex-col w-full mb-4 md:mb-8 ${isAI ? 'items-start' : 'items-end'}`}
               >
-                <div className={`flex flex-col w-full max-w-[95%] sm:max-w-[85%] ${isAI ? 'items-start' : 'items-end'}`}>
-                  {/* Author Label */}
-                  <div className={`flex items-center gap-2 mb-1.5 ${isAI ? 'flex-row' : 'flex-row-reverse'}`}>
-                    <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#0f3d3e]/70">
-                      {isAI ? (
-                        <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-[#0f3d3e]/10 text-[#0f3d3e]">
-                          <Bot className="w-3.5 h-3.5 text-[#0f3d3e]" /> Orenda AI
-                        </span>
-                      ) : (
-                        <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-[#4B5563]/15 text-[#0f3d3e]">
-                          <UserIcon className="w-3.5 h-3.5" /> You
-                        </span>
-                      )}
-                    </div>
-                    <span className="text-[11px] text-[#4B5563]/70">
-                      {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                    </span>
+                {/* ── Author Label ── */}
+                <div className={`flex items-center gap-2 mb-1.5 ${isAI ? 'flex-row' : 'flex-row-reverse'}`}>
+                  <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#0f3d3e]/70">
+                    {isAI ? (
+                      /* Fix 2 – logo icon only, no text */
+                      <span className="flex items-center gap-1  ">
+
+                        <Image src="/logo-mockup.png" alt="Orenda Vault" width={40} height={40} style={{ objectFit: 'cover', width: 40, height: 40 }} className='rounded-md rounded-rb-sm' />
+
+                      </span>
+                    ) : (
+                      <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-[#4B5563]/15 text-[#0f3d3e]">
+                        <UserIcon className="w-3.5 h-3.5" /> You
+                      </span>
+                    )}
                   </div>
-
-                  {/* Message Content */}
-                  <div className={`text-sm sm:text-base leading-relaxed text-left ${
-                    isAI ? 'text-[#0f3d3e] font-normal w-full' : 'text-[#0f3d3e] font-medium bg-white/60 p-4 rounded-2xl rounded-tr-sm border border-[#0f3d3e]/10 shadow-soft'
-                  }`}>
-                    {msg.content.split('\n').map((line, idx) => {
-                      if (line.startsWith('### ')) {
-                        return <h3 key={idx} className="text-base font-semibold text-[#0f3d3e] mt-3 mb-1">{line.replace('### ', '')}</h3>;
-                      }
-                      if (line.startsWith('## ')) {
-                        return <h2 key={idx} className="text-lg font-semibold text-[#0f3d3e] mt-4 mb-2">{line.replace('## ', '')}</h2>;
-                      }
-                      if (line.startsWith('# ')) {
-                        return <h1 key={idx} className="text-xl font-semibold text-[#0f3d3e] mt-4 mb-2">{line.replace('# ', '')}</h1>;
-                      }
-                      if (line.startsWith('- ') || line.startsWith('* ')) {
-                        return <li key={idx} className="ml-4 list-disc text-sm sm:text-base my-0.5">{line.replace(/^[-*]\s*/, '')}</li>;
-                      }
-                      return <p key={idx} className="my-1.5 whitespace-pre-wrap">{line}</p>;
-                    })}
-                  </div>
-
-                  {/* Response Toolbar (ONLY on AI Messages) */}
-                  {isAI && (
-                    <div className="flex flex-wrap items-center gap-1.5 pt-2">
-                      <button
-                        onClick={() => handleCopy(msg.id, msg.content)}
-                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium bg-white/70 hover:bg-white border border-[#0f3d3e]/10 text-[#0f3d3e]/80 hover:text-[#0f3d3e] transition-all shadow-soft"
-                      >
-                        {copiedId === msg.id ? <Check className="w-3.5 h-3.5 text-[#A8E063]" /> : <Copy className="w-3.5 h-3.5" />}
-                        <span>{copiedId === msg.id ? 'Copied' : 'Copy'}</span>
-                      </button>
-
-
-                      <button
-                        onClick={() => onSendMessage(`Please regenerate and refine your last answer:\n\n"${msg.content.slice(0, 50)}..."`)}
-                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium bg-white/70 hover:bg-white border border-[#0f3d3e]/10 text-[#0f3d3e]/80 hover:text-[#0f3d3e] transition-all shadow-soft ml-auto"
-                      >
-                        <RefreshCw className="w-3.5 h-3.5" />
-                        <span>Regenerate</span>
-                      </button>
-                    </div>
-                  )}
+                  <span className="text-[11px] text-[#4B5563]/70">
+                    {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </span>
                 </div>
+
+                {/* ── Message Content (Fix 4 & 5 – no outer box, tight padding on user bubble) ── */}
+                <div className={`text-sm sm:text-base leading-relaxed text-left ${isAI
+                  ? 'text-[#0f3d3e] font-normal w-full max-w-[95%] sm:max-w-[85%]'
+                  : 'text-[#0f3d3e] font-medium bg-white/60 py-2 px-3 rounded-2xl rounded-tr-sm border border-[#0f3d3e]/10 shadow-soft'
+                  }`}>
+                  {msg.content.split('\n').map((line, idx) => {
+                    if (line.startsWith('### ')) {
+                      return <h3 key={idx} className="text-base font-semibold text-[#0f3d3e] mt-3 mb-1">{line.replace('### ', '')}</h3>;
+                    }
+                    if (line.startsWith('## ')) {
+                      return <h2 key={idx} className="text-lg font-semibold text-[#0f3d3e] mt-4 mb-2">{line.replace('## ', '')}</h2>;
+                    }
+                    if (line.startsWith('# ')) {
+                      return <h1 key={idx} className="text-xl font-semibold text-[#0f3d3e] mt-4 mb-2">{line.replace('# ', '')}</h1>;
+                    }
+                    if (line.startsWith('- ') || line.startsWith('* ')) {
+                      return <li key={idx} className="ml-4 list-disc text-sm sm:text-base my-0.5">{line.replace(/^[-*]\s*/, '')}</li>;
+                    }
+                    return <p key={idx} className="my-1 whitespace-pre-wrap">{line}</p>;
+                  })}
+                </div>
+
+                {/* ── Response Toolbar (AI only) ── */}
+                {isAI && (
+                  <div className="flex flex-wrap items-center gap-1.5 pt-2">
+                    <button
+                      onClick={() => handleCopy(msg.id, msg.content)}
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium bg-white/70 hover:bg-white border border-[#0f3d3e]/10 text-[#0f3d3e]/80 hover:text-[#0f3d3e] transition-all shadow-soft"
+                    >
+                      {copiedId === msg.id ? <Check className="w-3.5 h-3.5 text-[#A8E063]" /> : <Copy className="w-3.5 h-3.5" />}
+                      <span>{copiedId === msg.id ? 'Copied' : 'Copy'}</span>
+                    </button>
+
+                    <button
+                      onClick={() => onSendMessage(`Please regenerate and refine your last answer:\n\n"${msg.content.slice(0, 50)}..."`)}
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium bg-white/70 hover:bg-white border border-[#0f3d3e]/10 text-[#0f3d3e]/80 hover:text-[#0f3d3e] transition-all shadow-soft ml-auto"
+                    >
+                      <RefreshCw className="w-3.5 h-3.5" />
+                      <span>Regenerate</span>
+                    </button>
+                  </div>
+                )}
               </motion.div>
             );
           })}
         </AnimatePresence>
 
-        {/* AI Typing Loader Dot animation */}
+        {/* AI Typing Loader */}
         {isLoading && (
           <div className="flex items-center gap-2 py-4 text-[#0f3d3e]">
             <span className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-white/80 border border-[#0f3d3e]/10 shadow-soft text-xs font-medium">
               <span className="w-2 h-2 rounded-full bg-[#0f3d3e] animate-ping" />
               <span className="w-2 h-2 rounded-full bg-[#4B5563] animate-pulse" />
-              <span>Searching...</span>
+              <span>Thinking...</span>
             </span>
           </div>
         )}
 
         <div ref={messagesEndRef} />
       </div>
-
-
     </div>
   );
 };
+

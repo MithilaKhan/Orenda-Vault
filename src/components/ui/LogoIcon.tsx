@@ -1,27 +1,29 @@
 import React from 'react';
+import Image from 'next/image';
 
-export const LogoIcon: React.FC<{ className?: string }> = ({ className = "w-6 h-6" }) => {
+interface LogoIconProps {
+  className?: string;
+  /** Size in pixels of the visible clip area. Defaults to 28. */
+  size?: number;
+}
+
+export const LogoIcon: React.FC<LogoIconProps> = ({ className, size = 28 }) => {
+  // The PNG has ~20% background padding on every side.
+  // Render the image at ~160% of the clip size so the logo mark fills the container.
+  const imgSize = Math.round(size * 1.6);
   return (
-    <svg 
-      viewBox="0 0 24 24" 
-      fill="none" 
-      xmlns="http://www.w3.org/2000/svg" 
-      className={className}
+    <span
+      className={`inline-flex items-center justify-center overflow-hidden rounded-full flex-shrink-0 ${className ?? ''}`}
+      style={{ width: size, height: size }}
     >
-      <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2.5" />
-      <path 
-        d="M5 12C8 12 9 9 12 9C15 9 16 12 19 12" 
-        stroke="currentColor" 
-        strokeWidth="1.5" 
-        strokeLinecap="round" 
+      <Image
+        src="/logo-mockup.png"
+        alt="Orenda AI Logo"
+        width={imgSize}
+        height={imgSize}
+        style={{ objectFit: 'cover', width: imgSize, height: imgSize }}
+        priority
       />
-      <path 
-        d="M5 15C8 15 9 12 12 12C15 12 16 15 19 15" 
-        stroke="currentColor" 
-        strokeWidth="1" 
-        strokeLinecap="round" 
-        opacity="0.6" 
-      />
-    </svg>
+    </span>
   );
 };

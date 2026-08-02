@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { Star, Clock, Trash2, Search, FileText } from 'lucide-react';
 import { useWorkspaceStore } from '@/store/useWorkspaceStore';
 import { WorkspaceShell } from '@/components/layout/WorkspaceShell';
@@ -84,11 +85,9 @@ export default function VaultPage() {
       store.setActiveView('notes');
       return;
     }
-    // Filter notes in Notes view
     store.setActiveView('notes');
   };
 
-  // Filter notes based on search query or view
   const getDisplayedNotes = () => {
     let filtered = store.notes;
 
@@ -116,11 +115,24 @@ export default function VaultPage() {
 
   if (!store.isHydrated) {
     return (
-      <div className="min-h-screen bg-[#F7F3EA] flex items-center justify-center p-6 text-[#0f3d3e]">
-        <div className="flex flex-col items-center gap-3">
-          <span className="text-4xl animate-bounce">🌿</span>
-          <p className="text-sm font-semibold tracking-wider uppercase text-[#4B5563]">Loading Orenda Vault...</p>
+      <div className="min-h-screen bg-[#F7F3EA] flex flex-col items-center justify-center p-6 text-[#0f3d3e] animate-in fade-in duration-300">
+        <div className="relative w-20 h-20 flex items-center justify-center mb-6">
+          <div className="absolute inset-0 border-4 border-[#0f3d3e]/10 rounded-full" />
+          <div className="absolute inset-0 border-4 border-t-[#0F4C3A] border-r-transparent border-b-transparent border-l-transparent rounded-full animate-spin" />
+          <span className="inline-flex items-center justify-center overflow-hidden rounded-full animate-pulse" style={{ width: 48, height: 48 }}>
+            <Image
+              src="/logo-mockup.png"
+              alt="Orenda Vault"
+              width={76}
+              height={76}
+              style={{ objectFit: 'cover', width: 76, height: 76 }}
+              priority
+            />
+          </span>
         </div>
+        <p className="text-xs font-semibold tracking-widest text-[#0f3d3e]/80 uppercase animate-pulse">
+          Loading Orenda Vault...
+        </p>
       </div>
     );
   }
@@ -198,16 +210,22 @@ export default function VaultPage() {
               : 'Vault Notes'
           }
           viewIcon={
-            store.activeView === 'favorites' ? <Star className="w-6 h-6 text-[#0F4C3A]" /> :
-            store.activeView === 'recent' ? <Clock className="w-6 h-6 text-[#0F4C3A]" /> :
-            store.activeView === 'trash' ? <Trash2 className="w-6 h-6 text-[#0F4C3A]" /> :
-            store.searchQuery ? <Search className="w-6 h-6 text-[#0F4C3A]" /> :
-            <FileText className="w-6 h-6 text-[#0F4C3A]" />
+            store.activeView === 'favorites' ? <Star className="w-5 h-5 text-[#0F4C3A] fill-[#0F4C3A]" /> :
+            store.activeView === 'recent' ? <Clock className="w-5 h-5 text-[#0F4C3A] fill-[#0F4C3A]/20" /> :
+            store.activeView === 'trash' ? <Trash2 className="w-5 h-5 text-red-600 fill-red-500/20" /> :
+            store.searchQuery ? <Search className="w-5 h-5 text-[#0F4C3A]" /> :
+            <FileText className="w-5 h-5 text-[#0F4C3A] fill-[#0F4C3A]/20" />
           }
           viewDescription={
-            store.activeView === 'trash'
+            store.activeView === 'favorites'
+              ? 'Quickly access your starred notes and high-priority knowledge.'
+              : store.activeView === 'recent'
+              ? 'Review your latest updated thoughts, captured snippets, and activity.'
+              : store.activeView === 'trash'
               ? 'Items in trash can be restored or permanently removed.'
-              : 'Click any note to edit its content or use AI to summarize and tag.'
+              : store.searchQuery
+              ? 'Matching notes and snippets found across your vault.'
+              : 'Access, refine, and organize your entire knowledge repository.'
           }
           isTrashView={store.activeView === 'trash'}
         />

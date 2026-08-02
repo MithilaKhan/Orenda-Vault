@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import { Form, Input, Button } from 'antd';
 import { Mail, ArrowLeft } from 'lucide-react';
 import { AuthView } from '../AuthModal';
@@ -25,7 +26,12 @@ export const ForgotPassView: React.FC<ForgotPassViewProps> = ({ onSwitchView }) 
         <ArrowLeft className="w-3.5 h-3.5 mr-1" /> Back to Sign In
       </button>
 
-      <div className="text-center space-y-2">
+      <div className="text-center space-y-3">
+        <div className="flex justify-center mb-1">
+          <span className="inline-flex items-center justify-center overflow-hidden rounded-full" style={{ width: 56, height: 56 }}>
+            <Image src="/logo-mockup.png" alt="Orenda AI" width={90} height={90} style={{ objectFit: 'cover', width: 90, height: 90 }} priority />
+          </span>
+        </div>
         <h2 className="text-2xl font-bold text-[#0f3d3e]">Forgot Password?</h2>
         <p className="text-[#4B5563] text-sm px-4">
           Enter your email address and we'll send you a code to reset your password.

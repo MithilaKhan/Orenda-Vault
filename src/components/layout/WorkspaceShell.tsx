@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { Sidebar } from './Sidebar';
 import { AuthModal } from '../../features/auth/AuthModal';
 import { ProfileSettingsModal } from '../../features/settings/ProfileSettingsModal';
@@ -43,8 +44,10 @@ export const WorkspaceShell: React.FC<WorkspaceShellProps> = ({
     <div className="min-h-screen bg-[#F7F3EA] text-[#0f3d3e] flex flex-col font-sans relative">
       {/* Mobile Top Header */}
       <header className="lg:hidden sticky top-0 z-40 bg-[#EFEADF]/90 backdrop-blur-md border-b border-[#0f3d3e]/10 px-4 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-2" onClick={() => onSelectView('dashboard')}>
-          <span className="text-xl">🌿</span>
+        <div className="flex items-center gap-2 cursor-pointer" onClick={() => onSelectView('dashboard')}>
+          <span className="inline-flex items-center justify-center overflow-hidden rounded-full" style={{ width: 28, height: 28 }}>
+            <Image src="/logo-mockup.png" alt="Orenda AI" width={45} height={45} style={{ objectFit: 'cover', width: 45, height: 45 }} priority />
+          </span>
           <span className="font-semibold text-base text-[#0f3d3e]">Orenda Vault</span>
         </div>
         <button
@@ -152,7 +155,7 @@ export const WorkspaceShell: React.FC<WorkspaceShellProps> = ({
             type="submit"
             disabled={!floatingPrompt.trim()}
             className="p-2.5 rounded-xl bg-[#0F4C3A] text-[#F7F3EA] hover:bg-[#0F4C3A]/90 disabled:opacity-30 disabled:cursor-not-allowed transition-all active:scale-95 shadow-soft flex-shrink-0"
-            title="Send to Orenda AI"
+            title="Send to Orenda Vault"
           >
             <Send className="w-4 h-4" />
           </button>

@@ -8,8 +8,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Orenda AI",
-  description: "A premium nature-inspired AI content generator",
+  title: "Orenda Vault",
+  description: "A premium AI-powered personal knowledge workspace",
 };
 
 export default function RootLayout({

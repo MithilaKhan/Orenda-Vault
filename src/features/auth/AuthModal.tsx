@@ -66,7 +66,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         onCancel={onClose}
         footer={null}
         width={480}
-        destroyOnClose
         centered
         className="auth-modal"
         styles={{

@@ -36,8 +36,8 @@ export const NotesManager: React.FC<NotesManagerProps> = ({
   onPermanentlyDeleteNote,
   onToggleFavorite,
   viewTitle = 'Vault Notes',
-  viewIcon,
-  viewDescription = 'Your personal second brain and searchable knowledge repository',
+  viewIcon = <FileText className="w-5 h-5 text-[#0F4C3A] fill-[#0F4C3A]/20" />,
+  viewDescription = 'Access, refine, and organize your entire knowledge repository.',
   isTrashView = false,
 }) => {
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);

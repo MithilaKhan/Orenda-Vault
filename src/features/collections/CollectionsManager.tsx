@@ -59,7 +59,7 @@ export const CollectionsManager: React.FC<CollectionsManagerProps> = ({
           onDeleteNote={onDeleteNote}
           onToggleFavorite={onToggleFavorite}
           viewTitle={activeCol ? activeCol.name : 'Collection Notes'}
-          viewIcon={<Folder className="w-6 h-6 text-[#0F4C3A]" />}
+          viewIcon={<Folder className="w-5 h-5 text-[#0F4C3A] fill-[#0F4C3A]/20" />}
           viewDescription={activeCol?.description || 'Notes saved inside this collection'}
         />
       </div>
@@ -71,7 +71,7 @@ export const CollectionsManager: React.FC<CollectionsManagerProps> = ({
       <PageHeader
         title="Collections"
         description="Organize your knowledge into dedicated project vaults and topics"
-        icon={<Folder className="w-6 h-6 text-[#0F4C3A]" />}
+        icon={<Folder className="w-5 h-5 text-[#0F4C3A] fill-[#0F4C3A]/20" />}
         action={
           <Button variant="accent" size="sm" onClick={() => setIsModalOpen(true)} icon={<Plus className="w-4 h-4 font-semibold" />}>
             New Collection

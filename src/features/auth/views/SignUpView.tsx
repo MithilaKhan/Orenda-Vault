@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import { Form, Input, Button, Divider } from 'antd';
 import { Mail, Lock, User } from 'lucide-react';
 import { AuthView } from '../AuthModal';
@@ -19,9 +20,14 @@ export const SignUpView: React.FC<SignUpViewProps> = ({ onSwitchView, onSuccess 
 
   return (
     <div className="animate-fade-in space-y-6">
-      <div className="text-center space-y-2">
+      <div className="text-center space-y-3">
+        <div className="flex justify-center mb-1">
+          <span className="inline-flex items-center justify-center overflow-hidden rounded-full" style={{ width: 56, height: 56 }}>
+            <Image src="/logo-mockup.png" alt="Orenda AI" width={90} height={90} style={{ objectFit: 'cover', width: 90, height: 90 }} priority />
+          </span>
+        </div>
         <h2 className="text-2xl font-bold text-[#0f3d3e]">Create Account</h2>
-        <p className="text-[#4B5563] text-sm">Join the knowledge sanctuary</p>
+        <p className="text-[#4B5563] text-sm">Join your knowledge sanctuary</p>
       </div>
 
       <Form form={form} layout="vertical" onFinish={onFinish} className="space-y-4">

@@ -60,12 +60,12 @@ export const Sidebar: React.FC<SidebarProps>= ({
         <div className="flex items-center justify-between px-2 py-2">
           {!isCollapsed ? (
             <div className="flex items-center gap-2 cursor-pointer text-[#0f3d3e]" onClick={() => onSelectView('dashboard')}>
-              <LogoIcon className="w-7 h-7" />
-              <span className="font-bold tracking-tight text-lg mt-0.5">Orenda AI</span>
+              <LogoIcon size={28} />
+              <span className="font-bold tracking-tight text-lg mt-0.5">Orenda Vault</span>
             </div>
           ) : (
             <div className="mx-auto cursor-pointer text-[#0f3d3e]" onClick={() => onSelectView('dashboard')}>
-              <LogoIcon className="w-7 h-7" />
+              <LogoIcon size={28} />
             </div>
           )}
           <button
