@@ -27,16 +27,19 @@ export const NoteTableView: React.FC<NoteTableViewProps> = ({
   onPermanentlyDeleteNote,
 }) => {
   return (
-    <div className="bg-white/80 rounded-2xl p-4 border border-[#0f3d3e]/15 shadow-soft overflow-x-auto">
+    <div className="bg-white/80 rounded-2xl p-2 sm:p-4 border border-[#0f3d3e]/15 shadow-soft overflow-hidden">
+      <div className="overflow-x-auto -mx-2 sm:mx-0">
       <Table
         dataSource={notes}
         rowKey="id"
-        pagination={{ pageSize: 8 }}
+        pagination={{ pageSize: 8, size: 'small' }}
+        scroll={{ x: 560 }}
         columns={[
           {
             title: 'Title',
             dataIndex: 'title',
             key: 'title',
+            minWidth: 160,
             render: (text, record) => (
               <span
                 className="font-semibold text-[#0f3d3e] hover:text-[#0f3d3e] cursor-pointer"
@@ -49,6 +52,7 @@ export const NoteTableView: React.FC<NoteTableViewProps> = ({
           {
             title: 'Collection',
             key: 'collection',
+            minWidth: 120,
             render: (_, record) => {
               const col = collections.find(c => c.id === record.collectionId);
               return col ? (
@@ -65,17 +69,21 @@ export const NoteTableView: React.FC<NoteTableViewProps> = ({
             title: 'Summary',
             dataIndex: 'summary',
             key: 'summary',
+            minWidth: 160,
+            responsive: ['md'] as ('md')[],
             render: (text) => <span className="text-xs text-[#4B5563] line-clamp-1">{text}</span>,
           },
           {
             title: 'Updated',
             dataIndex: 'updatedAt',
             key: 'updatedAt',
+            minWidth: 90,
             render: (date) => <span className="text-xs text-[#4B5563]">{new Date(date).toLocaleDateString()}</span>,
           },
           {
             title: 'Actions',
             key: 'actions',
+            minWidth: 90,
             render: (_, record) => (
               <div className="flex items-center gap-1.5">
                 {!isTrashView ? (
@@ -121,6 +129,7 @@ export const NoteTableView: React.FC<NoteTableViewProps> = ({
           },
         ]}
       />
+      </div>
     </div>
   );
 };

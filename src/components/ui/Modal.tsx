@@ -18,6 +18,9 @@ export const Modal: React.FC<ModalProps> = ({
   children,
   maxWidth = 'max-w-xl',
 }) => {
+  // Derive numeric width for Ant Modal, capped at viewport width on mobile
+  const desktopWidth = maxWidth.includes('2xl') ? 768 : maxWidth.includes('xl') ? 640 : 520;
+
   return (
     <ConfigProvider
       theme={{
@@ -36,9 +39,16 @@ export const Modal: React.FC<ModalProps> = ({
         title={title ? <span className="font-semibold text-lg text-[#0f3d3e]">{title}</span> : null}
         footer={null}
         centered
-        width={maxWidth.includes('xl') ? 640 : maxWidth.includes('2xl') ? 768 : 520}
-        destroyOnClose
+        width={desktopWidth}
+        style={{ maxWidth: 'calc(100vw - 32px)' }}
+        destroyOnHidden
         className="custom-antd-modal"
+        styles={{
+          body: {
+            maxHeight: 'calc(100dvh - 200px)',
+            overflowY: 'auto',
+          },
+        }}
       >
         <div className="pt-2">{children}</div>
       </AntModal>

@@ -37,6 +37,20 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans);
   overflow-x: hidden;
+  /* iOS touch performance */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+button, a, [role="button"] {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Safe-area insets for notched devices (iPhone X+) */
+.floating-bar-safe {
+  padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+  bottom: env(safe-area-inset-bottom, 0px);
 }
 
 /* Custom Scrollbar for sleek, Apple-like feel */
@@ -84,4 +98,22 @@ body {
 .shadow-hover:hover {
   box-shadow: 0 10px 25px -5px rgba(15, 76, 58, 0.08), 0 8px 10px -6px rgba(15, 76, 58, 0.04);
   transform: translateY(-2px);
+}
+
+/* Hide scrollbar but allow scrolling (for horizontal suggestion strips) */
+.scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+/* Fade-in animation for page views */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in {
+  animation: fadeIn 0.25s ease-out both;
 }

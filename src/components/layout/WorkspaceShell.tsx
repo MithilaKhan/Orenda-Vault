@@ -129,10 +129,11 @@ export const WorkspaceShell: React.FC<WorkspaceShellProps> = ({
 
       {/* Sticky Floating AI Input Bottom Command Bar */}
       <div
-        className={`fixed bottom-6 left-4 right-4 z-20 transition-all duration-300 ${
-          isCollapsed ? 'lg:left-24' : 'lg:left-68'
-        } lg:right-8 max-w-3xl mx-auto`}
+        className={`fixed bottom-6 left-0 right-0 z-20 px-4 transition-all duration-300 ${
+          isCollapsed ? 'lg:pl-[96px]' : 'lg:pl-[272px]'
+        } lg:pr-8`}
       >
+        <div className="max-w-3xl mx-auto">
         <form
           onSubmit={handleFloatingSubmit}
           className="bg-white/85 backdrop-blur-xl border border-[#0f3d3e]/15 rounded-2xl shadow-2xl p-2 flex items-center gap-2 focus-within:ring-2 focus-within:ring-[#0f3d3e]/30 transition-all"
@@ -143,19 +144,20 @@ export const WorkspaceShell: React.FC<WorkspaceShellProps> = ({
           <Input
             value={floatingPrompt}
             onChange={(e) => setFloatingPrompt(e.target.value)}
-            placeholder="✨ Ask Orenda... (e.g., Explain JWT, brainstorm blog topics, or search notes)"
+            placeholder="✨ Ask Orenda..."
             className="w-full border-none shadow-none bg-transparent"
             style={{ boxShadow: 'none', background: 'transparent' }}
           />
           <button
             type="submit"
             disabled={!floatingPrompt.trim()}
-            className="p-2.5 rounded-xl bg-[#0F4C3A] text-[#F7F3EA] hover:bg-[#0F4C3A]/90 disabled:opacity-30 disabled:cursor-not-allowed transition-all active:scale-95 shadow-soft"
+            className="p-2.5 rounded-xl bg-[#0F4C3A] text-[#F7F3EA] hover:bg-[#0F4C3A]/90 disabled:opacity-30 disabled:cursor-not-allowed transition-all active:scale-95 shadow-soft flex-shrink-0"
             title="Send to Orenda AI"
           >
             <Send className="w-4 h-4" />
           </button>
         </form>
+        </div>
       </div>
 
       <AuthModal 

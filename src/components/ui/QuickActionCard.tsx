@@ -32,7 +32,7 @@ export const QuickActionCard: React.FC<QuickActionCardProps> = ({ card, index, o
     <Card
       hoverEffect
       onClick={() => onClick(card.actionType)}
-      className="group flex flex-col justify-between h-48 bg-white/75 hover:bg-white border-[#0f3d3e]/15 hover:border-[#0f3d3e]/30 transition-all shadow-soft hover:shadow-md relative overflow-hidden"
+      className="group flex flex-col justify-between min-h-40 h-auto sm:h-48 bg-white/75 hover:bg-white border-[#0f3d3e]/15 hover:border-[#0f3d3e]/30 transition-all shadow-soft hover:shadow-md relative overflow-hidden"
     >
       <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#0f3d3e]/30 via-[#A8E063] to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
       <div className="space-y-3.5">

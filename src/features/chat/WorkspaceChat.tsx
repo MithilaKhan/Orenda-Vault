@@ -85,7 +85,7 @@ export const WorkspaceChat: React.FC<WorkspaceChatProps> = ({
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-140px)] max-w-3xl mx-auto px-2 sm:px-4">
+    <div className="flex flex-col h-[calc(100vh-210px)] sm:h-[calc(100vh-185px)] lg:h-[calc(100vh-140px)] max-w-3xl mx-auto px-2 sm:px-4">
       {/* Header */}
       <div className="flex items-center justify-between pb-4 border-b border-[#0f3d3e]/10 mb-4">
         <div className="flex items-center gap-2.5">

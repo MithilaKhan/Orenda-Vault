@@ -31,7 +31,7 @@ export const CollectionCard: React.FC<CollectionCardProps> = ({
     <Card
       hoverEffect
       onClick={() => onSelect(collection.id)}
-      className="flex flex-col justify-between h-48 bg-white/70 hover:bg-white border-[#0f3d3e]/15 group"
+      className="flex flex-col justify-between min-h-40 h-auto sm:h-48 bg-white/70 hover:bg-white border-[#0f3d3e]/15 group"
     >
       <div className="space-y-3">
         <div className="flex items-center justify-between">
