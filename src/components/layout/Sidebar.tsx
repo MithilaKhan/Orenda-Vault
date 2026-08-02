@@ -17,25 +17,21 @@ import {
   Settings, 
   User 
 } from 'lucide-react';
-import { WorkspaceView } from '@/types/workspace';
+import { LogoIcon } from '@/components/ui/LogoIcon';
+import { SidebarProps } from '@/types/workspace';
 import { MAIN_NAV_ITEMS, AI_TOOLS } from '@/constants/navigation';
 
-export interface SidebarProps {
-  activeView: WorkspaceView;
-  onSelectView: (view: WorkspaceView) => void;
-  onNewWorkspace: () => void;
-  onTriggerAITool: (toolId: string, prompt: string) => void;
-  isCollapsed: boolean;
-  onToggleCollapse: () => void;
-}
 
-export const Sidebar: React.FC<SidebarProps> = ({
+
+export const Sidebar: React.FC<SidebarProps>= ({
   activeView,
   onSelectView,
   onNewWorkspace,
   onTriggerAITool,
   isCollapsed,
   onToggleCollapse,
+  onOpenAuth,
+  onOpenSettings,
 }) => {
   const getIcon = (iconName: string, className: string = 'w-4 h-4') => {
     switch (iconName) {
@@ -63,13 +59,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
         {/* Logo & Collapse Button */}
         <div className="flex items-center justify-between px-2 py-2">
           {!isCollapsed ? (
-            <div className="flex items-center gap-2 cursor-pointer" onClick={() => onSelectView('dashboard')}>
-              <span className="text-xl">🌿</span>
-              <span className="font-semibold tracking-tight text-lg text-[#0f3d3e]">Orenda Vault</span>
+            <div className="flex items-center gap-2 cursor-pointer text-[#0f3d3e]" onClick={() => onSelectView('dashboard')}>
+              <LogoIcon className="w-7 h-7" />
+              <span className="font-bold tracking-tight text-lg mt-0.5">Orenda AI</span>
             </div>
           ) : (
-            <div className="mx-auto cursor-pointer" onClick={() => onSelectView('dashboard')}>
-              <span className="text-2xl">🌿</span>
+            <div className="mx-auto cursor-pointer text-[#0f3d3e]" onClick={() => onSelectView('dashboard')}>
+              <LogoIcon className="w-7 h-7" />
             </div>
           )}
           <button
@@ -154,19 +150,21 @@ export const Sidebar: React.FC<SidebarProps> = ({
       <div className="p-3 border-t border-[#0f3d3e]/10 bg-white/40">
         <div className={`flex items-center gap-3 ${isCollapsed ? 'justify-center' : 'justify-between'}`}>
           <div className="flex items-center gap-2.5 overflow-hidden">
-            <div className="w-8 h-8 rounded-full bg-[#0F4C3A] text-[#F7F3EA] flex items-center justify-center font-semibold text-xs flex-shrink-0 shadow-soft">
-              MK
-            </div>
-            {!isCollapsed && (
-              <div className="overflow-hidden">
-                <p className="text-xs font-semibold text-[#0f3d3e] truncate">Mithila Khan</p>
-                <p className="text-[10px] text-[#4B5563] truncate">Pro Vault Plan 🌿</p>
+            <button 
+              onClick={onOpenAuth}
+              className="flex items-center gap-2 text-[#0f3d3e] hover:text-[#0F4C3A] transition-colors"
+            >
+              <div className="w-8 h-8 rounded-full bg-[#0f3d3e]/10 flex items-center justify-center flex-shrink-0">
+                <User className="w-4 h-4" />
               </div>
-            )}
+              {!isCollapsed && (
+                <span className="text-sm font-semibold whitespace-nowrap">Sign In</span>
+              )}
+            </button>
           </div>
           {!isCollapsed && (
             <button 
-              onClick={() => onSelectView('dashboard')}
+              onClick={onOpenSettings}
               className="p-1.5 rounded-lg text-[#4B5563] hover:text-[#0f3d3e] hover:bg-[#0f3d3e]/5 transition-colors"
               title="Settings"
             >

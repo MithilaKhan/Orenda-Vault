@@ -2,6 +2,8 @@
 
 import React, { useState } from 'react';
 import { Sidebar } from './Sidebar';
+import { AuthModal } from '../../features/auth/AuthModal';
+import { ProfileSettingsModal } from '../../features/settings/ProfileSettingsModal';
 import { WorkspaceView } from '@/types/workspace';
 import { Sparkles, Send, Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -27,6 +29,8 @@ export const WorkspaceShell: React.FC<WorkspaceShellProps> = ({
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
   const [isMobileOpen, setIsMobileOpen] = useState<boolean>(false);
   const [floatingPrompt, setFloatingPrompt] = useState<string>('');
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
 
   const handleFloatingSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -61,6 +65,8 @@ export const WorkspaceShell: React.FC<WorkspaceShellProps> = ({
           onTriggerAITool={onTriggerAITool}
           isCollapsed={isCollapsed}
           onToggleCollapse={() => setIsCollapsed(!isCollapsed)}
+          onOpenAuth={() => setIsAuthModalOpen(true)}
+          onOpenSettings={() => setIsSettingsModalOpen(true)}
         />
       </div>
 
@@ -98,6 +104,14 @@ export const WorkspaceShell: React.FC<WorkspaceShellProps> = ({
                 }}
                 isCollapsed={false}
                 onToggleCollapse={() => setIsMobileOpen(false)}
+                onOpenAuth={() => {
+                  setIsAuthModalOpen(true);
+                  setIsMobileOpen(false);
+                }}
+                onOpenSettings={() => {
+                  setIsSettingsModalOpen(true);
+                  setIsMobileOpen(false);
+                }}
               />
             </motion.div>
           </div>
@@ -143,6 +157,15 @@ export const WorkspaceShell: React.FC<WorkspaceShellProps> = ({
           </button>
         </form>
       </div>
+
+      <AuthModal 
+        isOpen={isAuthModalOpen} 
+        onClose={() => setIsAuthModalOpen(false)} 
+      />
+      <ProfileSettingsModal 
+        isOpen={isSettingsModalOpen} 
+        onClose={() => setIsSettingsModalOpen(false)} 
+      />
     </div>
   );
 };
