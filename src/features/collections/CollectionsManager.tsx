@@ -73,7 +73,7 @@ export const CollectionsManager: React.FC<CollectionsManagerProps> = ({
         description="Organize your knowledge into dedicated project vaults and topics"
         icon={<Folder className="w-5 h-5 text-[#0F4C3A] fill-[#0F4C3A]/20" />}
         action={
-          <Button variant="accent" size="sm" onClick={() => setIsModalOpen(true)} icon={<Plus className="w-4 h-4 font-semibold" />}>
+          <Button variant="primary" size="sm" onClick={() => setIsModalOpen(true)} icon={<Plus className="w-4 h-4 font-semibold" />}>
             New Collection
           </Button>
         }

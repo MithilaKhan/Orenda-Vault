@@ -41,7 +41,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
 
       <div className="flex flex-wrap items-center justify-center gap-3">
         {onCreateNote && (
-          <Button variant="accent" size="sm" onClick={onCreateNote} icon={<Plus className="w-4 h-4" />}>
+          <Button variant="primary" size="sm" onClick={onCreateNote} icon={<Plus className="w-4 h-4" />}>
             Create Note
           </Button>
         )}

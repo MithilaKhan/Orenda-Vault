@@ -1,21 +1,21 @@
 'use client';
 
 import React from 'react';
-import { 
-  Home, 
-  FileText, 
-  Folder, 
-  Star, 
-  Clock, 
-  Trash2, 
-  Sparkles, 
-  Tag as TagIcon, 
-  Search, 
-  Plus, 
-  ChevronLeft, 
-  ChevronRight, 
-  Settings, 
-  User 
+import {
+  Home,
+  FileText,
+  Folder,
+  Star,
+  Clock,
+  Trash2,
+  Sparkles,
+  Tag as TagIcon,
+  Search,
+  Plus,
+  ChevronLeft,
+  ChevronRight,
+  Settings,
+  User
 } from 'lucide-react';
 import { LogoIcon } from '@/components/ui/LogoIcon';
 import { SidebarProps } from '@/types/workspace';
@@ -23,7 +23,7 @@ import { MAIN_NAV_ITEMS, AI_TOOLS } from '@/constants/navigation';
 
 
 
-export const Sidebar: React.FC<SidebarProps>= ({
+export const Sidebar: React.FC<SidebarProps> = ({
   activeView,
   onSelectView,
   onNewWorkspace,
@@ -50,9 +50,8 @@ export const Sidebar: React.FC<SidebarProps>= ({
 
   return (
     <aside
-      className={`fixed top-0 left-0 bottom-0 z-30 bg-[#EFEADF] border-r border-[#0f3d3e]/10 transition-all duration-300 flex flex-col justify-between ${
-        isCollapsed ? 'w-20' : 'w-64'
-      }`}
+      className={`fixed top-0 left-0 bottom-0 z-30 bg-[#EFEADF] border-r border-[#0f3d3e]/10 transition-all duration-300 flex flex-col justify-between ${isCollapsed ? 'w-20' : 'w-64'
+        }`}
     >
       {/* Top Header & Navigation */}
       <div className="flex flex-col flex-1 overflow-y-auto overflow-x-hidden p-3 space-y-4">
@@ -80,9 +79,8 @@ export const Sidebar: React.FC<SidebarProps>= ({
         {/* + New Workspace Button */}
         <button
           onClick={onNewWorkspace}
-          className={`w-full flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-[#A8E063] hover:bg-[#95cc56] text-[#0f3d3e] font-semibold transition-all shadow-soft active:scale-[0.98] ${
-            isCollapsed ? 'px-0' : ''
-          }`}
+          className={`w-full flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-[#0F4C3A]  text-white font-semibold transition-all shadow-soft active:scale-[0.98] ${isCollapsed ? 'px-0' : ''
+            }`}
           title="Create Note"
         >
           <Plus className="w-4 h-4 flex-shrink-0 font-semibold" />
@@ -99,14 +97,13 @@ export const Sidebar: React.FC<SidebarProps>= ({
               <button
                 key={item.id}
                 onClick={() => onSelectView(item.id)}
-                className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-all ${
-                  isActive
-                    ? 'bg-[#0F4C3A] text-[#F7F3EA] shadow-soft font-semibold'
-                    : 'text-[#0f3d3e]/80 hover:bg-[#0f3d3e]/5 hover:text-[#0f3d3e]'
-                } ${isCollapsed ? 'justify-center px-0' : ''}`}
+                className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-all ${isActive
+                  ? 'bg-gradient-to-r from-[#255c4b] to-[#A8E063]/70 text-white shadow-soft font-semibold'
+                  : 'text-[#0f3d3e]/80 hover:bg-[#0f3d3e]/5 hover:text-[#0f3d3e]'
+                  } ${isCollapsed ? 'justify-center px-0' : ''}`}
                 title={item.label}
               >
-                {getIcon(item.iconName, isActive ? 'w-4 h-4 text-[#A8E063]' : 'w-4 h-4 text-[#4B5563]')}
+                {getIcon(item.iconName, isActive ? 'w-4 h-4 text-white' : 'w-4 h-4 text-[#4B5563]')}
                 {!isCollapsed && <span>{item.label}</span>}
               </button>
             );
@@ -134,9 +131,8 @@ export const Sidebar: React.FC<SidebarProps>= ({
                   onTriggerAITool(tool.id, tool.prompt);
                 }
               }}
-              className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-[#0f3d3e]/80 hover:bg-[#0f3d3e]/5 hover:text-[#0f3d3e] transition-all ${
-                isCollapsed ? 'justify-center px-0' : ''
-              }`}
+              className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-[#0f3d3e]/80 hover:bg-[#0f3d3e]/5 hover:text-[#0f3d3e] transition-all ${isCollapsed ? 'justify-center px-0' : ''
+                }`}
               title={`${tool.label} - AI Action`}
             >
               {getIcon(tool.iconName, 'w-4 h-4 text-[#4B5563]')}
@@ -150,7 +146,7 @@ export const Sidebar: React.FC<SidebarProps>= ({
       <div className="p-3 border-t border-[#0f3d3e]/10 bg-white/40">
         <div className={`flex items-center gap-3 ${isCollapsed ? 'justify-center' : 'justify-between'}`}>
           <div className="flex items-center gap-2.5 overflow-hidden">
-            <button 
+            <button
               onClick={onOpenAuth}
               className="flex items-center gap-2 text-[#0f3d3e] hover:text-[#0F4C3A] transition-colors"
             >
@@ -163,7 +159,7 @@ export const Sidebar: React.FC<SidebarProps>= ({
             </button>
           </div>
           {!isCollapsed && (
-            <button 
+            <button
               onClick={onOpenSettings}
               className="p-1.5 rounded-lg text-[#4B5563] hover:text-[#0f3d3e] hover:bg-[#0f3d3e]/5 transition-colors"
               title="Settings"

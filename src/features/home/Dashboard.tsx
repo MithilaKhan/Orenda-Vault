@@ -57,7 +57,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
       <div className="bg-gradient-to-br from-white/90 via-white/70 to-white/90 p-6 sm:p-8 rounded-3xl border border-[#0f3d3e]/15 shadow-soft space-y-4">
         <div className="max-w-2xl">
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#0f3d3e]/5 text-[#0f3d3e] text-xs font-semibold mb-2">
-            <Sparkles className="w-3.5 h-3.5 text-[#A8E063]" /> AI Knowledge Vault
+            <Sparkles className="w-3.5 h-3.5 text-[#0F4C3A]" /> AI Knowledge Vault
           </span>
           <h2 className="text-2xl sm:text-3xl font-bold text-[#0f3d3e] tracking-tight">
             What would you like to create or recall today?

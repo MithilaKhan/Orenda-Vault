@@ -22,12 +22,13 @@ export const NewCollectionModal: React.FC<NewCollectionModalProps> = ({
   const [newColDesc, setNewColDesc] = useState<string>('');
   const [newColIcon, setNewColIcon] = useState<string>('Folder');
 
-  const getColIcon = (iconName: string) => {
+  const getColIcon = (iconName: string, isSelected: boolean) => {
+    const iconClass = `w-5 h-5 ${isSelected ? 'text-white' : 'text-[#0F4C3A]'}`;
     switch (iconName) {
-      case 'Briefcase': return <Briefcase className="w-5 h-5 text-[#0F4C3A]" />;
-      case 'Code': return <Code className="w-5 h-5 text-[#0F4C3A]" />;
-      case 'FileText': return <FileText className="w-5 h-5 text-[#0F4C3A]" />;
-      default: return <Folder className="w-5 h-5 text-[#0F4C3A]" />;
+      case 'Briefcase': return <Briefcase className={iconClass} />;
+      case 'Code': return <Code className={iconClass} />;
+      case 'FileText': return <FileText className={iconClass} />;
+      default: return <Folder className={iconClass} />;
     }
   };
 
@@ -66,18 +67,21 @@ export const NewCollectionModal: React.FC<NewCollectionModalProps> = ({
 
         <Form.Item label={<span className="text-xs font-semibold text-[#0f3d3e]">Folder Icon</span>} className="mb-2">
           <div className="flex items-center gap-3">
-            {['Folder', 'Briefcase', 'Code', 'FileText'].map((icon) => (
-              <button
-                key={icon}
-                type="button"
-                onClick={() => setNewColIcon(icon)}
-                className={`p-2.5 rounded-xl border transition-all ${
-                  newColIcon === icon ? 'bg-[#0F4C3A] text-[#F7F3EA] border-[#0f3d3e]' : 'bg-white text-[#0f3d3e] border-[#0f3d3e]/15 hover:bg-[#0f3d3e]/5'
-                }`}
-              >
-                {getColIcon(icon)}
-              </button>
-            ))}
+            {['Folder', 'Briefcase', 'Code', 'FileText'].map((icon) => {
+              const isSelected = newColIcon === icon;
+              return (
+                <button
+                  key={icon}
+                  type="button"
+                  onClick={() => setNewColIcon(icon)}
+                  className={`p-2.5 rounded-xl border transition-all ${
+                    isSelected ? 'bg-[#0F4C3A] text-white border-[#0f3d3e]' : 'bg-white text-[#0f3d3e] border-[#0f3d3e]/15 hover:bg-[#0f3d3e]/5'
+                  }`}
+                >
+                  {getColIcon(icon, isSelected)}
+                </button>
+              );
+            })}
           </div>
         </Form.Item>
 
@@ -85,8 +89,8 @@ export const NewCollectionModal: React.FC<NewCollectionModalProps> = ({
           <Button variant="secondary" size="sm" onClick={onClose} type="button">
             Cancel
           </Button>
-          <Button variant="accent" size="sm" onClick={handleCreate} disabled={!newColName.trim()} type="button">
-            Create Folder
+          <Button variant="primary" size="sm" onClick={handleCreate} disabled={!newColName.trim()} type="button">
+            Create Collection
           </Button>
         </div>
       </Form>

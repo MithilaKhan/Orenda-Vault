@@ -105,8 +105,8 @@ export default function VaultPage() {
       const q = store.searchQuery.toLowerCase();
       filtered = filtered.filter(
         n => n.title.toLowerCase().includes(q) ||
-             n.content.toLowerCase().includes(q) ||
-             (n.category && n.category.toLowerCase().includes(q))
+          n.content.toLowerCase().includes(q) ||
+          (n.category && n.category.toLowerCase().includes(q))
       );
     }
 
@@ -189,47 +189,47 @@ export default function VaultPage() {
         store.activeView === 'favorites' ||
         store.activeView === 'recent' ||
         store.activeView === 'trash') && (
-        <NotesManager
-          notes={getDisplayedNotes()}
-          collections={store.collections}
-          onAddNote={store.addNote}
-          onUpdateNote={store.updateNote}
-          onDeleteNote={store.deleteNote}
-          onRestoreNote={store.restoreNote}
-          onPermanentlyDeleteNote={store.permanentlyDeleteNote}
-          onToggleFavorite={store.toggleFavorite}
-          viewTitle={
-            store.activeView === 'favorites'
-              ? 'Favorite Notes'
-              : store.activeView === 'recent'
-              ? 'Recent Notes'
-              : store.activeView === 'trash'
-              ? 'Trashed Notes'
-              : store.searchQuery
-              ? `Search Results for "${store.searchQuery}"`
-              : 'Vault Notes'
-          }
-          viewIcon={
-            store.activeView === 'favorites' ? <Star className="w-5 h-5 text-[#0F4C3A] fill-[#0F4C3A]" /> :
-            store.activeView === 'recent' ? <Clock className="w-5 h-5 text-[#0F4C3A] fill-[#0F4C3A]/20" /> :
-            store.activeView === 'trash' ? <Trash2 className="w-5 h-5 text-red-600 fill-red-500/20" /> :
-            store.searchQuery ? <Search className="w-5 h-5 text-[#0F4C3A]" /> :
-            <FileText className="w-5 h-5 text-[#0F4C3A] fill-[#0F4C3A]/20" />
-          }
-          viewDescription={
-            store.activeView === 'favorites'
-              ? 'Quickly access your starred notes and high-priority knowledge.'
-              : store.activeView === 'recent'
-              ? 'Review your latest updated thoughts, captured snippets, and activity.'
-              : store.activeView === 'trash'
-              ? 'Items in trash can be restored or permanently removed.'
-              : store.searchQuery
-              ? 'Matching notes and snippets found across your vault.'
-              : 'Access, refine, and organize your entire knowledge repository.'
-          }
-          isTrashView={store.activeView === 'trash'}
-        />
-      )}
+          <NotesManager
+            notes={getDisplayedNotes()}
+            collections={store.collections}
+            onAddNote={store.addNote}
+            onUpdateNote={store.updateNote}
+            onDeleteNote={store.deleteNote}
+            onRestoreNote={store.restoreNote}
+            onPermanentlyDeleteNote={store.permanentlyDeleteNote}
+            onToggleFavorite={store.toggleFavorite}
+            viewTitle={
+              store.activeView === 'favorites'
+                ? 'Favorite Notes'
+                : store.activeView === 'recent'
+                  ? 'Recent Notes'
+                  : store.activeView === 'trash'
+                    ? 'Trashed Notes'
+                    : store.searchQuery
+                      ? `Search Results for "${store.searchQuery}"`
+                      : 'Vault Notes'
+            }
+            viewIcon={
+              store.activeView === 'favorites' ? <Star className="w-5 h-5 text-[#0F4C3A] fill-[#0F4C3A]" /> :
+                store.activeView === 'recent' ? <Clock className="w-5 h-5 text-[#0F4C3A] fill-[#0F4C3A]/20" /> :
+                  store.activeView === 'trash' ? <Trash2 className="w-5 h-5 text-red-600 fill-red-500/20" /> :
+                    store.searchQuery ? <Search className="w-5 h-5 text-[#0F4C3A]" /> :
+                      <FileText className="w-5 h-5 text-[#0F4C3A] fill-[#0F4C3A]/20" />
+            }
+            viewDescription={
+              store.activeView === 'favorites'
+                ? 'Quickly access your starred notes and high-priority knowledge.'
+                : store.activeView === 'recent'
+                  ? 'Review your latest updated thoughts, captured snippets, and activity.'
+                  : store.activeView === 'trash'
+                    ? 'Items in trash can be restored or permanently removed.'
+                    : store.searchQuery
+                      ? 'Matching notes and snippets found across your vault.'
+                      : 'Access, refine, and organize your entire knowledge repository.'
+            }
+            isTrashView={store.activeView === 'trash'}
+          />
+        )}
 
       {store.activeView === 'collections' && (
         <CollectionsManager

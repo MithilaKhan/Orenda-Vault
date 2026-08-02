@@ -118,8 +118,8 @@ export const QuickNoteModal: React.FC<QuickNoteModalProps> = ({
             <Button variant="secondary" size="sm" onClick={onClose} type="button">
               Cancel
             </Button>
-            <Button variant="accent" size="sm" onClick={handleSave} type="button">
-              Save
+            <Button variant="primary" size="sm" onClick={handleSave} type="button">
+              Save Note
             </Button>
           </div>
         </div>
