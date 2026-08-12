@@ -27,7 +27,7 @@ export const useWorkspaceAI = (store: WorkspaceStore) => {
       const res = await aiService.generateResponse(prompt, store.chatMessages);
       store.addChatMessage({ role: 'assistant', content: res.content });
     } catch {
-      store.addChatMessage({ role: 'assistant', content: aiService.getOfflineFallback(prompt) });
+      store.addChatMessage({ role: 'assistant', content: 'An unexpected error occurred.' });
     } finally {
       store.setIsAiLoading(false);
     }
