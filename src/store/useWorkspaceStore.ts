@@ -6,7 +6,8 @@ import {
   Note, 
   Collection, 
   ActivityItem, 
-  WorkspaceChatMessage 
+  WorkspaceChatMessage,
+  User 
 } from '@/types/workspace';
 import { 
   INITIAL_NOTES, 
@@ -28,6 +29,7 @@ export function useWorkspaceStore() {
   const [selectedCollectionId, setSelectedCollectionId] = useState<string | null>(null);
   const [isAiLoading, setIsAiLoading] = useState<boolean>(false);
   const [isHydrated, setIsHydrated] = useState<boolean>(false);
+  const [user, setUser] = useState<User | null>(null);
 
   // Load from localStorage on mount
   useEffect(() => {
@@ -46,6 +48,7 @@ export function useWorkspaceStore() {
         if (parsed.collections) setCollections(parsed.collections);
         if (parsed.activities) setActivities(parsed.activities);
         if (parsed.chatMessages) setChatMessages(parsed.chatMessages);
+        if (parsed.user) setUser(parsed.user);
       }
     } catch (e) {
       console.error('Failed to load Orenda Vault state from localStorage:', e);
@@ -63,11 +66,12 @@ export function useWorkspaceStore() {
         collections,
         activities,
         chatMessages,
+        user
       }));
     } catch (e) {
       console.error('Failed to save Orenda Vault state to localStorage:', e);
     }
-  }, [notes, collections, activities, chatMessages, isHydrated]);
+  }, [notes, collections, activities, chatMessages, user, isHydrated]);
 
   const addActivity = useCallback((title: string, type: string, targetId?: string) => {
     const newAct: ActivityItem = {
@@ -220,6 +224,8 @@ export function useWorkspaceStore() {
     isAiLoading,
     setIsAiLoading,
     isHydrated,
+    user,
+    setUser,
   };
 }
 

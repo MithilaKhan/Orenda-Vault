@@ -3,19 +3,60 @@ import Image from 'next/image';
 import { Form, Input, Button } from 'antd';
 import { ArrowLeft } from 'lucide-react';
 import { AuthView } from '../AuthModal';
+import { useAuth } from '@/hooks/useAuth';
+import toast from 'react-hot-toast';
 
 
 interface OtpVerifyViewProps {
   onSwitchView: (view: AuthView) => void;
+  onSuccess: () => void;
+  emailContext: string;
+  setResetToken: (token: string) => void;
 }
 
-export const OtpVerifyView: React.FC<OtpVerifyViewProps> = ({ onSwitchView }) => {
+export const OtpVerifyView: React.FC<OtpVerifyViewProps> = ({ onSwitchView, onSuccess, emailContext, setResetToken }) => {
   const [form] = Form.useForm();
+  const [loading, setLoading] = React.useState(false);
+  const [resendLoading, setResendLoading] = React.useState(false);
+  const { verifyEmail, forgotPassword, handleApiError } = useAuth();
 
-  const onFinish = (values: any) => {
-    console.log('OTP Code:', values);
-    // TODO: Implement actual OTP verify logic
-    onSwitchView('reset');
+  const onFinish = async (values: any) => {
+    if (!emailContext) {
+      toast.error("Email context is missing. Please try again.");
+      return;
+    }
+    setLoading(true);
+    const res = await verifyEmail(emailContext, Number(values.otp));
+    setLoading(false);
+
+    if (res?.success) {
+      toast.success(res?.message || "Verified successfully");
+      form.resetFields();
+      if (res?.data) {
+        setResetToken(res.data);
+        onSwitchView('reset');
+      } else {
+        onSwitchView('signin');
+      }
+    } else {
+      handleApiError(res, 'otp');
+    }
+  };
+
+  const handleResend = async () => {
+    if (!emailContext) {
+      toast.error("Email context is missing.");
+      return;
+    }
+    setResendLoading(true);
+    const res = await forgotPassword(emailContext);
+    setResendLoading(false);
+
+    if (res?.success) {
+      toast.success(res?.message || "Reset code resent to your email");
+    } else {
+      handleApiError(res, 'resend-otp');
+    }
   };
 
   return (
@@ -35,7 +76,7 @@ export const OtpVerifyView: React.FC<OtpVerifyViewProps> = ({ onSwitchView }) =>
         </div>
         <h2 className="text-2xl font-bold text-[#0f3d3e]">Verify Code</h2>
         <p className="text-[#4B5563] text-sm px-4">
-          We've sent a 6-digit verification code to your email.
+          We've sent a 4-digit verification code to your email.
         </p>
       </div>
 
@@ -44,20 +85,25 @@ export const OtpVerifyView: React.FC<OtpVerifyViewProps> = ({ onSwitchView }) =>
           name="otp"
           rules={[
             { required: true, message: 'Please input the code!' },
-            { len: 6, message: 'Code must be 6 digits' }
+            { len: 4, message: 'Code must be 4 digits' }
           ]}
         >
           <Input 
             size="large" 
-            placeholder="000000" 
-            maxLength={6}
+            placeholder="0000" 
+            maxLength={4}
             className="rounded-xl px-4 py-2 text-center text-lg tracking-[0.5em] font-mono"
           />
         </Form.Item>
 
         <div className="text-center">
-          <button type="button" className="text-xs font-semibold text-[#0F4C3A] hover:underline">
-            Didn't receive a code? Resend
+          <button 
+            type="button" 
+            onClick={handleResend}
+            disabled={resendLoading}
+            className="text-xs font-semibold text-[#0F4C3A] hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {resendLoading ? 'Resending...' : "Didn't receive a code? Resend"}
           </button>
         </div>
 
@@ -66,6 +112,7 @@ export const OtpVerifyView: React.FC<OtpVerifyViewProps> = ({ onSwitchView }) =>
           htmlType="submit" 
           block 
           size="large"
+          loading={loading}
           className="bg-[#0F4C3A] hover:bg-[#0F4C3A]/90 h-11 rounded-xl text-sm font-semibold shadow-soft"
         >
           Verify Code

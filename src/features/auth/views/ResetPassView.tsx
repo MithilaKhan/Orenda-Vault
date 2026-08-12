@@ -3,19 +3,40 @@ import Image from 'next/image';
 import { Form, Input, Button } from 'antd';
 import { Lock } from 'lucide-react';
 import { AuthView } from '../AuthModal';
+import { useAuth } from '@/hooks/useAuth';
+import toast from 'react-hot-toast';
 
 interface ResetPassViewProps {
   onSwitchView: (view: AuthView) => void;
   onSuccess: () => void;
+  resetToken: string;
 }
 
-export const ResetPassView: React.FC<ResetPassViewProps> = ({ onSuccess }) => {
+export const ResetPassView: React.FC<ResetPassViewProps> = ({ onSwitchView, onSuccess, resetToken }) => {
   const [form] = Form.useForm();
+  const [loading, setLoading] = React.useState(false);
+  const { resetPassword, handleApiError } = useAuth();
 
-  const onFinish = (values: any) => {
-    console.log('Reset password values:', values);
-    // TODO: Implement actual reset password logic
-    onSuccess(); // After resetting, maybe sign them in or close modal
+  const onFinish = async (values: any) => {
+    if (!resetToken) {
+      toast.error("Reset token is missing. Please try the process again.");
+      return;
+    }
+    setLoading(true);
+    const payload = {
+      newPassword: values.password,
+      confirmPassword: values.confirm,
+    };
+    const res = await resetPassword(payload, resetToken);
+    setLoading(false);
+
+    if (res?.success) {
+      toast.success(res?.message || "Password reset successfully");
+      form.resetFields();
+      onSwitchView('signin');
+    } else {
+      handleApiError(res, 'reset');
+    }
   };
 
   return (
@@ -73,6 +94,7 @@ export const ResetPassView: React.FC<ResetPassViewProps> = ({ onSuccess }) => {
           htmlType="submit" 
           block 
           size="large"
+          loading={loading}
           className="bg-[#0F4C3A] hover:bg-[#0F4C3A]/90 h-11 rounded-xl text-sm font-semibold shadow-soft"
         >
           Reset Password

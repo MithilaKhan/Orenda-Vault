@@ -32,3 +32,13 @@ export interface WorkspaceChatMessage {
   timestamp: number;
   isFavorite?: boolean;
 }
+
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  image?: string;
+  role: string;
+  contact?: string;
+  location?: string;
+}

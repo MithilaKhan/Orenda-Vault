@@ -1,14 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Form, Input, Button, message } from 'antd';
 import { Lock } from 'lucide-react';
+import { useProfile } from '@/hooks/useProfile';
 
 export const ChangePasswordTab: React.FC = () => {
   const [form] = Form.useForm();
+  const [loading, setLoading] = useState(false);
+  const { changePassword } = useProfile();
 
-  const onFinish = (values: any) => {
-    console.log('Success:', values);
-    message.success('Password updated successfully');
-    form.resetFields();
+  const onFinish = async (values: any) => {
+    setLoading(true);
+    const res = await changePassword({
+      currentPassword: values.currentPassword,
+      newPassword: values.newPassword,
+      confirmPassword: values.confirmPassword
+    });
+    setLoading(false); 
+    console.log("change password",res)
+
+    if (res?.success) {
+      message.success(res?.message || 'Password updated successfully');
+      form.resetFields();
+    } else if (res?.message) {
+      message.error(res.message);
+    }
   };
 
   return (
@@ -69,7 +84,8 @@ export const ChangePasswordTab: React.FC = () => {
           <Button 
             type="primary" 
             htmlType="submit" 
-            className="w-full h-12 rounded-xl text-sm font-semibold shadow-none hover:shadow-md transition-shadow"
+            loading={loading}
+            className="w-full h-12 rounded-xl text-sm font-semibold shadow-none hover:shadow-md transition-shadow bg-[#0F4C3A] hover:bg-[#0F4C3A]/90"
           >
             Update Password
           </Button>

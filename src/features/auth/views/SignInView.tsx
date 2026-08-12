@@ -3,20 +3,40 @@ import Image from 'next/image';
 import { Form, Input, Button, Divider } from 'antd';
 import { Mail, Lock } from 'lucide-react';
 import { AuthView } from '../AuthModal';
+import { useAuth } from '@/hooks/useAuth';
+import toast from 'react-hot-toast';
 
 
 interface SignInViewProps {
   onSwitchView: (view: AuthView) => void;
   onSuccess: () => void;
+  setEmailContext: (email: string) => void;
 }
 
-export const SignInView: React.FC<SignInViewProps> = ({ onSwitchView, onSuccess }) => {
+export const SignInView: React.FC<SignInViewProps> = ({ onSwitchView, onSuccess, setEmailContext }) => {
   const [form] = Form.useForm();
+  const [loading, setLoading] = React.useState(false);
+  const { signIn, handleApiError, handleAuthSuccess } = useAuth();
 
-  const onFinish = (values: any) => {
-    console.log('Sign in values:', values);
-    // TODO: Implement actual sign in logic
-    onSuccess();
+  const onFinish = async (values: any) => {
+    setLoading(true);
+    const res = await signIn(values);
+    console.log("user login", res)
+    setLoading(false);
+
+    if (res?.success) {
+      toast.success(res?.message || "Signed in successfully");
+      handleAuthSuccess(res);
+      form.resetFields();
+      onSuccess();
+    } else {
+      if (res?.message?.toLowerCase().includes("not verified")) {
+        setEmailContext(values.email);
+        onSwitchView('otp');
+      } else {
+        handleApiError(res, 'signin');
+      }
+    }
   };
 
   return (
@@ -39,10 +59,10 @@ export const SignInView: React.FC<SignInViewProps> = ({ onSwitchView, onSuccess 
             { type: 'email', message: 'Please enter a valid email!' }
           ]}
         >
-          <Input 
-            size="large" 
-            prefix={<Mail className="w-4 h-4 text-gray-400 mr-2" />} 
-            placeholder="Email address" 
+          <Input
+            size="large"
+            prefix={<Mail className="w-4 h-4 text-gray-400 mr-2" />}
+            placeholder="Email address"
             className="rounded-xl px-4 py-2 text-sm"
           />
         </Form.Item>
@@ -51,10 +71,10 @@ export const SignInView: React.FC<SignInViewProps> = ({ onSwitchView, onSuccess 
           name="password"
           rules={[{ required: true, message: 'Please input your password!' }]}
         >
-          <Input.Password 
-            size="large" 
-            prefix={<Lock className="w-4 h-4 text-gray-400 mr-2" />} 
-            placeholder="Password" 
+          <Input.Password
+            size="large"
+            prefix={<Lock className="w-4 h-4 text-gray-400 mr-2" />}
+            placeholder="Password"
             className="rounded-xl px-4 py-2 text-sm"
           />
         </Form.Item>
@@ -69,11 +89,12 @@ export const SignInView: React.FC<SignInViewProps> = ({ onSwitchView, onSuccess 
           </button>
         </div>
 
-        <Button 
-          type="primary" 
-          htmlType="submit" 
-          block 
+        <Button
+          type="primary"
+          htmlType="submit"
+          block
           size="large"
+          loading={loading}
           className="bg-[#0F4C3A] hover:bg-[#0F4C3A]/90 h-11 rounded-xl text-sm font-semibold shadow-soft"
         >
           Sign In

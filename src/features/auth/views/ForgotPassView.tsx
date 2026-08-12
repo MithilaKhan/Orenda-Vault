@@ -3,18 +3,32 @@ import Image from 'next/image';
 import { Form, Input, Button } from 'antd';
 import { Mail, ArrowLeft } from 'lucide-react';
 import { AuthView } from '../AuthModal';
+import { useAuth } from '@/hooks/useAuth';
+import toast from 'react-hot-toast';
 
 interface ForgotPassViewProps {
   onSwitchView: (view: AuthView) => void;
+  setEmailContext: (email: string) => void;
 }
 
-export const ForgotPassView: React.FC<ForgotPassViewProps> = ({ onSwitchView }) => {
+export const ForgotPassView: React.FC<ForgotPassViewProps> = ({ onSwitchView, setEmailContext }) => {
   const [form] = Form.useForm();
+  const [loading, setLoading] = React.useState(false);
+  const { forgotPassword, handleApiError } = useAuth();
 
-  const onFinish = (values: any) => {
-    console.log('Forgot password email:', values);
-    // TODO: Implement actual send OTP logic
-    onSwitchView('otp');
+  const onFinish = async (values: any) => {
+    setLoading(true);
+    const res = await forgotPassword(values.email);
+    setLoading(false);
+
+    if (res?.success) {
+      toast.success(res?.message || "Reset code sent to your email");
+      setEmailContext(values.email);
+      form.resetFields();
+      onSwitchView('otp');
+    } else {
+      handleApiError(res, 'forgot-password');
+    }
   };
 
   return (
@@ -59,6 +73,7 @@ export const ForgotPassView: React.FC<ForgotPassViewProps> = ({ onSwitchView }) 
           htmlType="submit" 
           block 
           size="large"
+          loading={loading}
           className="bg-[#0F4C3A] hover:bg-[#0F4C3A]/90 h-11 rounded-xl text-sm font-semibold shadow-soft"
         >
           Send Reset Code

@@ -20,6 +20,8 @@ import {
 import { LogoIcon } from '@/components/ui/LogoIcon';
 import { SidebarProps } from '@/types/workspace';
 import { MAIN_NAV_ITEMS, AI_TOOLS } from '@/constants/navigation';
+import { useWorkspaceStore } from '@/store/useWorkspaceStore';
+import { resolveImageUrl } from '@/helpers/resolveImageUrl';
 
 
 
@@ -33,6 +35,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onOpenAuth,
   onOpenSettings,
 }) => {
+  const { user } = useWorkspaceStore();
+
   const getIcon = (iconName: string, className: string = 'w-4 h-4') => {
     switch (iconName) {
       case 'Home': return <Home className={className} />;
@@ -147,18 +151,24 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <div className={`flex items-center gap-3 ${isCollapsed ? 'justify-center' : 'justify-between'}`}>
           <div className="flex items-center gap-2.5 overflow-hidden">
             <button
-              onClick={onOpenAuth}
-              className="flex items-center gap-2 text-[#0f3d3e] hover:text-[#0F4C3A] transition-colors"
+              onClick={user ? onOpenSettings : onOpenAuth}
+              className="flex items-center gap-2 text-[#0f3d3e] hover:text-[#0F4C3A] transition-colors overflow-hidden"
             >
-              <div className="w-8 h-8 rounded-full bg-[#0f3d3e]/10 flex items-center justify-center flex-shrink-0">
-                <User className="w-4 h-4" />
+              <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 bg-[#E8F0EB] flex items-center justify-center border border-[#0F4C3A]/10">
+                {user?.image ? (
+                  <img src={resolveImageUrl(user.image)} alt={user.name} className="w-full h-full object-cover" />
+                ) : (
+                  <User className="w-4 h-4" />
+                )}
               </div>
               {!isCollapsed && (
-                <span className="text-sm font-semibold whitespace-nowrap">Sign In</span>
+                <span className="text-sm font-semibold whitespace-nowrap truncate max-w-[120px]">
+                  {user ? user.name : 'Sign In'}
+                </span>
               )}
             </button>
           </div>
-          {!isCollapsed && (
+          {!isCollapsed && user && (
             <button
               onClick={onOpenSettings}
               className="p-1.5 rounded-lg text-[#4B5563] hover:text-[#0f3d3e] hover:bg-[#0f3d3e]/5 transition-colors"

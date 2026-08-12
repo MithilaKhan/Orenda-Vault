@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
-import { Form, Input, Button, Upload, message, Avatar } from 'antd';
-import { User, Mail, Upload as UploadIcon } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Form, Input, Button, Upload, message } from 'antd';
+import { User as UserIcon, Mail, Upload as UploadIcon } from 'lucide-react';
 import type { UploadChangeParam } from 'antd/es/upload';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
+import { useWorkspaceStore } from '@/store/useWorkspaceStore';
+import { useProfile } from '@/hooks/useProfile';
+import { resolveImageUrl } from '@/helpers/resolveImageUrl';
 
 interface EditProfileFormValues {
-  fullName: string;
+  name: string;
   email: string;
 }
 
@@ -13,42 +16,45 @@ export const EditProfileTab: React.FC = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string>();
+  const [selectedFile, setSelectedFile] = useState<RcFile | undefined>();
+  
+  const { user, setUser } = useWorkspaceStore();
+  const { updateProfile, getProfile } = useProfile(); 
+console.log("user profile",user)
 
-  const getBase64 = (img: RcFile, callback: (url: string) => void) => {
-    const reader = new FileReader();
-    reader.addEventListener('load', () => callback(reader.result as string));
-    reader.readAsDataURL(img);
-  };
+  useEffect(() => {
+    if (user) {
+      form.setFieldsValue({
+        name: user.name,
+        email: user.email,
+      });
+      if (user.image) {
+        setImageUrl(resolveImageUrl(user.image));
+      }
+    }
+  }, [user, form]);
 
-  const beforeUpload = (file: RcFile) => {
-    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-    if (!isJpgOrPng) {
-      message.error('You can only upload JPG/PNG file!');
-    }
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-      message.error('Image must smaller than 2MB!');
-    }
-    return isJpgOrPng && isLt2M;
-  };
 
   const handleChange: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {
-    if (info.file.status === 'uploading') {
-      setLoading(true);
-      return;
-    }
-    if (info.file.status === 'done') {
-      // Get this url from response in real world.
-      getBase64(info.file.originFileObj as RcFile, (url) => {
-        setLoading(false);
-        setImageUrl(url);
-      });
+    const file = info.file.originFileObj as RcFile;
+    if (file) {
+      setSelectedFile(file);
+      setImageUrl(URL.createObjectURL(file));
     }
   };
 
-  const onFinish = (values: EditProfileFormValues) => {
-    console.log('Success:', values);
-    message.success('Profile updated successfully');
+  const onFinish = async (values: EditProfileFormValues) => {
+    setLoading(true);
+    const res = await updateProfile(values, selectedFile);
+    setLoading(false);
+
+    if (res?.success) {
+      message.success(res?.message || 'Profile updated successfully');
+      const updatedProfileRes = await getProfile();
+      if (updatedProfileRes?.success && updatedProfileRes.data) {
+        setUser(updatedProfileRes.data);
+      }
+    }
   };
 
   return (
@@ -59,8 +65,6 @@ export const EditProfileTab: React.FC = () => {
           listType="picture-circle"
           className="avatar-uploader"
           showUploadList={false}
-          action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
-          beforeUpload={beforeUpload}
           onChange={handleChange}
         >
           {imageUrl ? (
@@ -79,18 +83,14 @@ export const EditProfileTab: React.FC = () => {
         form={form}
         layout="vertical"
         onFinish={onFinish}
-        initialValues={{
-          fullName: 'Mithila Khan',
-          email: 'mithila@example.com'
-        }}
       >
         <Form.Item
           label={<span className="text-sm font-semibold text-gray-700">Full Name</span>}
-          name="fullName"
+          name="name"
           rules={[{ required: true, message: 'Please enter your full name' }]}
         >
           <Input 
-            prefix={<User className="w-4 h-4 text-gray-400 mr-2" />} 
+            prefix={<UserIcon className="w-4 h-4 text-gray-400 mr-2" />} 
             className="h-11 rounded-xl text-sm"
           />
         </Form.Item>
@@ -113,7 +113,8 @@ export const EditProfileTab: React.FC = () => {
           <Button 
             type="primary" 
             htmlType="submit" 
-            className="w-full h-12 rounded-xl text-sm font-semibold shadow-none hover:shadow-md transition-shadow"
+            loading={loading}
+            className="w-full h-12 rounded-xl text-sm font-semibold shadow-none hover:shadow-md transition-shadow bg-[#0F4C3A] hover:bg-[#0F4C3A]/90"
           >
             Save Changes
           </Button>

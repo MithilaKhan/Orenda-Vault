@@ -3,19 +3,34 @@ import Image from 'next/image';
 import { Form, Input, Button, Divider } from 'antd';
 import { Mail, Lock, User } from 'lucide-react';
 import { AuthView } from '../AuthModal';
-
+import { myFetch } from '@/helpers/myFetch';
+import toast from 'react-hot-toast';
+import { useAuth } from '@/hooks/useAuth';
 interface SignUpViewProps {
   onSwitchView: (view: AuthView) => void;
   onSuccess: () => void;
+  setEmailContext: (email: string) => void;
 }
 
-export const SignUpView: React.FC<SignUpViewProps> = ({ onSwitchView, onSuccess }) => {
+export const SignUpView: React.FC<SignUpViewProps> = ({ onSwitchView, onSuccess, setEmailContext }) => {
   const [form] = Form.useForm();
+  const [loading, setLoading] = React.useState(false);
+  const { signUp, handleApiError } = useAuth();
 
-  const onFinish = (values: any) => {
-    console.log('Sign up values:', values);
-    // TODO: Implement actual sign up logic
-    onSuccess();
+  const onFinish = async (values: any) => {
+    setLoading(true);
+    const res = await signUp(values);
+    setLoading(false);
+    console.log("user register", res)
+
+    if (res?.success) {
+      toast.success(res?.message || "Registered successfully", { id: "register" });
+      setEmailContext(values.email);
+      form.resetFields();
+      onSwitchView("otp");
+    } else {
+      handleApiError(res, "register");
+    }
   };
 
   return (
@@ -35,10 +50,10 @@ export const SignUpView: React.FC<SignUpViewProps> = ({ onSwitchView, onSuccess 
           name="name"
           rules={[{ required: true, message: 'Please input your name!' }]}
         >
-          <Input 
-            size="large" 
-            prefix={<User className="w-4 h-4 text-gray-400 mr-2" />} 
-            placeholder="Full Name" 
+          <Input
+            size="large"
+            prefix={<User className="w-4 h-4 text-gray-400 mr-2" />}
+            placeholder="Full Name"
             className="rounded-xl px-4 py-2 text-sm"
           />
         </Form.Item>
@@ -50,10 +65,10 @@ export const SignUpView: React.FC<SignUpViewProps> = ({ onSwitchView, onSuccess 
             { type: 'email', message: 'Please enter a valid email!' }
           ]}
         >
-          <Input 
-            size="large" 
-            prefix={<Mail className="w-4 h-4 text-gray-400 mr-2" />} 
-            placeholder="Email address" 
+          <Input
+            size="large"
+            prefix={<Mail className="w-4 h-4 text-gray-400 mr-2" />}
+            placeholder="Email address"
             className="rounded-xl px-4 py-2 text-sm"
           />
         </Form.Item>
@@ -62,19 +77,20 @@ export const SignUpView: React.FC<SignUpViewProps> = ({ onSwitchView, onSuccess 
           name="password"
           rules={[{ required: true, message: 'Please input your password!' }]}
         >
-          <Input.Password 
-            size="large" 
-            prefix={<Lock className="w-4 h-4 text-gray-400 mr-2" />} 
-            placeholder="Password" 
+          <Input.Password
+            size="large"
+            prefix={<Lock className="w-4 h-4 text-gray-400 mr-2" />}
+            placeholder="Password"
             className="rounded-xl px-4 py-2 text-sm"
           />
         </Form.Item>
 
-        <Button 
-          type="primary" 
-          htmlType="submit" 
-          block 
+        <Button
+          type="primary"
+          htmlType="submit"
+          block
           size="large"
+          loading={loading}
           className="bg-[#0F4C3A] hover:bg-[#0F4C3A]/90 h-11 rounded-xl text-sm font-semibold shadow-soft mt-2"
         >
           Sign Up

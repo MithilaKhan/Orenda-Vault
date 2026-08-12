@@ -9,6 +9,9 @@ import { WorkspaceView } from '@/types/workspace';
 import { Sparkles, Send, Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Input } from '@/components/ui/Input';
+import { useWorkspaceStore } from '@/store/useWorkspaceStore';
+import { useProfile } from '@/hooks/useProfile';
+import { getCookieValue } from '@/helpers/cookieHelper';
 
 export interface WorkspaceShellProps {
   activeView: WorkspaceView;
@@ -32,6 +35,23 @@ export const WorkspaceShell: React.FC<WorkspaceShellProps> = ({
   const [floatingPrompt, setFloatingPrompt] = useState<string>('');
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
+  
+  const { user, setUser } = useWorkspaceStore();
+  const { getProfile } = useProfile();
+
+  React.useEffect(() => {
+    const fetchUser = async () => {
+      const token = getCookieValue('accessToken');
+      if (token && !user) {
+        const res = await getProfile();
+        if (res?.success && res.data) {
+          // Backend profile might wrap the user details inside res.data or res.data itself is the user
+          setUser(res.data);
+        }
+      }
+    };
+    fetchUser();
+  }, []);
 
   const handleFloatingSubmit = (e: React.FormEvent) => {
     e.preventDefault();
