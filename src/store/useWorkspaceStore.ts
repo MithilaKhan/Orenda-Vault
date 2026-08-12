@@ -10,68 +10,21 @@ import {
   User 
 } from '@/types/workspace';
 import { 
-  INITIAL_NOTES, 
-  INITIAL_COLLECTIONS, 
   INITIAL_ACTIVITIES, 
   INITIAL_CHAT_MESSAGES 
 } from '@/constants/defaultData';
 
-const STORAGE_KEY = 'orenda_vault_state_v1';
-
 export function useWorkspaceStore() {
   const [activeView, setActiveView] = useState<WorkspaceView>('dashboard');
-  const [notes, setNotes] = useState<Note[]>(INITIAL_NOTES);
-  const [collections, setCollections] = useState<Collection[]>(INITIAL_COLLECTIONS);
+  const [notes, setNotes] = useState<Note[]>([]);
+  const [collections, setCollections] = useState<Collection[]>([]);
   const [activities, setActivities] = useState<ActivityItem[]>(INITIAL_ACTIVITIES);
   const [chatMessages, setChatMessages] = useState<WorkspaceChatMessage[]>(INITIAL_CHAT_MESSAGES);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
   const [selectedCollectionId, setSelectedCollectionId] = useState<string | null>(null);
   const [isAiLoading, setIsAiLoading] = useState<boolean>(false);
-  const [isHydrated, setIsHydrated] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(null);
-
-  // Load from localStorage on mount
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (parsed.notes) {
-          const sanitizedNotes = parsed.notes.map((n: Note) => {
-            return {
-              ...n,
-            };
-          });
-          setNotes(sanitizedNotes);
-        }
-        if (parsed.collections) setCollections(parsed.collections);
-        if (parsed.activities) setActivities(parsed.activities);
-        if (parsed.chatMessages) setChatMessages(parsed.chatMessages);
-        if (parsed.user) setUser(parsed.user);
-      }
-    } catch (e) {
-      console.error('Failed to load Orenda Vault state from localStorage:', e);
-    } finally {
-      setIsHydrated(true);
-    }
-  }, []);
-
-  // Save to localStorage when state changes
-  useEffect(() => {
-    if (!isHydrated) return;
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({
-        notes,
-        collections,
-        activities,
-        chatMessages,
-        user
-      }));
-    } catch (e) {
-      console.error('Failed to save Orenda Vault state to localStorage:', e);
-    }
-  }, [notes, collections, activities, chatMessages, user, isHydrated]);
 
   const addActivity = useCallback((title: string, type: string, targetId?: string) => {
     const newAct: ActivityItem = {
@@ -82,105 +35,6 @@ export function useWorkspaceStore() {
       targetId,
     };
     setActivities(prev => [newAct, ...prev].slice(0, 20)); // keep last 20
-  }, []);
-
-  const addNote = useCallback((noteData: {
-    title: string;
-    content: string;
-    summary?: string;
-    category?: string;
-    collectionId?: string;
-  }) => {
-    const newNote: Note = {
-      id: `note-${Date.now()}`,
-      title: noteData.title || 'Untitled Note',
-      content: noteData.content || '',
-      summary: noteData.summary || noteData.content.slice(0, 100) + '...',
-      category: noteData.category || 'General Notes',
-      collectionId: noteData.collectionId,
-      isFavorite: false,
-      isTrashed: false,
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
-    };
-
-    setNotes(prev => [newNote, ...prev]);
-    
-    // Update collection count if added to collection
-    if (noteData.collectionId) {
-      setCollections(prev => prev.map(c => c.id === noteData.collectionId ? { ...c, noteCount: c.noteCount + 1 } : c));
-    }
-
-    addActivity(newNote.title, 'Created Note', newNote.id);
-    return newNote;
-  }, [addActivity]);
-
-  const updateNote = useCallback((id: string, partial: Partial<Note>) => {
-    setNotes(prev => prev.map(note => {
-      if (note.id === id) {
-        const updated = { ...note, ...partial, updatedAt: Date.now() };
-        if (partial.title || partial.content) {
-          addActivity(updated.title, 'Edited Note', updated.id);
-        }
-        return updated;
-      }
-      return note;
-    }));
-  }, [addActivity]);
-
-  const toggleFavorite = useCallback((id: string) => {
-    setNotes(prev => prev.map(note => {
-      if (note.id === id) {
-        const nextState = !note.isFavorite;
-        addActivity(note.title, nextState ? 'Favorited' : 'Unfavorited', note.id);
-        return { ...note, isFavorite: nextState };
-      }
-      return note;
-    }));
-  }, [addActivity]);
-
-  const deleteNote = useCallback((id: string) => {
-    setNotes(prev => prev.map(note => {
-      if (note.id === id) {
-        if (!note.isTrashed) {
-          addActivity(note.title, 'Moved to Trash', note.id);
-          return { ...note, isTrashed: true };
-        }
-      }
-      return note;
-    }));
-  }, [addActivity]);
-
-  const permanentlyDeleteNote = useCallback((id: string) => {
-    setNotes(prev => prev.filter(note => note.id !== id));
-  }, []);
-
-  const restoreNote = useCallback((id: string) => {
-    setNotes(prev => prev.map(note => {
-      if (note.id === id) {
-        addActivity(note.title, 'Restored Note', note.id);
-        return { ...note, isTrashed: false };
-      }
-      return note;
-    }));
-  }, [addActivity]);
-
-  const addCollection = useCallback((name: string, description: string = '', icon: string = 'Folder') => {
-    const newCol: Collection = {
-      id: `col-${Date.now()}`,
-      name,
-      description,
-      icon,
-      noteCount: 0,
-      createdAt: Date.now(),
-    };
-    setCollections(prev => [newCol, ...prev]);
-    addActivity(name, 'Created Collection', newCol.id);
-    return newCol;
-  }, [addActivity]);
-
-  const deleteCollection = useCallback((id: string) => {
-    setCollections(prev => prev.filter(col => col.id !== id));
   }, []);
 
   const addChatMessage = useCallback((message: Omit<WorkspaceChatMessage, 'id' | 'timestamp'>) => {
@@ -201,15 +55,9 @@ export function useWorkspaceStore() {
     activeView,
     setActiveView,
     notes,
-    addNote,
-    updateNote,
-    toggleFavorite,
-    deleteNote,
-    permanentlyDeleteNote,
-    restoreNote,
+    setNotes,
     collections,
-    addCollection,
-    deleteCollection,
+    setCollections,
     activities,
     addActivity,
     chatMessages,
@@ -223,7 +71,6 @@ export function useWorkspaceStore() {
     setSelectedCollectionId,
     isAiLoading,
     setIsAiLoading,
-    isHydrated,
     user,
     setUser,
   };

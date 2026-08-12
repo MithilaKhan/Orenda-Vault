@@ -12,7 +12,6 @@ export interface WorkspaceStoreState {
   selectedNote: Note | null;
   selectedCollectionId: string | null;
   isAiLoading: boolean;
-  isHydrated: boolean;
 }
 
 export interface WorkspaceStoreActions {
@@ -20,20 +19,8 @@ export interface WorkspaceStoreActions {
   setSearchQuery: (query: string) => void;
   setSelectedNote: (note: Note | null) => void;
   setSelectedCollectionId: (id: string | null) => void;
-  addNote: (noteData: {
-    title: string;
-    content: string;
-    summary?: string;
-    category?: string;
-    collectionId?: string;
-  }) => Note;
-  updateNote: (id: string, partial: Partial<Note>) => void;
-  deleteNote: (id: string) => void;
-  restoreNote: (id: string) => void;
-  permanentlyDeleteNote: (id: string) => void;
-  toggleFavorite: (id: string) => void;
-  addCollection: (name: string, description?: string, icon?: string) => Collection;
-  deleteCollection: (id: string) => void;
+  setNotes: (notes: Note[]) => void;
+  setCollections: (collections: Collection[]) => void;
   addChatMessage: (role: 'user' | 'assistant' | 'system', content: string) => WorkspaceChatMessage;
   clearChatHistory: () => void;
   addActivity: (title: string, type: string, targetId?: string) => void;
