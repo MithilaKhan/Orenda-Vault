@@ -83,7 +83,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         {/* + New Workspace Button */}
         <button
           onClick={onNewWorkspace}
-          className={`w-full flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-[#0F4C3A]  text-white font-semibold transition-all shadow-soft active:scale-[0.98] ${isCollapsed ? 'px-0' : ''
+          className={`w-full flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-gradient-to-r from-[#255c4b] to-[#A8E063]/70 text-white font-semibold transition-all shadow-soft active:scale-[0.98] ${isCollapsed ? 'px-0' : ''
             }`}
           title="Create Note"
         >
@@ -102,7 +102,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 key={item.id}
                 onClick={() => onSelectView(item.id)}
                 className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-all ${isActive
-                  ? 'bg-gradient-to-r from-[#255c4b] to-[#A8E063]/70 text-white shadow-soft font-semibold'
+                  ? 'bg-[#0F4C3A] text-white shadow-soft font-semibold'
                   : 'text-[#0f3d3e]/80 hover:bg-[#0f3d3e]/5 hover:text-[#0f3d3e]'
                   } ${isCollapsed ? 'justify-center px-0' : ''}`}
                 title={item.label}
