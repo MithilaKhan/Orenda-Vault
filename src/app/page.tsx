@@ -65,7 +65,6 @@ export default function VaultPage() {
         <Dashboard
           notes={store.notes}
           collections={store.collections}
-          activities={store.activities}
           onSelectNote={(note) => {
             store.setSelectedNote(note);
             store.setActiveView('notes');

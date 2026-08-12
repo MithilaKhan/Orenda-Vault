@@ -9,8 +9,7 @@ import {
   WorkspaceChatMessage,
   User 
 } from '@/types/workspace';
-import { 
-  INITIAL_ACTIVITIES, 
+import {  
   INITIAL_CHAT_MESSAGES 
 } from '@/constants/defaultData';
 
@@ -18,7 +17,6 @@ export function useWorkspaceStore() {
   const [activeView, setActiveView] = useState<WorkspaceView>('dashboard');
   const [notes, setNotes] = useState<Note[]>([]);
   const [collections, setCollections] = useState<Collection[]>([]);
-  const [activities, setActivities] = useState<ActivityItem[]>(INITIAL_ACTIVITIES);
   const [chatMessages, setChatMessages] = useState<WorkspaceChatMessage[]>(INITIAL_CHAT_MESSAGES);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
@@ -26,16 +24,7 @@ export function useWorkspaceStore() {
   const [isAiLoading, setIsAiLoading] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(null);
 
-  const addActivity = useCallback((title: string, type: string, targetId?: string) => {
-    const newAct: ActivityItem = {
-      id: `act-${Date.now()}`,
-      title,
-      type,
-      timestamp: Date.now(),
-      targetId,
-    };
-    setActivities(prev => [newAct, ...prev].slice(0, 20)); // keep last 20
-  }, []);
+
 
   const addChatMessage = useCallback((message: Omit<WorkspaceChatMessage, 'id' | 'timestamp'>) => {
     const newMsg: WorkspaceChatMessage = {
@@ -58,8 +47,6 @@ export function useWorkspaceStore() {
     setNotes,
     collections,
     setCollections,
-    activities,
-    addActivity,
     chatMessages,
     addChatMessage,
     clearChatHistory,

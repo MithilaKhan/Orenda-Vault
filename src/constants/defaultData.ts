@@ -119,30 +119,6 @@ export const INITIAL_NOTES: Note[] = [
   },
 ];
 
-export const INITIAL_ACTIVITIES: ActivityItem[] = [
-  {
-    id: 'act-1',
-    title: 'Portfolio Hero Headline Drafts',
-    type: 'Edited Note',
-    timestamp: Date.now() - 3600000 * 1,
-    targetId: 'note-2',
-  },
-  {
-    id: 'act-2',
-    title: 'JWT Authentication Breakdown',
-    type: 'Saved Note',
-    timestamp: Date.now() - 3600000 * 4,
-    targetId: 'note-1',
-  },
-  {
-    id: 'act-3',
-    title: 'Resume Summary Highlights',
-    type: 'Created Collection',
-    timestamp: Date.now() - 86400000 * 2,
-    targetId: 'col-3',
-  },
-];
-
 export const INITIAL_CHAT_MESSAGES: WorkspaceChatMessage[] = [
   {
     id: 'msg-welcome',

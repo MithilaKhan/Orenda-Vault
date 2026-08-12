@@ -10,10 +10,11 @@ export const useWorkspaceData = (store: WorkspaceStore) => {
   const { getCollections, createCollection, deleteCollection } = useCollections();
 
   const fetchData = useCallback(async () => {
+    let currentNotes: Note[] = [];
     const notesRes = await getNotes();
     if (notesRes?.success) {
       const notesArray = notesRes.data?.data || notesRes.data || [];
-      const formattedNotes = notesArray.map((n: any) => ({
+      currentNotes = notesArray.map((n: any) => ({
         id: n._id,
         title: n.title,
         content: n.description || '',
@@ -25,7 +26,7 @@ export const useWorkspaceData = (store: WorkspaceStore) => {
         createdAt: n.createdAt ? new Date(n.createdAt).getTime() : Date.now(),
         updatedAt: n.updatedAt ? new Date(n.updatedAt).getTime() : Date.now()
       }));
-      store.setNotes(formattedNotes);
+      store.setNotes(currentNotes);
     }
 
     const colRes = await getCollections();
@@ -36,7 +37,7 @@ export const useWorkspaceData = (store: WorkspaceStore) => {
         name: c.title,
         description: c.description || '',
         icon: c.icon || 'Folder',
-        noteCount: 0,
+        noteCount: currentNotes.filter(n => n.collectionId === c._id).length,
         createdAt: c.createdAt ? new Date(c.createdAt).getTime() : Date.now(),
       }));
       store.setCollections(formattedCols);
@@ -72,7 +73,6 @@ export const useWorkspaceData = (store: WorkspaceStore) => {
   };
 
   const handleDeleteNote = async (id: string) => {
-    // For now, permanent delete since backend doesn't support trash yet
     const res = await deleteNote(id);
     if (res?.success) {
       toast.success('Note deleted');
@@ -106,7 +106,7 @@ export const useWorkspaceData = (store: WorkspaceStore) => {
     }
   };
 
-  // Dummy implementations for features not yet in backend
+
   const handleToggleFavorite = (id: string) => {
     store.setNotes(prev => prev.map(n => n.id === id ? { ...n, isFavorite: !n.isFavorite } : n));
   };

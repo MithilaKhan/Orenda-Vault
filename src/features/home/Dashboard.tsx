@@ -13,7 +13,6 @@ import { Input } from '@/components/ui/Input';
 export interface DashboardProps {
   notes: Note[];
   collections: Collection[];
-  activities: ActivityItem[];
   onSelectNote: (note: Note) => void;
   onSelectCollection: (colId: string) => void;
   onActionCardClick: (actionType: ActionType) => void;
@@ -24,7 +23,6 @@ export interface DashboardProps {
 export const Dashboard: React.FC<DashboardProps> = ({
   notes,
   collections,
-  activities,
   onSelectNote,
   onSelectCollection,
   onActionCardClick,
@@ -174,22 +172,6 @@ export const Dashboard: React.FC<DashboardProps> = ({
             </div>
           </div>
 
-          <div>
-            <SectionTitle title="Timeline" subtitle="Recent workspace actions." />
-            <div className="p-4 rounded-2xl bg-white/60 border border-[#0f3d3e]/15 space-y-3.5">
-              {activities.slice(0, 4).map((act) => (
-                <div key={act.id} className="flex items-start gap-2.5 text-xs">
-                  <div className="w-2 h-2 rounded-full bg-[#A8E063] mt-1.5 flex-shrink-0" />
-                  <div className="flex-1 min-w-0">
-                    <p className="text-[#0f3d3e] font-semibold truncate">{act.title}</p>
-                    <p className="text-[#4B5563] text-[11px]">
-                      {act.type}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
         </div>
       </div>
     </div>
