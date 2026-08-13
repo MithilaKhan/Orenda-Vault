@@ -93,7 +93,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
         <div className="h-px bg-[#0f3d3e]/10 my-2" />
 
-        {/* Main Navigation Items */}
         <nav className="space-y-1">
           {MAIN_NAV_ITEMS.map((item) => {
             const isActive = activeView === item.id;
