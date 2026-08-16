@@ -48,6 +48,7 @@ export function useWorkspaceStore() {
     collections,
     setCollections,
     chatMessages,
+    setChatMessages,
     addChatMessage,
     clearChatHistory,
     searchQuery,

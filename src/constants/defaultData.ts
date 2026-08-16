@@ -123,7 +123,11 @@ export const INITIAL_CHAT_MESSAGES: WorkspaceChatMessage[] = [
   {
     id: 'msg-welcome',
     role: 'assistant',
-    content: `Hello Mithila! 👋 Welcome to **Orenda Vault**. I am your personal AI assistant and memory sanctuary.\n\nYou can ask me to explain technical concepts, draft UI copy, summarize your saved notes, or brainstorm new ideas. What would you like to explore today?`,
+    content: `Welcome to *Orenda Vault* — your intelligent second brain.
+
+Create, discover, and organize your *notes and collections* through natural conversation.
+
+What’s on your mind?`,
     timestamp: Date.now() - 60000,
   },
 ];

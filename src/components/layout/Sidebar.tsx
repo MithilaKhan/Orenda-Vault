@@ -138,7 +138,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 }}
                 className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-all ${
                   isActive
-                    ? 'bg-[#0F4C3A]/10 text-[#0F4C3A] font-semibold'
+                    ? 'bg-[#0F4C3A] text-white shadow-soft font-semibold'
                     : 'text-[#0f3d3e]/80 hover:bg-[#0f3d3e]/5 hover:text-[#0f3d3e]'
                 } ${isCollapsed ? 'justify-center px-0' : ''}`}
                 title={`${tool.label} - AI Action`}
@@ -146,7 +146,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 {tool.id === 'chat' ? (
                   <LogoIcon size={16} className="shrink-0" />
                 ) : (
-                  getIcon(tool.iconName, isActive ? 'w-4 h-4 text-[#0F4C3A]' : 'w-4 h-4 text-[#4B5563]')
+                  getIcon(tool.iconName, isActive ? 'w-4 h-4 text-white' : 'w-4 h-4 text-[#4B5563]')
                 )}
                 {!isCollapsed && <span>{tool.label}</span>}
               </button>
