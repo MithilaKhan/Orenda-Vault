@@ -122,26 +122,36 @@ export const Sidebar: React.FC<SidebarProps> = ({
               AI Tools
             </p>
           )}
-          {AI_TOOLS.map((tool) => (
-            <button
-              key={tool.id}
-              onClick={() => {
-                if (tool.id === 'search') {
-                  onSelectView('dashboard');
-                } else if (tool.id === 'chat') {
-                  onSelectView('chat');
-                } else {
-                  onTriggerAITool(tool.id, tool.prompt);
-                }
-              }}
-              className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-[#0f3d3e]/80 hover:bg-[#0f3d3e]/5 hover:text-[#0f3d3e] transition-all ${isCollapsed ? 'justify-center px-0' : ''
-                }`}
-              title={`${tool.label} - AI Action`}
-            >
-              {getIcon(tool.iconName, 'w-4 h-4 text-[#4B5563]')}
-              {!isCollapsed && <span>{tool.label}</span>}
-            </button>
-          ))}
+          {AI_TOOLS.map((tool) => {
+            const isActive = activeView === tool.id;
+            return (
+              <button
+                key={tool.id}
+                onClick={() => {
+                  if (tool.id === 'search') {
+                    onSelectView('dashboard');
+                  } else if (tool.id === 'chat') {
+                    onSelectView('chat');
+                  } else {
+                    onTriggerAITool(tool.id, tool.prompt);
+                  }
+                }}
+                className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-all ${
+                  isActive
+                    ? 'bg-[#0F4C3A]/10 text-[#0F4C3A] font-semibold'
+                    : 'text-[#0f3d3e]/80 hover:bg-[#0f3d3e]/5 hover:text-[#0f3d3e]'
+                } ${isCollapsed ? 'justify-center px-0' : ''}`}
+                title={`${tool.label} - AI Action`}
+              >
+                {tool.id === 'chat' ? (
+                  <LogoIcon size={16} className="shrink-0" />
+                ) : (
+                  getIcon(tool.iconName, isActive ? 'w-4 h-4 text-[#0F4C3A]' : 'w-4 h-4 text-[#4B5563]')
+                )}
+                {!isCollapsed && <span>{tool.label}</span>}
+              </button>
+            );
+          })}
         </div>
       </div>
 

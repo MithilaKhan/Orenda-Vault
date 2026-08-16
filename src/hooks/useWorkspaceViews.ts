@@ -51,8 +51,6 @@ export const useWorkspaceViews = (store: WorkspaceStore) => {
 
     if (store.activeView === 'favorites') {
       filtered = filtered.filter(n => n.isFavorite && !n.isTrashed);
-    } else if (store.activeView === 'trash') {
-      filtered = filtered.filter(n => n.isTrashed);
     } else if (store.activeView === 'recent') {
       filtered = [...filtered.filter(n => !n.isTrashed)].sort((a, b) => b.updatedAt - a.updatedAt);
     } else {

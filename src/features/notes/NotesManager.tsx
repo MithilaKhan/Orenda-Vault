@@ -24,6 +24,7 @@ export interface NotesManagerProps {
   viewIcon?: React.ReactNode;
   viewDescription?: string;
   isTrashView?: boolean;
+  isFavoritesView?: boolean;
 }
 
 export const NotesManager: React.FC<NotesManagerProps> = ({
@@ -39,6 +40,7 @@ export const NotesManager: React.FC<NotesManagerProps> = ({
   viewIcon = <FileText className="w-5 h-5 text-[#0F4C3A] fill-[#0F4C3A]/20" />,
   viewDescription = 'Access, refine, and organize your entire knowledge repository.',
   isTrashView = false,
+  isFavoritesView = false,
 }) => {
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
   const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -96,9 +98,25 @@ export const NotesManager: React.FC<NotesManagerProps> = ({
 
         {notes.length === 0 ? (
           <EmptyState 
-            title={isTrashView ? 'Trash is empty' : 'No notes yet.'}
-            description={isTrashView ? 'Deleted notes will appear here.' : 'Create your first note to start building your knowledge library.'}
-            onCreateNote={isTrashView ? undefined : () => onAddNote({ title: 'New Vault Note', content: '# Welcome\n\nStart writing...' })}
+            title={
+              isTrashView 
+                ? 'Trash is empty' 
+                : isFavoritesView 
+                  ? 'No favorites yet' 
+                  : 'No notes yet.'
+            }
+            description={
+              isTrashView 
+                ? 'Deleted notes will appear here.' 
+                : isFavoritesView 
+                  ? 'Star your important notes to keep them handy here.' 
+                  : 'Create your first note to start building your knowledge library.'
+            }
+            onCreateNote={
+              (isTrashView || isFavoritesView) 
+                ? undefined 
+                : () => onAddNote({ title: 'New Vault Note', content: '# Welcome\n\nStart writing...' })
+            }
           />
         ) : viewMode === 'grid' ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">

@@ -7,7 +7,7 @@ export const useNotes = () => {
 
   const getNotes = async () => {
     try {
-      const res = await myFetch("/notes", {
+      const res = await myFetch("/notes?limit=1000", {
         method: "GET",
       });
       return res; 

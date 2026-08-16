@@ -4,8 +4,7 @@ export type WorkspaceView =
   | 'notes' 
   | 'collections' 
   | 'favorites' 
-  | 'recent' 
-  | 'trash';
+  | 'recent';
 
 export type ActionType = 'note' | 'website' | 'pdf' | 'code' | 'idea' | 'meeting';
 

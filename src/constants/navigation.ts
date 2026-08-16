@@ -20,13 +20,12 @@ export const MAIN_NAV_ITEMS: NavItem[] = [
   { id: 'collections', label: 'Collections', iconName: 'Folder' },
   { id: 'favorites', label: 'Favorites', iconName: 'Star' },
   { id: 'recent', label: 'Recent Activity', iconName: 'Clock' },
-  { id: 'trash', label: 'Trash', iconName: 'Trash2' },
 ];
 
 export const AI_TOOLS: AIToolItem[] = [
   { 
     id: 'chat', 
-    label: 'AI Search', 
+    label: 'Ask Orenda', 
     iconName: 'Sparkles', 
     prompt: '' 
   },
