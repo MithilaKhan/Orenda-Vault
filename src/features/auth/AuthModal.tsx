@@ -12,12 +12,14 @@ interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
   defaultView?: AuthView;
+  onLoginSuccess?: () => void;
 }
 
 export const AuthModal: React.FC<AuthModalProps> = ({ 
   isOpen, 
   onClose, 
-  defaultView = 'signin' 
+  defaultView = 'signin',
+  onLoginSuccess
 }) => {
   const [currentView, setCurrentView] = useState<AuthView>(defaultView);
   const [emailContext, setEmailContext] = useState<string>('');
@@ -31,7 +33,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   }, [isOpen, defaultView]);
 
   const handleSuccess = () => {
-    // We could dispatch user context here, for now just close
+    if (onLoginSuccess) {
+      onLoginSuccess();
+    }
     onClose();
   };
 

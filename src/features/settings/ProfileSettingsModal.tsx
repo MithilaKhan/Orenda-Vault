@@ -3,27 +3,32 @@ import { Modal, ConfigProvider, Tabs } from 'antd';
 import type { TabsProps } from 'antd';
 import { EditProfileTab } from './tabs/EditProfileTab';
 import { ChangePasswordTab } from './tabs/ChangePasswordTab';
-import { User, KeyRound } from 'lucide-react';
+import { User as UserIcon, KeyRound } from 'lucide-react';
+import { User } from '@/shared/shared.type';
 
 interface ProfileSettingsModalProps {
   isOpen: boolean;
   onClose: () => void;
+  user: User | null;
+  setUser: (user: User | null) => void;
 }
 
 export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
   isOpen,
   onClose,
+  user,
+  setUser,
 }) => {
   const items: TabsProps['items'] = [
     {
       key: 'profile',
       label: (
         <span className="flex items-center gap-2 font-semibold">
-          <User className="w-4 h-4" />
+          <UserIcon className="w-4 h-4" />
           Edit Profile
         </span>
       ),
-      children: <EditProfileTab />,
+      children: <EditProfileTab user={user} setUser={setUser} />,
     },
     {
       key: 'password',

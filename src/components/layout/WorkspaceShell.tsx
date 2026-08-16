@@ -5,15 +5,16 @@ import Image from 'next/image';
 import { Sidebar } from './Sidebar';
 import { AuthModal } from '../../features/auth/AuthModal';
 import { ProfileSettingsModal } from '../../features/settings/ProfileSettingsModal';
-import { WorkspaceView } from '@/types/workspace';
+import { WorkspaceView, User } from '@/types/workspace';
 import { Sparkles, Send, Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Input } from '@/components/ui/Input';
-import { useWorkspaceStore } from '@/store/useWorkspaceStore';
 import { useProfile } from '@/hooks/useProfile';
 import { getCookieValue } from '@/helpers/cookieHelper';
 
 export interface WorkspaceShellProps {
+  user: User | null;
+  setUser: (user: User | null) => void;
   activeView: WorkspaceView;
   onSelectView: (view: WorkspaceView) => void;
   onNewWorkspace: () => void;
@@ -23,6 +24,8 @@ export interface WorkspaceShellProps {
 }
 
 export const WorkspaceShell: React.FC<WorkspaceShellProps> = ({
+  user,
+  setUser,
   activeView,
   onSelectView,
   onNewWorkspace,
@@ -36,22 +39,28 @@ export const WorkspaceShell: React.FC<WorkspaceShellProps> = ({
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
   
-  const { user, setUser } = useWorkspaceStore();
   const { getProfile } = useProfile();
 
-  React.useEffect(() => {
-    const fetchUser = async () => {
-      const token = getCookieValue('accessToken');
-      if (token && !user) {
-        const res = await getProfile();
-        if (res?.success && res.data) {
-          // Backend profile might wrap the user details inside res.data or res.data itself is the user
-          setUser(res.data);
-        }
+  const fetchUser = React.useCallback(async () => {
+    const token = getCookieValue('accessToken');
+    if (token) {
+      const res = await getProfile();
+      if (res?.success && res.data) {
+        // Backend profile might wrap the user details inside res.data or res.data itself is the user
+        setUser(res.data);
       }
-    };
+    }
+  }, [getProfile, setUser]);
+
+  React.useEffect(() => {
+    if (!user) {
+      fetchUser();
+    }
+  }, [user, fetchUser]);
+
+  const handleLoginSuccess = () => {
     fetchUser();
-  }, []);
+  };
 
   const handleFloatingSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -82,6 +91,7 @@ export const WorkspaceShell: React.FC<WorkspaceShellProps> = ({
       {/* Desktop Fixed Sidebar */}
       <div className="hidden lg:block">
         <Sidebar
+          user={user}
           activeView={activeView}
           onSelectView={onSelectView}
           onNewWorkspace={onNewWorkspace}
@@ -112,6 +122,7 @@ export const WorkspaceShell: React.FC<WorkspaceShellProps> = ({
               className="relative w-64 bg-[#EFEADF] h-full z-10 shadow-2xl"
             >
               <Sidebar
+                user={user}
                 activeView={activeView}
                 onSelectView={(view) => {
                   onSelectView(view);
@@ -186,10 +197,13 @@ export const WorkspaceShell: React.FC<WorkspaceShellProps> = ({
       <AuthModal 
         isOpen={isAuthModalOpen} 
         onClose={() => setIsAuthModalOpen(false)} 
+        onLoginSuccess={handleLoginSuccess}
       />
       <ProfileSettingsModal 
         isOpen={isSettingsModalOpen} 
         onClose={() => setIsSettingsModalOpen(false)} 
+        user={user}
+        setUser={setUser}
       />
     </div>
   );

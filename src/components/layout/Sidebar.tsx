@@ -20,12 +20,12 @@ import {
 import { LogoIcon } from '@/components/ui/LogoIcon';
 import { SidebarProps } from '@/types/workspace';
 import { MAIN_NAV_ITEMS, AI_TOOLS } from '@/constants/navigation';
-import { useWorkspaceStore } from '@/store/useWorkspaceStore';
 import { resolveImageUrl } from '@/helpers/resolveImageUrl';
 
 
 
 export const Sidebar: React.FC<SidebarProps> = ({
+  user,
   activeView,
   onSelectView,
   onNewWorkspace,
@@ -35,7 +35,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onOpenAuth,
   onOpenSettings,
 }) => {
-  const { user } = useWorkspaceStore();
+
 
   const getIcon = (iconName: string, className: string = 'w-4 h-4') => {
     switch (iconName) {

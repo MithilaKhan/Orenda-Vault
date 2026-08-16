@@ -50,6 +50,8 @@ export default function VaultPage() {
 
   return (
     <WorkspaceShell
+      user={store.user}
+      setUser={store.setUser}
       activeView={store.activeView}
       onSelectView={(view) => {
         store.setActiveView(view);

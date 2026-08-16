@@ -3,22 +3,26 @@ import { Form, Input, Button, Upload, message } from 'antd';
 import { User as UserIcon, Mail, Upload as UploadIcon } from 'lucide-react';
 import type { UploadChangeParam } from 'antd/es/upload';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
-import { useWorkspaceStore } from '@/store/useWorkspaceStore';
 import { useProfile } from '@/hooks/useProfile';
 import { resolveImageUrl } from '@/helpers/resolveImageUrl';
+import { User } from '@/shared/shared.type';
 
 interface EditProfileFormValues {
   name: string;
   email: string;
 }
 
-export const EditProfileTab: React.FC = () => {
+interface EditProfileTabProps {
+  user: User | null;
+  setUser: (user: User | null) => void;
+}
+
+export const EditProfileTab: React.FC<EditProfileTabProps> = ({ user, setUser }) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string>();
   const [selectedFile, setSelectedFile] = useState<RcFile | undefined>();
   
-  const { user, setUser } = useWorkspaceStore();
   const { updateProfile, getProfile } = useProfile(); 
 console.log("user profile",user)
 

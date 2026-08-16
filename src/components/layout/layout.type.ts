@@ -1,23 +1,8 @@
 import React from 'react';
-import { WorkspaceView, ActionType } from '@/shared/shared.type';
+import { WorkspaceView, ActionType, User } from '@/shared/shared.type';
 
 export interface SidebarProps {
-  activeView: WorkspaceView;
-  onSelectView: (view: WorkspaceView) => void;
-  onTriggerAITool: (toolId: string, prompt: string) => void;
-  isCollapsed: boolean;
-  onToggleCollapse: () => void;
-}
-
-export interface WorkspaceShellProps {
-  children: React.ReactNode;
-  activeView: WorkspaceView;
-  onSelectView: (view: WorkspaceView) => void;
-  onTriggerAITool: (toolId: string, prompt: string) => void;
-  onQuickNoteCreate: () => void;
-}
-
-export interface SidebarProps {
+  user: User | null;
   activeView: WorkspaceView;
   onSelectView: (view: WorkspaceView) => void;
   onNewWorkspace: () => void;
@@ -26,4 +11,12 @@ export interface SidebarProps {
   onToggleCollapse: () => void;
   onOpenAuth: () => void;
   onOpenSettings: () => void;
+}
+
+export interface WorkspaceShellProps {
+  children: React.ReactNode;
+  activeView: WorkspaceView;
+  onSelectView: (view: WorkspaceView) => void;
+  onTriggerAITool: (toolId: string, prompt: string) => void;
+  onQuickNoteCreate: () => void;
 }
