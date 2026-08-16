@@ -21,7 +21,7 @@ export const useWorkspaceData = (store: WorkspaceStore) => {
         summary: n.description?.slice(0, 100) + '...',
         category: 'General Notes',
         collectionId: n.collection?._id || n.collection,
-        isFavorite: false,
+        isFavorite: n.isFavorite || false,
         isTrashed: false,
         createdAt: n.createdAt ? new Date(n.createdAt).getTime() : Date.now(),
         updatedAt: n.updatedAt ? new Date(n.updatedAt).getTime() : Date.now()
@@ -59,11 +59,13 @@ export const useWorkspaceData = (store: WorkspaceStore) => {
   };
 
   const handleUpdateNote = async (id: string, partial: Partial<Note>) => {
-    const res = await updateNote(id, {
-      title: partial.title,
-      description: partial.content,
-      collection: partial.collectionId
-    });
+    const payload: any = {};
+    if (partial.title !== undefined) payload.title = partial.title;
+    if (partial.content !== undefined) payload.description = partial.content;
+    if (partial.collectionId !== undefined) payload.collection = partial.collectionId;
+    if (partial.isFavorite !== undefined) payload.isFavorite = partial.isFavorite;
+
+    const res = await updateNote(id, payload);
     if (res?.success) {
       toast.success('Note updated');
       fetchData();
@@ -107,8 +109,23 @@ export const useWorkspaceData = (store: WorkspaceStore) => {
   };
 
 
-  const handleToggleFavorite = (id: string) => {
-    store.setNotes(prev => prev.map(n => n.id === id ? { ...n, isFavorite: !n.isFavorite } : n));
+  const handleToggleFavorite = async (id: string) => {
+    const note = store.notes.find(n => n.id === id);
+    if (!note) return;
+    const nextFavorite = !note.isFavorite;
+
+    // Optimistic update
+    store.setNotes(prev => prev.map(n => n.id === id ? { ...n, isFavorite: nextFavorite } : n));
+
+    const res = await updateNote(id, { isFavorite: nextFavorite });
+    if (res?.success) {
+      toast.success(nextFavorite ? 'Added to favorites' : 'Removed from favorites');
+      fetchData();
+    } else {
+      toast.error(res?.message || res?.error || 'Failed to toggle favorite');
+      // Revert
+      store.setNotes(prev => prev.map(n => n.id === id ? { ...n, isFavorite: !nextFavorite } : n));
+    }
   };
   const handleRestoreNote = (id: string) => {
     store.setNotes(prev => prev.map(n => n.id === id ? { ...n, isTrashed: false } : n));
