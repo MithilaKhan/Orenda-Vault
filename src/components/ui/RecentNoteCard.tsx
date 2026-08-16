@@ -26,9 +26,10 @@ export const RecentNoteCard: React.FC<RecentNoteCardProps> = ({ note, onSelect }
           </h4>
           {note.isFavorite && <span className="text-amber-500 text-xs shrink-0">⭐</span>}
         </div>
-        <p className="text-xs text-[#4B5563] line-clamp-2 leading-relaxed font-normal">
-          {note.summary || note.content}
-        </p>
+        <div 
+          className="text-xs text-[#4B5563] line-clamp-2 leading-relaxed font-normal"
+          dangerouslySetInnerHTML={{ __html: note.summary || note.content }}
+        />
         <div className="flex flex-wrap items-center gap-1.5 pt-1.5">
 
           <span className="text-[11px] text-[#4B5563]/80 flex items-center gap-1 ml-auto font-medium shrink-0">

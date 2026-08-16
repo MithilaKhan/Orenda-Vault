@@ -64,9 +64,10 @@ export const NoteCard: React.FC<NoteCardProps> = ({
           </span>
         )}
 
-        <p className="text-xs text-[#4B5563] line-clamp-3 leading-relaxed font-normal">
-          {note.summary || note.content.slice(0, 120) + '...'}
-        </p>
+        <div 
+          className="text-xs text-[#4B5563] line-clamp-3 leading-relaxed font-normal"
+          dangerouslySetInnerHTML={{ __html: note.summary || note.content }}
+        />
       </div>
 
       {/* Note Bottom Bar */}

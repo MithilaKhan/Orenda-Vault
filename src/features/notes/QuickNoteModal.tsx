@@ -4,9 +4,15 @@ import React, { useState } from 'react';
 import { Modal } from '@/components/ui/Modal';
 import { Button } from '@/components/ui/Button';
 import { Collection } from '@/types/workspace';
-import { Sparkles, Folder } from 'lucide-react';
+import { Folder } from 'lucide-react';
 import { Select, Form, ConfigProvider } from 'antd';
-import { Input, TextArea } from '@/components/ui/Input';
+import { Input } from '@/components/ui/Input';
+import dynamic from 'next/dynamic';
+
+const JoditEditor = dynamic(() => import('jodit-react'), {
+  ssr: false,
+  loading: () => <div className="h-[250px] border border-gray-200 rounded-xl bg-gray-50 flex items-center justify-center text-sm text-gray-400">Loading Editor...</div>
+});
 
 export interface QuickNoteModalProps {
   isOpen: boolean;
@@ -32,11 +38,30 @@ export const QuickNoteModal: React.FC<QuickNoteModalProps> = ({
 }) => {
   const [title, setTitle] = useState<string>(initialTitle);
   const [content, setContent] = useState<string>(initialContent);
-
   const [selectedCollectionId, setSelectedCollectionId] = useState<string>('');
 
+  const editorConfig = React.useMemo(() => ({
+    readonly: false,
+    placeholder: 'Jot down thoughts, code snippets, or meeting takeaways...',
+    buttons: [
+      'source', '|',
+      'bold', 'italic', 'underline', 'strikethrough', '|',
+      'ul', 'ol', '|',
+      'font', 'fontsize', 'paragraph', '|',
+      'image', 'table', 'link', '|',
+      'align', 'undo', 'redo', '|',
+      'hr', 'eraser', 'fullsize'
+    ],
+    uploader: {
+      insertImageAsBase64URI: true
+    },
+    height: 250,
+    minHeight: 180
+  }), []);
+
   const handleSave = () => {
-    if (!title.trim() && !content.trim()) return;
+    const textOnly = content.replace(/<[^>]*>/g, '').trim();
+    if (!title.trim() && !textOnly) return;
 
     const col = collections.find(c => c.id === selectedCollectionId);
 
@@ -69,14 +94,15 @@ export const QuickNoteModal: React.FC<QuickNoteModalProps> = ({
         </Form.Item>
 
         <Form.Item className="mb-3">
-          <TextArea
-            rows={5}
+          <JoditEditor
             value={content}
-            onChange={(e) => setContent(e.target.value)}
-            placeholder="Jot down thoughts, code snippets, or meeting takeaways... Markdown is supported!"
-            className="font-mono text-sm leading-relaxed"
+            config={editorConfig}
+            onBlur={(newContent) => setContent(newContent)}
+            onChange={() => {}}
           />
         </Form.Item>
+
+
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
