@@ -71,14 +71,14 @@ console.log("user profile",user)
           showUploadList={false}
           onChange={handleChange}
         >
-          {imageUrl ? (
-            <img src={imageUrl} alt="avatar" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
-          ) : (
-            <div className="flex flex-col items-center justify-center text-gray-400">
-              <UploadIcon className="w-6 h-6 mb-2" />
-              <div className="text-xs">Upload</div>
-            </div>
-          )}
+          <img
+            src={imageUrl || '/default-avatar.svg'}
+            alt="avatar"
+            style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }}
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = '/default-avatar.svg';
+            }}
+          />
         </Upload>
         <p className="text-xs text-gray-500 mt-3 font-medium">Click to upload new picture</p>
       </div>
