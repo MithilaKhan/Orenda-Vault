@@ -5,6 +5,7 @@ import { Collection, Note } from '@/types/workspace';
 import { Button } from '@/components/ui/Button';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { EmptyState } from '@/components/ui/EmptyState';
+import { useWorkspace } from '@/context/WorkspaceContext';
 import { NotesManager } from '@/features/notes/NotesManager';
 import { Folder, Plus, ArrowLeft } from 'lucide-react';
 import { CollectionCard } from '@/components/ui/CollectionCard';
@@ -35,7 +36,16 @@ export const CollectionsManager: React.FC<CollectionsManagerProps> = ({
   selectedCollectionId,
   onSelectCollection,
 }) => {
+  const { store } = useWorkspace();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  const handleCreateCollectionClick = () => {
+    if (!store.user) {
+      store.setIsAuthModalOpen(true);
+      return;
+    }
+    setIsModalOpen(true);
+  };
 
   // If a collection is selected, render its notes!
   if (selectedCollectionId) {
@@ -73,7 +83,7 @@ export const CollectionsManager: React.FC<CollectionsManagerProps> = ({
         description="Organize your knowledge into dedicated project vaults and topics"
         icon={<Folder className="w-5 h-5 text-[#0F4C3A] fill-[#0F4C3A]/20" />}
         action={
-          <Button variant="primary" size="sm" onClick={() => setIsModalOpen(true)} icon={<Plus className="w-4 h-4 font-semibold" />}>
+          <Button variant="primary" size="sm" onClick={handleCreateCollectionClick} icon={<Plus className="w-4 h-4 font-semibold" />}>
             New Collection
           </Button>
         }
@@ -83,7 +93,8 @@ export const CollectionsManager: React.FC<CollectionsManagerProps> = ({
         <EmptyState
           title="No collections yet."
           description="Create a collection to organize your notes."
-          onCreateNote={() => setIsModalOpen(true)}
+          onCreateNote={handleCreateCollectionClick}
+          buttonText="Create Collection"
         />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">

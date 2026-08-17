@@ -11,6 +11,7 @@ export interface SidebarProps {
   onToggleCollapse: () => void;
   onOpenAuth: () => void;
   onOpenSettings: () => void;
+  onLogout: () => void;
 }
 
 export interface WorkspaceShellProps {

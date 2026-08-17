@@ -4,6 +4,8 @@ import { useNotes } from '@/hooks/useNotes';
 import { useCollections } from '@/hooks/useCollections';
 import { WorkspaceStore } from '@/store/useWorkspaceStore';
 import { Note } from '@/types/workspace';
+import { deleteCookie } from '@/helpers/getCookie';
+import { removeCookie } from '@/helpers/cookieHelper';
 
 export const useWorkspaceData = (store: WorkspaceStore) => {
   const { getNotes, createNote, updateNote, deleteNote } = useNotes();
@@ -45,6 +47,11 @@ export const useWorkspaceData = (store: WorkspaceStore) => {
   }, []);
 
   const handleAddNote = async (noteData: { title: string; content: string; collectionId?: string }) => {
+    if (!store.user) {
+      toast.error('Please sign in to create notes');
+      store.setIsAuthModalOpen(true);
+      return;
+    }
     const res = await createNote({
       title: noteData.title || 'Untitled Note',
       description: noteData.content || '',
@@ -59,6 +66,11 @@ export const useWorkspaceData = (store: WorkspaceStore) => {
   };
 
   const handleUpdateNote = async (id: string, partial: Partial<Note>) => {
+    if (!store.user) {
+      toast.error('Please sign in to update notes');
+      store.setIsAuthModalOpen(true);
+      return;
+    }
     const payload: any = {};
     if (partial.title !== undefined) payload.title = partial.title;
     if (partial.content !== undefined) payload.description = partial.content;
@@ -75,6 +87,11 @@ export const useWorkspaceData = (store: WorkspaceStore) => {
   };
 
   const handleDeleteNote = async (id: string) => {
+    if (!store.user) {
+      toast.error('Please sign in to delete notes');
+      store.setIsAuthModalOpen(true);
+      return;
+    }
     const res = await deleteNote(id);
     if (res?.success) {
       toast.success('Note deleted');
@@ -85,6 +102,11 @@ export const useWorkspaceData = (store: WorkspaceStore) => {
   };
 
   const handleAddCollection = async (name: string, description: string = '', icon: string = 'Folder') => {
+    if (!store.user) {
+      toast.error('Please sign in to create collections');
+      store.setIsAuthModalOpen(true);
+      return;
+    }
     const res = await createCollection({
       title: name,
       description,
@@ -99,6 +121,11 @@ export const useWorkspaceData = (store: WorkspaceStore) => {
   };
 
   const handleDeleteCollection = async (id: string) => {
+    if (!store.user) {
+      toast.error('Please sign in to delete collections');
+      store.setIsAuthModalOpen(true);
+      return;
+    }
     const res = await deleteCollection(id);
     if (res?.success) {
       toast.success('Collection deleted');
@@ -110,6 +137,11 @@ export const useWorkspaceData = (store: WorkspaceStore) => {
 
 
   const handleToggleFavorite = async (id: string) => {
+    if (!store.user) {
+      toast.error('Please sign in to manage favorites');
+      store.setIsAuthModalOpen(true);
+      return;
+    }
     const note = store.notes.find(n => n.id === id);
     if (!note) return;
     const nextFavorite = !note.isFavorite;
@@ -132,6 +164,16 @@ export const useWorkspaceData = (store: WorkspaceStore) => {
   };
   const handlePermanentlyDeleteNote = handleDeleteNote;
 
+  const handleLogout = useCallback(async () => {
+    await deleteCookie('accessToken');
+    removeCookie('accessToken');
+    store.setUser(null);
+    store.setNotes([]);
+    store.setCollections([]);
+    toast.success('Logged out successfully');
+    window.location.href = '/';
+  }, [store]);
+
   return {
     fetchData,
     handleAddNote,
@@ -141,6 +183,7 @@ export const useWorkspaceData = (store: WorkspaceStore) => {
     handleDeleteCollection,
     handleToggleFavorite,
     handleRestoreNote,
-    handlePermanentlyDeleteNote
+    handlePermanentlyDeleteNote,
+    handleLogout
   };
 };

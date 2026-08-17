@@ -23,6 +23,7 @@ export function useWorkspaceStore() {
   const [selectedCollectionId, setSelectedCollectionId] = useState<string | null>(null);
   const [isAiLoading, setIsAiLoading] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(null);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
 
 
 
@@ -61,6 +62,8 @@ export function useWorkspaceStore() {
     setIsAiLoading,
     user,
     setUser,
+    isAuthModalOpen,
+    setIsAuthModalOpen,
   };
 }
 

@@ -12,3 +12,8 @@ export const getCookieValue = (name: string) => {
     const cookieValue = Cookies.get(name);
     return cookieValue || null;
 }
+
+export const removeCookie = (name: string) => {
+    Cookies.remove(name);
+    return true;
+}

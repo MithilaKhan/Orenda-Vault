@@ -6,3 +6,9 @@ export const getCookie = async (name: string) => {
    const cookieValue = cookieStore.get(name)?.value || null;
    return cookieValue;
 };
+
+export const deleteCookie = async (name: string) => {
+   const cookieStore = await cookies();
+   cookieStore.delete(name);
+   return true;
+};

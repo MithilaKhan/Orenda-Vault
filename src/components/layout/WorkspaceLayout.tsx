@@ -16,6 +16,9 @@ function WorkspaceLayoutContent({ children }: { children: React.ReactNode }) {
         user={store.user}
         setUser={store.setUser}
         activeView={store.activeView}
+        isAuthModalOpen={store.isAuthModalOpen}
+        setIsAuthModalOpen={store.setIsAuthModalOpen}
+        onLogout={data.handleLogout}
         onSelectView={(view) => {
           router.push(view === 'dashboard' ? '/' : `/${view}`);
           store.setSearchQuery('');
@@ -23,7 +26,13 @@ function WorkspaceLayoutContent({ children }: { children: React.ReactNode }) {
             store.setSelectedCollectionId(null);
           }
         }}
-        onNewWorkspace={() => views.handleOpenCapture('note')}
+        onNewWorkspace={() => {
+          if (!store.user) {
+            store.setIsAuthModalOpen(true);
+            return;
+          }
+          views.handleOpenCapture('note');
+        }}
         onTriggerAITool={ai.handleTriggerAITool}
         onSendFloatingAI={ai.handleSendAI}
       >

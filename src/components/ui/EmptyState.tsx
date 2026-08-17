@@ -11,6 +11,7 @@ export interface EmptyStateProps {
   onCreateNote?: () => void;
   onImportBookmark?: () => void;
   onSuggestionClick?: (suggestion: string) => void;
+  buttonText?: string;
 }
 
 export const EmptyState: React.FC<EmptyStateProps> = ({
@@ -18,6 +19,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
   description = 'Start building your second brain with Orenda Vault.',
   onCreateNote,
   onImportBookmark,
+  buttonText,
 }) => {
   return (
     <div className="flex flex-col items-center justify-center p-10 sm:p-12 text-center bg-white/50 backdrop-blur-xl rounded-3xl border border-[#0f3d3e]/10 max-w-lg mx-auto my-8 shadow-soft transition-all">
@@ -42,7 +44,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
       <div className="flex flex-wrap items-center justify-center gap-3">
         {onCreateNote && (
           <Button variant="primary" size="sm" onClick={onCreateNote} icon={<Plus className="w-4 h-4" />}>
-            Create Note
+            {buttonText || 'Create Note'}
           </Button>
         )}
         {onImportBookmark && (

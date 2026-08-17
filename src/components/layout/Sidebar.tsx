@@ -15,7 +15,8 @@ import {
   ChevronLeft,
   ChevronRight,
   Settings,
-  User
+  User,
+  LogOut
 } from 'lucide-react';
 import { LogoIcon } from '@/components/ui/LogoIcon';
 import { SidebarProps } from '@/types/workspace';
@@ -34,6 +35,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onToggleCollapse,
   onOpenAuth,
   onOpenSettings,
+  onLogout,
 }) => {
 
 
@@ -136,11 +138,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     onTriggerAITool(tool.id, tool.prompt);
                   }
                 }}
-                className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-all ${
-                  isActive
+                className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-all ${isActive
                     ? 'bg-[#0F4C3A] text-white shadow-soft font-semibold'
                     : 'text-[#0f3d3e]/80 hover:bg-[#0f3d3e]/5 hover:text-[#0f3d3e]'
-                } ${isCollapsed ? 'justify-center px-0' : ''}`}
+                  } ${isCollapsed ? 'justify-center px-0' : ''}`}
                 title={`${tool.label} - AI Action`}
               >
                 {tool.id === 'chat' ? (
@@ -181,13 +182,22 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </button>
           </div>
           {!isCollapsed && user && (
-            <button
-              onClick={onOpenSettings}
-              className="p-1.5 rounded-lg text-[#4B5563] hover:text-[#0f3d3e] hover:bg-[#0f3d3e]/5 transition-colors"
-              title="Settings"
-            >
-              <Settings className="w-4 h-4" />
-            </button>
+            <div className="flex items-center gap-1">
+              <button
+                onClick={onOpenSettings}
+                className="p-1.5 rounded-lg text-[#4B5563] hover:text-[#0f3d3e] hover:bg-[#0f3d3e]/5 transition-colors"
+                title="Settings"
+              >
+                <Settings className="w-4 h-4" />
+              </button>
+              <button
+                onClick={onLogout}
+                className="p-1.5 rounded-lg text-red-700 hover:text-red-600 hover:bg-red-50 transition-colors"
+                title="Log Out"
+              >
+                <LogOut className="w-4 h-4" />
+              </button>
+            </div>
           )}
         </div>
       </div>

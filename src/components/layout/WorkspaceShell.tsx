@@ -20,6 +20,9 @@ export interface WorkspaceShellProps {
   onNewWorkspace: () => void;
   onTriggerAITool: (toolId: string, prompt: string) => void;
   onSendFloatingAI: (prompt: string) => void;
+  isAuthModalOpen: boolean;
+  setIsAuthModalOpen: (open: boolean) => void;
+  onLogout: () => void;
   children: React.ReactNode;
 }
 
@@ -31,12 +34,14 @@ export const WorkspaceShell: React.FC<WorkspaceShellProps> = ({
   onNewWorkspace,
   onTriggerAITool,
   onSendFloatingAI,
+  isAuthModalOpen,
+  setIsAuthModalOpen,
+  onLogout,
   children,
 }) => {
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
   const [isMobileOpen, setIsMobileOpen] = useState<boolean>(false);
   const [floatingPrompt, setFloatingPrompt] = useState<string>('');
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
   
   const { getProfile } = useProfile();
@@ -100,6 +105,7 @@ export const WorkspaceShell: React.FC<WorkspaceShellProps> = ({
           onToggleCollapse={() => setIsCollapsed(!isCollapsed)}
           onOpenAuth={() => setIsAuthModalOpen(true)}
           onOpenSettings={() => setIsSettingsModalOpen(true)}
+          onLogout={onLogout}
         />
       </div>
 
@@ -146,6 +152,7 @@ export const WorkspaceShell: React.FC<WorkspaceShellProps> = ({
                   setIsSettingsModalOpen(true);
                   setIsMobileOpen(false);
                 }}
+                onLogout={onLogout}
               />
             </motion.div>
           </div>
