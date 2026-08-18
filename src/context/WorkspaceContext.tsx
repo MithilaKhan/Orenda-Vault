@@ -24,7 +24,6 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const ai = useWorkspaceAI(store);
   const views = useWorkspaceViews(store);
 
-  // Sync pathname -> store.activeView
   useEffect(() => {
     let view: any = 'dashboard';
     if (pathname === '/notes') view = 'notes';
