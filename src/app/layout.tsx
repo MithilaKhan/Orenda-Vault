@@ -12,6 +12,11 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Orenda Vault",
   description: "A premium AI-powered personal knowledge workspace",
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/logo-mockup.png",
+  },
 };
 
 export default function RootLayout({
