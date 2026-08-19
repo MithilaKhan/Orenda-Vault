@@ -10,9 +10,10 @@ interface SignUpViewProps {
   onSwitchView: (view: AuthView) => void;
   onSuccess: () => void;
   setEmailContext: (email: string) => void;
+  setOtpContext: (otp: string) => void;
 }
 
-export const SignUpView: React.FC<SignUpViewProps> = ({ onSwitchView, onSuccess, setEmailContext }) => {
+export const SignUpView: React.FC<SignUpViewProps> = ({ onSwitchView, onSuccess, setEmailContext, setOtpContext }) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = React.useState(false);
   const { signUp, handleApiError } = useAuth();
@@ -26,6 +27,9 @@ export const SignUpView: React.FC<SignUpViewProps> = ({ onSwitchView, onSuccess,
     if (res?.success) {
       toast.success(res?.message || "Registered successfully", { id: "register" });
       setEmailContext(values.email);
+      if (res?.data?.otp) {
+        setOtpContext(String(res.data.otp));
+      }
       form.resetFields();
       onSwitchView("otp");
     } else {

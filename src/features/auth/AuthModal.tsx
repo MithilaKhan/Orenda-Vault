@@ -24,6 +24,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   const [currentView, setCurrentView] = useState<AuthView>(defaultView);
   const [emailContext, setEmailContext] = useState<string>('');
   const [resetToken, setResetToken] = useState<string>('');
+  const [otpContext, setOtpContext] = useState<string>('');
 
   // Reset view when modal opens
   React.useEffect(() => {
@@ -44,11 +45,11 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       case 'signin':
         return <SignInView onSwitchView={setCurrentView} onSuccess={handleSuccess} setEmailContext={setEmailContext} />;
       case 'signup':
-        return <SignUpView onSwitchView={setCurrentView} onSuccess={handleSuccess} setEmailContext={setEmailContext} />;
+        return <SignUpView onSwitchView={setCurrentView} onSuccess={handleSuccess} setEmailContext={setEmailContext} setOtpContext={setOtpContext} />;
       case 'forgot':
         return <ForgotPassView onSwitchView={setCurrentView} setEmailContext={setEmailContext} />;
       case 'otp':
-        return <OtpVerifyView onSwitchView={setCurrentView} onSuccess={handleSuccess} emailContext={emailContext} setResetToken={setResetToken} />;
+        return <OtpVerifyView onSwitchView={setCurrentView} onSuccess={handleSuccess} emailContext={emailContext} setResetToken={setResetToken} otpContext={otpContext} />;
       case 'reset':
         return <ResetPassView onSwitchView={setCurrentView} onSuccess={handleSuccess} resetToken={resetToken} />;
       default:

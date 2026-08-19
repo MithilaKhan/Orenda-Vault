@@ -12,13 +12,21 @@ interface OtpVerifyViewProps {
   onSuccess: () => void;
   emailContext: string;
   setResetToken: (token: string) => void;
+  otpContext?: string;
 }
 
-export const OtpVerifyView: React.FC<OtpVerifyViewProps> = ({ onSwitchView, onSuccess, emailContext, setResetToken }) => {
+export const OtpVerifyView: React.FC<OtpVerifyViewProps> = ({ onSwitchView, onSuccess, emailContext, setResetToken, otpContext }) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = React.useState(false);
   const [resendLoading, setResendLoading] = React.useState(false);
   const { verifyEmail, forgotPassword, handleApiError } = useAuth();
+
+  // Auto-fill OTP when provided from backend (dev mode)
+  React.useEffect(() => {
+    if (otpContext) {
+      form.setFieldsValue({ otp: otpContext });
+    }
+  }, [otpContext, form]);
 
   const onFinish = async (values: any) => {
     if (!emailContext) {
