@@ -22,7 +22,7 @@ export function ChatInputBox({ prompt, setPrompt, onGenerate, loading }: ChatInp
   };
 
   return (
-    <div className="sticky bottom-0 left-0 right-0 px-4 pb-6 pt-3 bg-gradient-to-t from-[#F7F3EA] via-[#F7F3EA]/95 to-transparent">
+    <div className="sticky bottom-0 left-0 right-0 px-4 pb-6 pt-3 bg-linear-to-t from-[#F7F3EA] via-[#F7F3EA]/95 to-transparent">
       <div className="max-w-3xl mx-auto">
         <div className="bg-white border border-[#0f3d3e]/15 rounded-2xl shadow-lg overflow-hidden focus-within:border-[#0F4C3A] focus-within:ring-2 focus-within:ring-[#0F4C3A]/20 transition-all duration-200">
           {/* Input Area */}

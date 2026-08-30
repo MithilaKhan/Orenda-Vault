@@ -61,7 +61,7 @@ export const BottomCommandBar: React.FC<BottomCommandBarProps> = ({
               e.stopPropagation();
               onOpenPalette();
             }}
-            className="p-2.5 rounded-xl bg-[#0F4C3A] text-[#F7F3EA] hover:bg-[#0F4C3A]/90 transition-all active:scale-95 shadow-soft flex-shrink-0"
+            className="p-2.5 rounded-xl bg-[#0F4C3A] text-[#F7F3EA] hover:bg-[#0F4C3A]/90 transition-all active:scale-95 shadow-soft shrink-0"
             title="Search Knowledge"
           >
             <Send className="w-4 h-4" />

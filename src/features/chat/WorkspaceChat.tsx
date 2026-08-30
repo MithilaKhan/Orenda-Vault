@@ -89,7 +89,7 @@ export const WorkspaceChat: React.FC<WorkspaceChatProps> = ({
       <div className="flex items-center justify-between pb-3 border-b border-[#0f3d3e]/10 mb-2">
         <div className="flex items-center gap-3">
           <span
-            className="inline-flex items-center justify-center overflow-hidden rounded-xl shadow-soft flex-shrink-0"
+            className="inline-flex items-center justify-center overflow-hidden rounded-xl shadow-soft shrink-0"
             style={{ width: 38, height: 38 }}
           >
             <Image
@@ -186,7 +186,7 @@ export const WorkspaceChat: React.FC<WorkspaceChatProps> = ({
         </div>
       ) : (
         /* Chat Messages List */
-        <div className="flex-1 overflow-y-auto space-y-4 py-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="flex-1 overflow-y-auto space-y-4 py-4 scrollbar-none [&::-webkit-scrollbar]:hidden">
           <AnimatePresence initial={false}>
             {messages.map((msg) => {
               const isAI = msg.role === 'assistant';
@@ -267,7 +267,7 @@ export const WorkspaceChat: React.FC<WorkspaceChatProps> = ({
                     })}
                   </div>
 
-                    {/* Response Toolbar (AI only) */}
+                  {/* Response Toolbar (AI only) */}
                   {isAI && (
                     <div className="flex flex-wrap items-center gap-1.5 pt-2">
                       <button

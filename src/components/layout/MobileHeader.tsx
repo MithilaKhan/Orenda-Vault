@@ -108,7 +108,7 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
                 {onNewWorkspace && (
                   <button
                     onClick={() => { onNewWorkspace(); onToggleMobileOpen(); }}
-                    className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-gradient-to-r from-[#255c4b] to-[#A8E063]/70 text-white font-semibold shadow-soft active:scale-[0.98] transition-all"
+                    className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-linear-to-r from-[#255c4b] to-[#A8E063]/70 text-white font-semibold shadow-soft active:scale-[0.98] transition-all"
                   >
                     <Plus className="w-4 h-4" />
                     <span className="text-sm">Create Note</span>
@@ -125,11 +125,10 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
                       <button
                         key={item.id}
                         onClick={() => handleNavClick(item.id)}
-                        className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
-                          isActive
+                        className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${isActive
                             ? 'bg-[#0F4C3A] text-white shadow-soft font-semibold'
                             : 'text-[#0f3d3e]/80 hover:bg-[#0f3d3e]/5 hover:text-[#0f3d3e]'
-                        }`}
+                          }`}
                       >
                         {getIcon(item.iconName, isActive ? 'w-4 h-4 text-white' : 'w-4 h-4 text-[#4B5563]')}
                         <span>{item.label}</span>
@@ -158,11 +157,10 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
                             onToggleMobileOpen();
                           }
                         }}
-                        className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
-                          isActive
+                        className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${isActive
                             ? 'bg-[#0F4C3A] text-white shadow-soft font-semibold'
                             : 'text-[#0f3d3e]/80 hover:bg-[#0f3d3e]/5 hover:text-[#0f3d3e]'
-                        }`}
+                          }`}
                       >
                         {getIcon(tool.iconName, isActive ? 'w-4 h-4 text-white' : 'w-4 h-4 text-[#4B5563]')}
                         <span>{tool.label}</span>

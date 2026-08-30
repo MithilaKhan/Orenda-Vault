@@ -164,7 +164,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               onClick={user ? onOpenSettings : onOpenAuth}
               className="flex items-center gap-2 text-[#0f3d3e] hover:text-[#0F4C3A] transition-colors overflow-hidden"
             >
-              <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 bg-[#E8F0EB] flex items-center justify-center border border-[#0F4C3A]/10">
+              <div className="w-8 h-8 rounded-full overflow-hidden shrink-0 bg-[#E8F0EB] flex items-center justify-center border border-[#0F4C3A]/10">
                 <img
                   src={user?.image ? resolveImageUrl(user.image) : '/default-avatar.svg'}
                   alt={user?.name || 'User'}
@@ -175,7 +175,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 />
               </div>
               {!isCollapsed && (
-                <span className="text-sm font-semibold whitespace-nowrap truncate max-w-[120px]">
+                <span className="text-sm font-semibold whitespace-nowrap truncate max-w-30">
                   {user ? user.name : 'Sign In'}
                 </span>
               )}
