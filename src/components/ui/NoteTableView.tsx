@@ -4,6 +4,7 @@ import React from 'react';
 import { Note, Collection } from '@/types/workspace';
 import { Table } from 'antd';
 import { Star, Edit3, Trash2, RotateCcw, X, Folder } from 'lucide-react';
+import { formatRelativeOrDate } from '@/helpers/dateHelper';
 
 export interface NoteTableViewProps {
   notes: Note[];
@@ -71,14 +72,17 @@ export const NoteTableView: React.FC<NoteTableViewProps> = ({
             key: 'summary',
             minWidth: 160,
             responsive: ['md'] as ('md')[],
-            render: (text) => <span className="text-xs text-[#4B5563] line-clamp-1">{text}</span>,
+            render: (text) => {
+              const clean = text ? text.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim() : '';
+              return <span className="text-xs text-[#4B5563] line-clamp-1">{clean || '—'}</span>;
+            },
           },
           {
             title: 'Updated',
             dataIndex: 'updatedAt',
             key: 'updatedAt',
             minWidth: 90,
-            render: (date) => <span className="text-xs text-[#4B5563]">{new Date(date).toLocaleDateString()}</span>,
+            render: (date) => <span className="text-xs text-[#4B5563]">{formatRelativeOrDate(date)}</span>,
           },
           {
             title: 'Actions',

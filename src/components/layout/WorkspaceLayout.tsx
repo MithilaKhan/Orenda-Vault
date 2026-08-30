@@ -16,6 +16,12 @@ function WorkspaceLayoutContent({ children }: { children: React.ReactNode }) {
         user={store.user}
         setUser={store.setUser}
         activeView={store.activeView}
+        notes={store.notes}
+        collections={store.collections}
+        isPaletteOpen={store.isCommandPaletteOpen}
+        paletteInitialQuery={store.paletteInitialQuery}
+        onOpenPalette={store.openCommandPalette}
+        onClosePalette={store.closeCommandPalette}
         isAuthModalOpen={store.isAuthModalOpen}
         setIsAuthModalOpen={store.setIsAuthModalOpen}
         onLogout={data.handleLogout}
@@ -25,6 +31,14 @@ function WorkspaceLayoutContent({ children }: { children: React.ReactNode }) {
           if (view !== 'collections') {
             store.setSelectedCollectionId(null);
           }
+        }}
+        onSelectNote={(note) => {
+          store.setSelectedNote(note);
+          router.push('/notes');
+        }}
+        onSelectCollection={(collectionId) => {
+          store.setSelectedCollectionId(collectionId);
+          router.push('/collections');
         }}
         onNewWorkspace={() => {
           if (!store.user) {
@@ -38,6 +52,7 @@ function WorkspaceLayoutContent({ children }: { children: React.ReactNode }) {
       >
         {children}
       </WorkspaceShell>
+
       <QuickNoteModal
         isOpen={views.isQuickNoteOpen}
         onClose={() => views.setIsQuickNoteOpen(false)}
@@ -50,7 +65,9 @@ function WorkspaceLayoutContent({ children }: { children: React.ReactNode }) {
   );
 }
 
-export const WorkspaceLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const WorkspaceLayout: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   return (
     <WorkspaceProvider>
       <WorkspaceLayoutContent>{children}</WorkspaceLayoutContent>

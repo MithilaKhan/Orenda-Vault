@@ -21,7 +21,7 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const pathname = usePathname();
 
   const data = useWorkspaceData(store);
-  const ai = useWorkspaceAI(store);
+  const ai = useWorkspaceAI(store, data.fetchData);
   const views = useWorkspaceViews(store);
 
   useEffect(() => {
@@ -39,6 +39,7 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
   useEffect(() => {
     data.fetchData();
+    ai.handleFetchHistory();
   }, []);
 
   return (
@@ -47,6 +48,7 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     </WorkspaceContext.Provider>
   );
 };
+
 
 export const useWorkspace = () => {
   const context = useContext(WorkspaceContext);

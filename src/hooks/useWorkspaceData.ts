@@ -12,6 +12,13 @@ export const useWorkspaceData = (store: WorkspaceStore) => {
   const { getCollections, createCollection, deleteCollection } = useCollections();
 
   const fetchData = useCallback(async () => {
+    const parseTimestamp = (item: any): number => {
+      const raw = item?.createdAt || item?.created_at || item?.updatedAt || item?.updated_at;
+      if (!raw) return Date.now();
+      const t = new Date(raw).getTime();
+      return isNaN(t) ? Date.now() : t;
+    };
+
     let currentNotes: Note[] = [];
     const notesRes = await getNotes();
     if (notesRes?.success) {
@@ -25,8 +32,8 @@ export const useWorkspaceData = (store: WorkspaceStore) => {
         collectionId: n.collection?._id || n.collection,
         isFavorite: n.isFavorite || false,
         isTrashed: false,
-        createdAt: n.createdAt ? new Date(n.createdAt).getTime() : Date.now(),
-        updatedAt: n.updatedAt ? new Date(n.updatedAt).getTime() : Date.now()
+        createdAt: parseTimestamp(n),
+        updatedAt: parseTimestamp({ createdAt: n.updatedAt || n.updated_at || n.createdAt })
       }));
       store.setNotes(currentNotes);
     }
@@ -40,7 +47,7 @@ export const useWorkspaceData = (store: WorkspaceStore) => {
         description: c.description || '',
         icon: c.icon || 'Folder',
         noteCount: currentNotes.filter(n => n.collectionId === c._id).length,
-        createdAt: c.createdAt ? new Date(c.createdAt).getTime() : Date.now(),
+        createdAt: parseTimestamp(c),
       }));
       store.setCollections(formattedCols);
     }

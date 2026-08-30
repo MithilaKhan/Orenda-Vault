@@ -85,11 +85,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
         {/* + New Workspace Button */}
         <button
           onClick={onNewWorkspace}
-          className={`w-full flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-gradient-to-r from-[#255c4b] to-[#A8E063]/70 text-white font-semibold transition-all shadow-soft active:scale-[0.98] ${isCollapsed ? 'px-0' : ''
+          className={`w-full flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-linear-to-r from-[#0F4C3A] to-[#0F4C3A]/85 text-white font-semibold transition-all shadow-soft active:scale-[0.98] ${isCollapsed ? 'px-0' : ''
             }`}
           title="Create Note"
         >
-          <Plus className="w-4 h-4 flex-shrink-0 font-semibold" />
+          <Plus className="w-4 h-4 shrink-0 font-semibold" />
           {!isCollapsed && <span className="text-sm">Create Note</span>}
         </button>
 
@@ -139,8 +139,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   }
                 }}
                 className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-all ${isActive
-                    ? 'bg-[#0F4C3A] text-white shadow-soft font-semibold'
-                    : 'text-[#0f3d3e]/80 hover:bg-[#0f3d3e]/5 hover:text-[#0f3d3e]'
+                  ? 'bg-[#0F4C3A] text-white shadow-soft font-semibold'
+                  : 'text-[#0f3d3e]/80 hover:bg-[#0f3d3e]/5 hover:text-[#0f3d3e]'
                   } ${isCollapsed ? 'justify-center px-0' : ''}`}
                 title={`${tool.label} - AI Action`}
               >

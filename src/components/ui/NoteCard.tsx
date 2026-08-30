@@ -3,8 +3,8 @@
 import React from 'react';
 import { Note, Collection } from '@/types/workspace';
 import { Card } from '@/components/ui/Card';
-import { Tag } from '@/components/ui/Tag';
 import { Star, Clock, Folder, Sparkles, Tag as TagIcon, Edit3, Trash2, RotateCcw, X } from 'lucide-react';
+import { formatRelativeOrDate } from '@/helpers/dateHelper';
 
 export interface NoteCardProps {
   note: Note;
@@ -35,7 +35,7 @@ export const NoteCard: React.FC<NoteCardProps> = ({
     <Card
       hoverEffect={!isTrashView}
       onClick={isTrashView ? undefined : () => onEdit(note)}
-      className="flex flex-col justify-between min-h-[260px] h-auto bg-white/70 hover:bg-white border-[#0f3d3e]/15 relative group p-5 gap-4"
+      className="flex flex-col justify-between min-h-65 h-auto bg-white/70 hover:bg-white border-[#0f3d3e]/15 relative group p-5 gap-4"
     >
       {/* Note Top Bar */}
       <div className="space-y-2.5">
@@ -64,7 +64,7 @@ export const NoteCard: React.FC<NoteCardProps> = ({
           </span>
         )}
 
-        <div 
+        <div
           className="text-xs text-[#4B5563] line-clamp-3 leading-relaxed font-normal"
           dangerouslySetInnerHTML={{ __html: note.summary || note.content }}
         />
@@ -75,7 +75,7 @@ export const NoteCard: React.FC<NoteCardProps> = ({
         <div className="flex items-center justify-between text-[11px] text-[#4B5563] pt-1">
           <span className="flex items-center gap-1 font-medium">
             <Clock className="w-3 h-3" />
-            {new Date(note.updatedAt).toLocaleDateString()}
+            {formatRelativeOrDate(note.updatedAt)}
           </span>
 
           <div className="flex items-center gap-1 opacity-85 group-hover:opacity-100 transition-opacity">

@@ -3,6 +3,7 @@ import { myFetch } from '@/helpers/myFetch';
 export interface AIResponseResult {
   content: string;
   success: boolean;
+  toolResult?: any;
   error?: string;
 }
 
@@ -30,6 +31,7 @@ export const aiService = {
       if (response.success && response.data) {
         return { 
           content: response.data.text || 'Processing completed.', 
+          toolResult: response.data.toolResult || null,
           success: true 
         };
       } else {
@@ -44,6 +46,39 @@ export const aiService = {
     }
   },
 
+  async getChatHistory() {
+    try {
+      const response = await myFetch('/chat/history', {
+        method: 'GET',
+      });
+      if (response.success && Array.isArray(response.data)) {
+        return {
+          success: true,
+          data: response.data,
+        };
+      }
+      return { success: false, data: [] };
+    } catch (err) {
+      console.warn('Failed to fetch chat history:', err);
+      return { success: false, data: [] };
+    }
+  },
+
+  async clearChatHistory() {
+    try {
+      const response = await myFetch('/chat/clear', {
+        method: 'DELETE',
+      });
+      return {
+        success: response.success,
+        message: response.message || 'Chat history cleared',
+      };
+    } catch (err) {
+      console.warn('Failed to clear chat history:', err);
+      return { success: false, message: 'Failed to clear chat history' };
+    }
+  },
+
   async summarizeText(text: string): Promise<string> {
     const res = await this.generateResponse(
       `Summarize the following notes into 3 concise bullet points with actionable takeaways:\n\n${text}`,
@@ -53,3 +88,4 @@ export const aiService = {
     return res.content;
   }
 };
+

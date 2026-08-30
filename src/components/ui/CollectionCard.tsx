@@ -3,7 +3,8 @@
 import React from 'react';
 import { Collection } from '@/types/workspace';
 import { Card } from '@/components/ui/Card';
-import { Folder, Briefcase, Code, FileText, Trash2 } from 'lucide-react';
+import { Folder, Briefcase, Code, FileText, Trash2, Calendar } from 'lucide-react';
+import { formatRelativeOrDate } from '@/helpers/dateHelper';
 
 export interface CollectionCardProps {
   collection: Collection;
@@ -31,7 +32,7 @@ export const CollectionCard: React.FC<CollectionCardProps> = ({
     <Card
       hoverEffect
       onClick={() => onSelect(collection.id)}
-      className="flex flex-col justify-between min-h-40 h-auto sm:h-48 bg-white/70 hover:bg-white border-[#0f3d3e]/15 group"
+      className="flex flex-col justify-between min-h-65 h-auto bg-white/70 hover:bg-white border-[#0f3d3e]/15 group"
     >
       <div className="space-y-3">
         <div className="flex items-center justify-between">
@@ -52,19 +53,23 @@ export const CollectionCard: React.FC<CollectionCardProps> = ({
         </div>
       </div>
 
-      <div className="pt-3 border-t border-[#0f3d3e]/10 flex items-center justify-between text-xs text-[#4B5563]">
-        <span>Created {new Date(collection.createdAt).toLocaleDateString()}</span>
+      <div className="mt-auto pt-1 border-t border-[#0f3d3e]/10 flex items-center justify-between text-xs text-[#4B5563]">
+        <span className="flex items-center gap-1.5 font-medium text-[#4B5563]">
+          <Calendar className="w-3.5 h-3.5 text-[#4B5563]/70" />
+          Created {formatRelativeOrDate(collection.createdAt)}
+        </span>
         <button
           onClick={(e) => {
             e.stopPropagation();
             onDelete(collection.id);
           }}
-          className="p-1.5 rounded hover:text-red-500 hover:bg-red-500/10 transition-colors"
+          className="p-1.5 rounded-lg text-red-500 hover:text-red-600 hover:bg-red-500/10 transition-colors"
           title="Delete Collection"
         >
-          <Trash2 className="w-4 h-4" />
+          <Trash2 className="w-4 h-4 text-red-500" />
         </button>
       </div>
     </Card>
   );
 };
+

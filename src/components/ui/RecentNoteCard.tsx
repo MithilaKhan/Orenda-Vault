@@ -5,6 +5,7 @@ import { Note } from '@/types/workspace';
 import { Card } from '@/components/ui/Card';
 import { Tag } from '@/components/ui/Tag';
 import { Clock, ArrowRight } from 'lucide-react';
+import { formatRelativeOrDate } from '@/helpers/dateHelper';
 
 export interface RecentNoteCardProps {
   note: Note;
@@ -34,7 +35,7 @@ export const RecentNoteCard: React.FC<RecentNoteCardProps> = ({ note, onSelect }
 
           <span className="text-[11px] text-[#4B5563]/80 flex items-center gap-1 ml-auto font-medium shrink-0">
             <Clock className="w-3 h-3" />
-            {new Date(note.updatedAt).toLocaleDateString()}
+            {formatRelativeOrDate(note.updatedAt)}
           </span>
         </div>
       </div>

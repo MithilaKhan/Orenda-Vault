@@ -22,7 +22,11 @@ export default function DashboardPage() {
         router.push('/collections');
       }}
       onActionCardClick={views.handleOpenCapture}
-      onSearchSubmit={views.handleSearchSubmit}
+      onSearchSubmit={(query) => {
+        views.handleSearchSubmit(query);
+        router.push('/notes');
+      }}
+      onOpenCommandPalette={store.openCommandPalette}
       onQuickNoteCreate={() => views.handleOpenCapture('note')}
     />
   );
