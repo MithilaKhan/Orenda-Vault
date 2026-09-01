@@ -1,10 +1,12 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Note, Collection } from '@/types/workspace';
 import { Card } from '@/components/ui/Card';
-import { Star, Clock, Folder, Sparkles, Tag as TagIcon, Edit3, Trash2, RotateCcw, X } from 'lucide-react';
+import { Star, Clock, Folder, Sparkles, Edit3, Trash2, RotateCcw, X, Check, Loader2 } from 'lucide-react';
 import { formatRelativeOrDate } from '@/helpers/dateHelper';
+import { aiService } from '@/services/aiService';
+import toast from 'react-hot-toast';
 
 export interface NoteCardProps {
   note: Note;
@@ -15,8 +17,7 @@ export interface NoteCardProps {
   onDelete: (id: string) => void;
   onRestore?: (id: string) => void;
   onPermanentlyDelete?: (id: string) => void;
-  onAiSummarize: (note: Note) => void;
-  isAiSummarizing?: boolean;
+  onUpdateNote: (id: string, partial: Partial<Note>) => void;
 }
 
 export const NoteCard: React.FC<NoteCardProps> = ({
@@ -28,9 +29,43 @@ export const NoteCard: React.FC<NoteCardProps> = ({
   onDelete,
   onRestore,
   onPermanentlyDelete,
-  onAiSummarize,
-  isAiSummarizing = false,
+  onUpdateNote,
 }) => {
+  const [isAiSummarizing, setIsAiSummarizing] = useState(false);
+  const [pendingSummary, setPendingSummary] = useState<string | null>(null);
+
+  const handleAiSummarize = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsAiSummarizing(true);
+    setPendingSummary(null);
+    try {
+      const summary = await aiService.summarizeText(note.content);
+      if (summary && !summary.includes('Failed to')) {
+        setPendingSummary(summary);
+      } else {
+        toast.error('Unable to generate summary');
+      }
+    } catch {
+      toast.error('Something went wrong');
+    } finally {
+      setIsAiSummarizing(false);
+    }
+  };
+
+  const handleConfirmSummary = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (pendingSummary) {
+      onUpdateNote(note.id, { summary: pendingSummary });
+      toast.success('Description updated with AI summary');
+      setPendingSummary(null);
+    }
+  };
+
+  const handleDismissSummary = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setPendingSummary(null);
+  };
+
   return (
     <Card
       hoverEffect={!isTrashView}
@@ -70,6 +105,42 @@ export const NoteCard: React.FC<NoteCardProps> = ({
         />
       </div>
 
+      {/* Pending AI Summary Preview */}
+      {pendingSummary && (
+        <div
+          className="p-3 rounded-xl bg-gradient-to-br from-[#0F4C3A]/5 to-[#A8E063]/10 border border-[#0F4C3A]/15 space-y-2 animate-fade-in"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] font-semibold text-[#0F4C3A] flex items-center gap-1">
+              <Sparkles className="w-3 h-3" /> AI Summary Preview
+            </span>
+          </div>
+          <div
+            className="text-[11px] text-[#0f3d3e] leading-relaxed line-clamp-4"
+            dangerouslySetInnerHTML={{
+              __html: pendingSummary
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\n/g, '<br/>')
+            }}
+          />
+          <div className="flex items-center gap-2 pt-1">
+            <button
+              onClick={handleConfirmSummary}
+              className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#0F4C3A] text-white text-[10px] font-semibold hover:bg-[#0F4C3A]/90 transition-colors"
+            >
+              <Check className="w-3 h-3" /> Use as Description
+            </button>
+            <button
+              onClick={handleDismissSummary}
+              className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white border border-[#0f3d3e]/15 text-[#4B5563] text-[10px] font-semibold hover:bg-gray-50 transition-colors"
+            >
+              <X className="w-3 h-3" /> Dismiss
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Note Bottom Bar */}
       <div className="space-y-3 pt-3 border-t border-[#0f3d3e]/10 mt-auto">
         <div className="flex items-center justify-between text-[11px] text-[#4B5563] pt-1">
@@ -82,15 +153,16 @@ export const NoteCard: React.FC<NoteCardProps> = ({
             {!isTrashView ? (
               <>
                 <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onAiSummarize(note);
-                  }}
-                  className="p-1.5 rounded-lg text-[#0f3d3e] hover:bg-[#0F4C3A]/10 transition-colors"
-                  title="Summarize"
+                  onClick={handleAiSummarize}
+                  className="p-1.5 rounded-lg text-[#0f3d3e] hover:bg-[#0F4C3A]/10 transition-colors relative group/btn"
+                  title="Generate AI Summary"
                   disabled={isAiSummarizing}
                 >
-                  <Sparkles className={`w-3.5 h-3.5 ${isAiSummarizing ? 'animate-spin' : ''}`} />
+                  {isAiSummarizing ? (
+                    <Loader2 className="w-3.5 h-3.5 animate-spin text-[#0F4C3A]" />
+                  ) : (
+                    <Sparkles className="w-3.5 h-3.5" />
+                  )}
                 </button>
                 <button
                   onClick={(e) => {

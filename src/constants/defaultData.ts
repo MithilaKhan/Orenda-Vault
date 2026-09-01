@@ -3,54 +3,39 @@ import { ActionCard, Collection, Note, ActivityItem, WorkspaceChatMessage } from
 export const QUICK_ACTION_CARDS: ActionCard[] = [
   {
     id: 'quick-note',
-    title: 'Quick Note',
-    description: 'Create a note, reminder, or snippet.',
+    title: 'Create Note',
+    description: 'Capture thoughts with a rich-text editor and organize into collections.',
     icon: 'FileEdit',
     actionType: 'note',
   },
   {
-    id: 'save-website',
-    title: 'Save Website',
-    description: 'Save a link and generate an AI summary.',
-    icon: 'Bookmark',
-    actionType: 'website',
-  },
-  {
-    id: 'summarize-pdf',
-    title: 'Summarize Document',
-    description: 'Extract bullet-point takeaways from text.',
-    icon: 'FileText',
-    actionType: 'pdf',
-  },
-  {
     id: 'save-code',
-    title: 'Save Code Snippet',
-    description: 'Store reusable code with AI explanations.',
+    title: 'Code Snippet',
+    description: 'Save code blocks with language detection, syntax preview, and context notes.',
     icon: 'Code2',
     actionType: 'code',
   },
   {
-    id: 'capture-idea',
-    title: 'Brainstorm Idea',
-    description: 'Expand your concepts and project outlines.',
-    icon: 'Lightbulb',
-    actionType: 'idea',
+    id: 'new-collection',
+    title: 'New Collection',
+    description: 'Create a themed folder to organize and group related notes together.',
+    icon: 'FolderPlus',
+    actionType: 'collection',
   },
   {
-    id: 'meeting-notes',
-    title: 'Meeting Notes',
-    description: 'Turn discussion notes into clear checklists.',
-    icon: 'ClipboardCheck',
-    actionType: 'meeting',
+    id: 'summarize-content',
+    title: 'Summarize Content',
+    description: 'Paste any text and let AI extract a concise, actionable summary.',
+    icon: 'Sparkles',
+    actionType: 'summarize',
   },
 ];
 
 export const SEARCH_SUGGESTIONS: string[] = [
-  'React 19 notes summary',
-  'Interview Q&A',
-  'Portfolio hero copy',
-  'Saved this week',
-  'jwt token',
+  'My recent notes',
+  'Code snippets',
+  'Meeting action items',
+  'Summarize my notes',
 ];
 
 export const INITIAL_COLLECTIONS: Collection[] = [

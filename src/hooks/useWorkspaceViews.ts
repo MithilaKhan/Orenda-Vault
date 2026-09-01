@@ -4,37 +4,29 @@ import { ActionType } from '@/types/workspace';
 
 export const useWorkspaceViews = (store: WorkspaceStore) => {
   const [isQuickNoteOpen, setIsQuickNoteOpen] = useState<boolean>(false);
+  const [isCodeSnippetOpen, setIsCodeSnippetOpen] = useState<boolean>(false);
+  const [isCollectionModalOpen, setIsCollectionModalOpen] = useState<boolean>(false);
+  const [isSummarizeModalOpen, setIsSummarizeModalOpen] = useState<boolean>(false);
   const [modalInitialTitle, setModalInitialTitle] = useState<string>('');
   const [modalInitialContent, setModalInitialContent] = useState<string>('');
 
   const handleOpenCapture = (actionType: ActionType) => {
     switch (actionType) {
       case 'note':
-        setModalInitialTitle('New Quick Note');
+        setModalInitialTitle('');
         setModalInitialContent('');
-        break;
-      case 'website':
-        setModalInitialTitle('Saved Website Bookmark');
-        setModalInitialContent('### URL:\nhttps://example.com\n\n### AI Summary:\n- Key takeaway 1\n- Key takeaway 2');
-        break;
-      case 'pdf':
-        setModalInitialTitle('PDF Document Summary');
-        setModalInitialContent('### Document Name:\nProject_Specification.pdf\n\n### Extracted Takeaways:\n1. Architecture goals\n2. Design system tokens');
+        setIsQuickNoteOpen(true);
         break;
       case 'code':
-        setModalInitialTitle('TypeScript Snippet');
-        setModalInitialContent('```ts\n// Paste code here\nconst vault = new OrendaVault();\n```\n\n### Notes:\nWhy this pattern was used.');
+        setIsCodeSnippetOpen(true);
         break;
-      case 'idea':
-        setModalInitialTitle('Brainstorming Concept');
-        setModalInitialContent('### Problem Statement:\n...\n\n### Proposed Solution:\n...');
+      case 'collection':
+        setIsCollectionModalOpen(true);
         break;
-      case 'meeting':
-        setModalInitialTitle('Meeting Notes: Standup');
-        setModalInitialContent('### Attendees:\n- Mithila\n- Team\n\n### Action Items:\n- [ ] Finalize Orenda Vault layout\n- [ ] Deploy to Vercel');
+      case 'summarize':
+        setIsSummarizeModalOpen(true);
         break;
     }
-    setIsQuickNoteOpen(true);
   };
 
   const handleSearchSubmit = (query: string) => {
@@ -72,6 +64,12 @@ export const useWorkspaceViews = (store: WorkspaceStore) => {
   return {
     isQuickNoteOpen,
     setIsQuickNoteOpen,
+    isCodeSnippetOpen,
+    setIsCodeSnippetOpen,
+    isCollectionModalOpen,
+    setIsCollectionModalOpen,
+    isSummarizeModalOpen,
+    setIsSummarizeModalOpen,
     modalInitialTitle,
     modalInitialContent,
     handleOpenCapture,

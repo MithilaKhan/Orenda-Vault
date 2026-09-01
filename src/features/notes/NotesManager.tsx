@@ -5,7 +5,6 @@ import { Note, Collection } from '@/types/workspace';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { FileText } from 'lucide-react';
-import { aiService } from '@/services/aiService';
 import { Radio, ConfigProvider } from 'antd';
 import { NoteCard } from '@/components/ui/NoteCard';
 import { NoteEditorModal } from '@/components/ui/NoteEditorModal';
@@ -44,24 +43,11 @@ export const NotesManager: React.FC<NotesManagerProps> = ({
 }) => {
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [isAiSummarizing, setIsAiSummarizing] = useState<boolean>(false);
   const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
 
   const handleOpenEdit = (note: Note) => {
     setSelectedNote(note);
     setIsEditing(true);
-  };
-
-  const handleAiSummarize = async (note: Note) => {
-    setIsAiSummarizing(true);
-    try {
-      const summary = await aiService.summarizeText(note.content);
-      onUpdateNote(note.id, { summary });
-    } catch {
-      // ignore
-    } finally {
-      setIsAiSummarizing(false);
-    }
   };
 
   return (
@@ -133,8 +119,7 @@ export const NotesManager: React.FC<NotesManagerProps> = ({
                   onDelete={onDeleteNote}
                   onRestore={onRestoreNote}
                   onPermanentlyDelete={onPermanentlyDeleteNote}
-                  onAiSummarize={handleAiSummarize}
-                  isAiSummarizing={isAiSummarizing}
+                  onUpdateNote={onUpdateNote}
                 />
               );
             })}

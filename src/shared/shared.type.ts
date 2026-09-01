@@ -6,7 +6,7 @@ export type WorkspaceView =
   | 'favorites' 
   | 'recent';
 
-export type ActionType = 'note' | 'website' | 'pdf' | 'code' | 'idea' | 'meeting';
+export type ActionType = 'note' | 'code' | 'collection' | 'summarize';
 
 export interface ActionCard {
   id: string;

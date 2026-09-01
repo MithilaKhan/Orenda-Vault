@@ -11,7 +11,7 @@ export const aiService = {
   async generateResponse(
     prompt: string, 
     history: { role: string; content: string }[] = [],
-    systemContext: string = 'You are Orenda AI, a calm, intelligent AI assistant inside Orenda Vault, a modern creative workspace and second brain.'
+    systemContext: string = 'You are Orenda AI, a calm, intelligent AI assistant inside Orenda Vault, a modern creative workspace and second brain. Always respond in the EXACT same language as the user input (Bangla, Banglish, or English).'
   ): Promise<AIResponseResult> {
     try {
       const messages = [
@@ -80,10 +80,37 @@ export const aiService = {
   },
 
   async summarizeText(text: string): Promise<string> {
+    const systemPrompt = `You are an expert knowledge analyst and summarizer for Orenda Vault, a premium knowledge workspace. Your summaries should be on par with the best AI assistants (ChatGPT, Claude).
+
+Rules:
+- LANGUAGE MATCHING (CRITICAL): Always respond in the EXACT same language as the input content.
+  * If input is in Bangla (বাংলা), write the entire summary in Bangla.
+  * If input is in Banglish (Bangla using English script), write in Banglish.
+  * If input is in English, write in English.
+- Analyze the content deeply — don't just extract surface-level points
+- Identify the CORE thesis, key insights, and actionable takeaways
+- Use clean, professional markdown formatting
+- Be concise but never lose critical nuance
+- If the content contains code, explain what it does in plain language
+- If the content is a meeting note, extract decisions and action items
+- Adapt your summary style to the content type (technical, creative, business, etc.)
+
+Output format (translate headers to match the input language if appropriate, e.g., **সারসংক্ষেপ** / **Summary**):
+**Summary** (or **সারসংক্ষেপ** for Bangla)
+A 1-2 sentence overview of what this content is about.
+
+**Key Points** (or **মূল বিষয়বস্তু** for Bangla)
+- Point 1
+- Point 2
+- Point 3
+
+**Takeaways** (or **সিদ্ধান্ত/শিক্ষণীয়** for Bangla)
+- What to do next or remember`;
+
     const res = await this.generateResponse(
-      `Summarize the following notes into 3 concise bullet points with actionable takeaways:\n\n${text}`,
+      `Summarize the following content in its original language with depth and precision:\n\n${text}`,
       [],
-      'You are an expert summarizer. Return clean markdown bullet points.'
+      systemPrompt
     );
     return res.content;
   }

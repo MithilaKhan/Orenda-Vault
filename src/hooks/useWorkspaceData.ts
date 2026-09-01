@@ -67,8 +67,10 @@ export const useWorkspaceData = (store: WorkspaceStore) => {
     if (res?.success) {
       toast.success('Note created');
       fetchData();
+      return true;
     } else {
       toast.error(res?.message || res?.error || 'Failed to create note');
+      return false;
     }
   };
 
@@ -122,8 +124,10 @@ export const useWorkspaceData = (store: WorkspaceStore) => {
     if (res?.success) {
       toast.success('Collection created');
       fetchData();
+      return true;
     } else {
       toast.error(res?.message || res?.error || 'Failed to create collection');
+      return false;
     }
   };
 
